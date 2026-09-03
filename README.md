@@ -19,6 +19,15 @@ The local foundation includes a Spring backend, PostgreSQL, a React development 
 
 Commands below use a POSIX shell from the repository root unless a directory change is shown. No Supabase account or production credentials are needed.
 
+### Clean checkout
+
+```sh
+git clone https://github.com/mrnoahjwilliams/bar-buddy.git
+cd bar-buddy
+```
+
+Select the prerequisite Node version in this checkout before installing dependencies, then confirm `node --version` and `npm --version`. A new terminal or checkout may otherwise use your version manager's default. Follow Database, Backend, Frontend, and API generation below in order, using separate terminals for the running apps. The default local ports are `54329`, `8080`, and `5173`; ensure they are available before starting another copy.
+
 ### Database
 
 ```sh
@@ -131,6 +140,6 @@ gh workflow run ci.yml --ref main
 
 [Documentation](docs/05-documentation.md#repository-and-ci) records verified CI and branch protection. [Workflow](docs/07-development-workflow.md#finish-and-review) owns merge authority.
 
-### Remaining foundation work
+### Development status
 
-[Plan](docs/06-plan.md#016--foundation-acceptance) owns clean-checkout foundation acceptance.
+[Documentation](docs/05-documentation.md#foundation-acceptance) records clean-checkout acceptance. [Plan](docs/06-plan.md#021--catalog-decisions-and-format) owns the next catalog decisions and work.
