@@ -19,7 +19,7 @@ Engineering conventions live here. Follow [Requirements](02-requirements.md) for
 
 ## API and frontend
 
-- Change backend DTOs/controllers → generate springdoc OpenAPI → generate Orval types/client/query hooks → integrate React in the same change. Commit generated contracts and client artifacts; do not hand-edit them or maintain duplicate DTOs/fetch clients/hooks when generation covers the case. A necessary custom transport adapter must remain narrowly scoped to generation integration.
+- When backend DTOs/controllers change, regenerate and commit springdoc OpenAPI and Orval types/client/query hooks in the same change, adapting affected existing React consumers so they remain compatible. Add new UI flows in their scheduled Plan unit; a backend unit does not pull later UI work forward. Do not hand-edit generated artifacts or maintain duplicate DTOs/fetch clients/hooks when generation covers the case. A necessary custom transport adapter must remain narrowly scoped to generation integration.
 - Keep route setup/providers/layout in `app/`, behavior in feature folders, reusable UI in `components/ui/`, and generated clients in `api/generated/`.
 - Reuse ingredient detail for owned/unowned contexts. Keep shopping logic in its feature module while presenting it as the Drinks mode. Follow Requirements for navigation, sorting and release timing.
 - Refresh affected query data after mutations; clear user-specific caches on account changes. Preserve relevant filter/navigation state. Provide accessible controls and loading, error and empty states.

@@ -13,7 +13,7 @@ Execution and Git/CI policy live here. Use [AGENTS.md](../AGENTS.md) to load onl
 ## During
 
 1. Implement the selected unit under Guidelines and the accepted release scope. Make routine choices autonomously; never silently resolve a business decision or expand scope.
-2. Keep contract, generated client, frontend integration, tests and affected docs together. Verify risky behavior as it changes and fix introduced failures. Never weaken checks or disguise missing verification.
+2. Apply Guidelines' API/client compatibility rule within the selected Plan unit; keep its tests and affected docs together. Verify risky behavior as it changes and fix introduced failures. Never weaken checks or disguise missing verification.
 3. Give concise progress/blocker updates. Preserve useful partial work if blocked; leave incomplete Plan items unchecked and record implementation limitations in Documentation or the PR, without creating a handoff file.
 
 ## Finish and review

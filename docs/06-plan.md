@@ -13,13 +13,13 @@ For every unit: implement its full stated scope, run meaningful checks, update a
 Apply these checks wherever the changed behavior depends on them; unit-specific cases below supplement them:
 
 - Backend rule/validation tests, consistent errors, authenticated ownership and cross-user reference protection; shared catalog remains read-only. Check indirect counts/calculations for private-data leaks.
-- Fresh migrations plus upgrades preserving existing data when schema changes; PostgreSQL mappings/queries, referential integrity and representative query cost without per-row/N+1 work.
-- API contracts, regenerated client and affected UI flows; cache refresh after mutations, account-switch isolation, persistence after reload, accessible mobile/desktop controls and loading/error/empty states.
+- Fresh migrations plus upgrades preserving existing data and provider access restrictions when database objects change; PostgreSQL mappings/queries, referential integrity and representative query cost without per-row/N+1 work.
+- API contracts, regenerated client and affected existing or currently scheduled UI flows; cache refresh after mutations, account-switch isolation, persistence after reload, accessible mobile/desktop controls and loading/error/empty states.
 - Follow Workflow's required local/CI checks. Never count unrun checks as passing or add tests that merely mirror implementation.
 
 ### Release gate
 
-Every **publish** unit includes: relevant full backend/integration/frontend regressions; clean setup and fresh/upgrade migrations/imports as applicable; representative performance and responsive UI review; approved deployment; public critical journeys with two accounts, including login/recovery and isolation; documented deployment/recovery instructions and actual deployed status. A failing gate leaves publication incomplete. Later releases preserve earlier behavior and data.
+Every **publish** unit includes: relevant full backend/integration/frontend regressions; clean setup and fresh/upgrade migrations/imports as applicable; representative performance and responsive UI review; approved deployment; public critical journeys with two accounts, including login/recovery, isolation and denial of alternate client access to application data; documented deployment/recovery instructions and actual deployed status. A failing gate leaves publication incomplete. Later releases preserve earlier behavior and data.
 
 ### Completed preparation
 
@@ -76,7 +76,7 @@ No public app or application entity schema yet.
 
 #### 1.1.1 — Backend identity
 
-- [ ] Configure Supabase Auth and normal PostgreSQL connections; add AppUser/Flyway migration uniquely linked to validated JWT `sub`; implement Spring Security and `GET /me`. **Verify:** valid/invalid/expired tokens, identity persistence and concurrent first access without duplicate users; client-supplied ownership is ignored/rejected.
+- [ ] Configure Supabase Auth and normal PostgreSQL connections with Design's provider access restrictions; add AppUser/Flyway migration uniquely linked to validated JWT `sub`; implement Spring Security and `GET /me`. **Verify:** valid/invalid/expired tokens, identity persistence and concurrent first access without duplicate users; client-supplied ownership is ignored/rejected. Confirm anonymous and two users' Auth credentials cannot read/write application data through Supabase REST/GraphQL; inspect application-object grants and confirm database credentials are absent from browser configuration. Auth and authorized Spring access must work. Document the actual settings and checks.
 
 #### 1.1.2 — Session and navigation
 
@@ -90,7 +90,7 @@ No public app or application entity schema yet.
 
 #### 1.2.2 — Browse and inspect
 
-- [ ] Implement ingredient/cocktail list, search, basic-filter and detail contracts and screens. Show recipe quantities/units/order, instructions, glassware/garnish, and ingredient detail's **related cocktail list plus distinct usage count** in this release. **Verify:** repeated recipe lines do not inflate counts; selecting a related cocktail opens its detail; generated-client flows work. Rich ingredient-based filtering waits for 2.1; photos/visuals arrive in Release 2.
+- [ ] Implement ingredient/cocktail list, text search and detail contracts/screens, with ingredient category and cocktail primary-spirit filters. Show recipe quantities/units/order, instructions, glassware/garnish, and ingredient detail's **related cocktail list plus distinct usage count** in this release. **Verify:** filter/search combinations, reset/empty/invalid inputs, repeated recipe lines do not inflate counts, and selecting a related cocktail opens its detail through generated-client flows. Availability/favorites filters arrive in 1.4/1.5; filtering cocktails by any recipe ingredient waits for 2.1, and photos/visuals for Release 2.
 
 ### 1.3 — Have/Out inventory
 
@@ -106,17 +106,17 @@ No public app or application entity schema yet.
 
 #### 1.4.1 — Availability service
 
-- [ ] Calculate makeability and distinct missing required ingredients from current Have inventory; add results/filters to cocktail APIs without storing derived state. **Verify:** empty/full bars, repeated ingredients, optional garnishes, several bottles including mixed Have/Out, and different users; avoid per-cocktail queries.
+- [ ] Calculate makeability and distinct missing required ingredients from current Have inventory; add results and the agreed MVP availability filters to cocktail APIs without storing derived state. **Verify:** empty/full bars, repeated ingredients, optional garnishes, several bottles including mixed Have/Out, different users and filter/search combinations; avoid per-cocktail queries.
 
 #### 1.4.2 — Availability presentation
 
-- [ ] Show You Can Make, then Other Drinks ordered by missing count with one-away first. Keep unavailable details openable and missing ingredients explicit. **Verify:** grouping/filtering/details and automatic refresh after inventory changes without losing navigation context.
+- [ ] Show You Can Make, then Other Drinks ordered by missing count with one-away first. Add the All / Can Make / Exactly One Ingredient Away selector alongside primary-spirit filtering and search. Keep unavailable details openable and missing ingredients explicit. **Verify:** grouping, combined filters/reset/empty results, details and automatic refresh after inventory changes without losing navigation context.
 
 ### 1.5 — Preferences and discovery
 
 #### 1.5.1 — Favorites
 
-- [ ] Add UserCocktailState and preference API favorite/unfavorite; wire card/detail controls. **Verify:** persistence, isolation, repeated updates and affected-view refresh. This completes the seven-entity MVP model.
+- [ ] Add UserCocktailState and preference API favorite/unfavorite; wire card/detail controls and a favorites-only Drinks filter that combines with search, primary spirit and availability. **Verify:** persistence, isolation, repeated updates, combined filters/empty results and affected-view refresh when favorites change. This completes the seven-entity MVP model.
 
 #### 1.5.2 — Random cocktail
 
@@ -144,7 +144,7 @@ No public app or application entity schema yet.
 
 ### 2.1 — Ingredient-based discovery
 
-- [ ] Extend existing related-cocktail detail with category/inventory context and ingredient-based cocktail filtering. Define combination with text search; link to filtered Drinks with change/clear controls. **Verify:** distinct counts across repeated lines/recipes, correct matching, availability groups, missing explanations and detail/back/filter-clear navigation. Do not move the MVP related list here or add unlocks early.
+- [ ] Extend existing related-cocktail detail with category/inventory context and cocktail filtering by any chosen recipe ingredient. Combine it with existing search/MVP filters; link to filtered Drinks with change/clear controls. **Verify:** distinct counts across repeated lines/recipes, correct matching, availability groups, missing explanations and detail/back/filter-clear navigation. Preserve the MVP primary-spirit filter and related list; do not add unlocks early.
 
 ### 2.2 — Catalog enrichment and discovery
 
@@ -154,7 +154,7 @@ No public app or application entity schema yet.
 
 #### 2.2.2 — Filters and sorting
 
-- [ ] Implement combinations/defaults for category, primary spirit, availability, favorites and the new metadata, with alphabetical and ingredient-count sorting. Define distinct-count treatment of optional ingredients, stable ties and invalid/empty parameters. Add mobile controls, active indicators and reset. **Verify:** combinations/ties/empty results, makeable/one-away grouping, cache/navigation state and query cost. Frequency, rating and strength sorts arrive in 4, 6 and 7 respectively.
+- [ ] Extend existing search/filter combinations with the new metadata and alphabetical/ingredient-count sorting. Define distinct-count treatment of optional ingredients, stable ties and invalid/empty parameters. Extend mobile controls, active indicators and reset. **Verify:** combinations/ties/empty results, makeable/one-away grouping, cache/navigation state and query cost. Frequency, rating and strength sorts arrive in 4, 6 and 7 respectively.
 
 #### 2.2.3 — Recently viewed cocktails
 
