@@ -19,6 +19,8 @@ Disable the unused Supabase Data API and remove application-object access for `a
 
 Foundation verifies compatible patch/library versions, chooses the remaining toolchain details, and commits wrappers/lockfiles. Do not substitute a different accepted stack without a decision.
 
+The initial local toolchain uses Maven with separate Surefire (`*Test`) and Failsafe (`*IT`) runners, Spotless with Google Java Format, and selected Checkstyle rules. Frontend tooling uses Node 24 LTS/npm, Prettier, ESLint, and jsdom for Vitest. TypeScript 6 is selected because the verified typescript-eslint version supports versions below 6.1; the latest TypeScript major is not yet compatible. Exact library versions live in [the Maven build](../backend/pom.xml) and [the npm manifest/lockfile](../frontend/package.json). PostgreSQL 17 is pinned to the same patch image in local Compose and Testcontainers; hosted database configuration remains in 1.1.1. [README](../README.md#setup) owns prerequisites and commands.
+
 Request flow: Spring Security → Jackson → validated request DTO → controller → service → repository/JPA → PostgreSQL. Response flow: entity/service result → MapStruct response DTO → JSON → generated TanStack Query hook → React. Services own transaction boundaries; neither mappers nor repositories decide business policy.
 
 ## Repository structure
