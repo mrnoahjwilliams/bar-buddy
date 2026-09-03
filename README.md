@@ -37,14 +37,13 @@ cd backend
 cp .env.example .env
 ```
 
-Load it and start the backend (repeat these commands in each new terminal):
+After that one-time setup, start the backend from `backend/` with:
 
 ```sh
-set -a
-. ./.env
-set +a
 ./mvnw spring-boot:run
 ```
+
+Spring reads `backend/.env` automatically when started from that directory; no shell export or sourcing step is needed. Use unquoted `KEY=value` lines, as in the example, without `export`. Existing environment variables take precedence over the file. The file remains ignored by Git and is optional when runtime environment variables provide the settings instead.
 
 Check `http://127.0.0.1:8080/actuator/health` with a browser or:
 
@@ -72,6 +71,8 @@ cd frontend
 npm ci
 npm run dev
 ```
+
+`npm ci` is needed on first setup or when dependencies change. For ordinary restarts, run only `npm run dev` from `frontend/` using the required Node version.
 
 Open `http://127.0.0.1:5173`. The shell needs no environment variables or running API. Stop it with Ctrl+C. It displays the development status and handles unknown URLs with a return link; authenticated navigation comes later.
 
