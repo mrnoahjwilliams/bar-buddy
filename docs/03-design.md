@@ -51,7 +51,9 @@ frontend/
   src/lib/, src/assets/
 ```
 
-Features stay relatively flat; add `dto/` where useful. Braces denote sibling directories; create them only as needed. Shopping is a module even though its UI is a Drinks mode. The public API-contract artifact location is established during foundation; generated contracts/client remain tracked.
+Features stay relatively flat; add `dto/` where useful. Braces denote sibling directories; create them only as needed. Shopping is a module even though its UI is a Drinks mode.
+
+The tracked API contract is `contracts/openapi.json`; Orval owns `frontend/src/api/generated/`, including its separate models and TanStack Query client. Both directories contain generated artifacts only. Generation exports application paths under `/api/v1` in a full Spring test context with disposable PostgreSQL, with stable metadata, relative server URLs and deterministic key ordering. Runtime documentation remains disabled. Orval uses Fetch with body-only success results and the narrow `frontend/src/api/http.ts` adapter for HTTP errors and response decoding; it preserves request options and cancellation. Origin routing and JWT attachment arrive in 1.1.2. [README](../README.md#api-generation-and-drift) owns generation/drift commands. See [springdoc properties](https://springdoc.org/properties.html) and [Orval Fetch integration](https://orval.dev/docs/guides/fetch-client/) for the underlying configuration.
 
 ## Domain model
 

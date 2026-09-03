@@ -9,6 +9,9 @@
     "npm": "11.x"
   },
   "scripts": {
+    "api:generate": "node scripts/api.mjs generate",
+    "api:check": "node scripts/api.mjs check",
+    "test:api-tooling": "node --test scripts/*.test.mjs",
     "dev": "vite --host 127.0.0.1",
     "build": "npm run typecheck && vite build",
     "preview": "vite preview --host 127.0.0.1",
@@ -18,7 +21,7 @@
     "format:check": "prettier --check .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "check": "npm run format:check && npm run lint && npm run test && npm run build"
+    "check": "npm run format:check && npm run lint && npm run test && npm run test:api-tooling && npm run build"
   },
   "dependencies": {
     "@tanstack/react-query": "5.102.8",

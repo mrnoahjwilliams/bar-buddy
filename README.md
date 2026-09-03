@@ -8,7 +8,7 @@ Start with [AGENTS.md](AGENTS.md) for the document map and task-specific reading
 
 ## Setup
 
-The local foundation includes a Spring backend, PostgreSQL, and a React development shell. API generation and CI are the next foundation units; authentication and application features begin in Release 1.
+The local foundation includes a Spring backend, PostgreSQL, a React development shell, and generated API contracts/clients. CI is the next foundation unit; authentication and application features begin in Release 1.
 
 ### Prerequisites
 
@@ -60,7 +60,7 @@ From `backend/`:
 ./mvnw spotless:apply
 ```
 
-`verify` checks Java/POM formatting (Spotless), selected static rules (Checkstyle), compiles and packages the app, runs security tests, and runs the PostgreSQL Testcontainers integration check. Docker is required; database tests fail if Docker is unavailable. They use a disposable container and require neither Compose nor a loaded `.env`. `./mvnw test` runs only the tests without containers and is not the full verification command. The executable package is `backend/target/bar-buddy-0.0.1-SNAPSHOT.jar`.
+`verify` checks Java/POM formatting (Spotless), selected static rules (Checkstyle), compiles and packages the app, runs security tests, and runs PostgreSQL Testcontainers integration checks for startup and OpenAPI export. Docker is required; database tests fail if Docker is unavailable. They use disposable containers and require neither Compose nor a loaded `.env`. `./mvnw test` runs only the tests without containers and is not the full verification command. The executable package is `backend/target/bar-buddy-0.0.1-SNAPSHOT.jar`.
 
 ### Frontend
 
@@ -85,8 +85,32 @@ npm run test:watch
 npm run preview
 ```
 
-`check` runs Prettier, ESLint, the Vitest/React Testing Library routing test, TypeScript, and the production build. Individual commands are `format:check`, `lint`, `test`, `typecheck`, and `build`. Build output is in `frontend/dist/`; `preview` serves that output at `http://127.0.0.1:4173` after a successful build. shadcn/ui is configured in [components.json](frontend/components.json); add needed components with `npx --no-install shadcn add <component>`.
+`check` runs Prettier, ESLint, Vitest/React Testing Library routing and transport tests, API artifact-checker tests, TypeScript, and the production build. Individual commands are `format:check`, `lint`, `test`, `test:api-tooling`, `typecheck`, and `build`. Build output is in `frontend/dist/`; `preview` serves that output at `http://127.0.0.1:4173` after a successful build. shadcn/ui is configured in [components.json](frontend/components.json); add needed components with `npx --no-install shadcn add <component>`.
+
+### API generation and drift
+
+After installing frontend dependencies, run from `frontend/` with the prerequisite Java/Node versions and Docker running:
+
+```sh
+npm run api:generate
+npm run check
+```
+
+Generation starts with a clean backend build and `OpenApiGenerationIT`, using a disposable PostgreSQL container and no listening application server. The test disables the local `.env` import, enables springdoc only in its test context, and reads the schema in-process without changing runtime security. Normal application startup still disables `/v3/api-docs`.
+
+The pipeline copies the exported schema to [contracts/openapi.json](contracts/openapi.json) and uses [Orval configuration](frontend/orval.config.ts) to generate `frontend/src/api/generated/`. These two locations contain generated output only and are replaced by `api:generate`; review and commit them with the backend changes. Never edit generated files by hand. The current contract intentionally has no product paths; types and query hooks appear when real controllers/DTOs arrive in Release 1.
+
+Review and stage the output, then run the drift check:
+
+```sh
+git -C .. add contracts frontend/src/api/generated
+npm run api:check
+```
+
+`api:check` independently rebuilds the contract and client in temporary storage, compares them with working files and Git tracking, and exits nonzero for missing, stale, modified, unstaged, untracked, or obsolete generated output. It does not repair working files. Generation failures also fail the command; old output cannot make a failed generation pass. Keep other backend builds/generation runs sequential because they share `backend/target/`. This check is separate from `npm run check` because it also requires Java and Docker. `npm run test:api-tooling` tests the drift checker using temporary Git repositories without Docker.
+
+The [request adapter](frontend/src/api/http.ts) preserves Orval request options/cancellation, returns successful JSON or empty bodies, and rejects HTTP errors with their status and response body. Requests use relative URLs. API origin routing and JWT attachment arrive with the first authenticated flow in unit 1.1.2.
 
 ### Remaining foundation work
 
-springdoc and Orval dependencies are pinned, but OpenAPI/client generation is not configured yet. Do not add handwritten API clients. [Plan](docs/06-plan.md#014--generated-api-pipeline) owns the remaining API pipeline, executable GitHub checks/protection, and clean-checkout foundation acceptance.
+[Plan](docs/06-plan.md#015--executable-ci-and-protection) owns the remaining executable GitHub checks/protection and clean-checkout foundation acceptance.
