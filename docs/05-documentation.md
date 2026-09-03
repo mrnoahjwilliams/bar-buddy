@@ -2,9 +2,9 @@
 
 ## Catalog curation draft
 
-The 0.2 branch contains a dated machine-readable snapshot of all 102 cocktails on the IBA official list as retrieved on September 3, 2026, plus a normalized JSON review candidate. The offline scraper verifies the expected unique page count and preserves every source URL, ingredient line, method and garnish. The builder currently resolves 416 ordered recipe lines against 113 practical canonical ingredients, retains recipe-specific IBA ingredient wording and source measurements, converts ordinary metric quantities to US bar notation, and records corrections and judgment conversions. [`catalog/README.md`](../catalog/README.md) owns the draft format, provenance, matching rules and review procedure.
+The 0.2 branch contains a lean, source-neutral Bar Buddy JSON review candidate with 102 cocktails, one default recipe per cocktail, 416 ordered recipe lines and 113 practical canonical ingredients. Each line retains recipe-specific wording and reviewed US/metric measurements; US is the declared default. Cocktail styles are optional and non-exclusive across an 18-value controlled vocabulary: 12 cocktails remain deliberately unclassified instead of using an `other` fallback. [`catalog/README.md`](../catalog/README.md) owns the draft format, measurement/matching/style rules and review procedure.
 
-The normalized catalog remains `pending-human-review`. It is not a database seed, no application runtime uses it, and Plan units 0.2.1 and 0.2.2 remain incomplete until product-owner review resolves the catalog decisions and content. Automated validation/import readiness remains separately scheduled in 0.3.
+The dated source snapshot, scraper, and final one-time builder are retained only under `catalog/archive/` for provenance; upstream list changes do not update the Bar Buddy dataset. The normalized catalog remains pending human review even though review workflow fields have been removed from the product data. It is not a database seed, no application runtime uses it, and Plan units 0.2.1 and 0.2.2 remain incomplete until product-owner review resolves the catalog decisions and content. Automated validation/import readiness remains separately scheduled in 0.3.
 
 ## Local application foundation
 

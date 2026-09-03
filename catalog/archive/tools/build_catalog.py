@@ -307,6 +307,121 @@ GLASSWARE = {
 }
 
 
+STYLE_VOCABULARY = {
+    "old-fashioned", "martini", "manhattan", "negroni", "sour", "daisy",
+    "collins", "fizz", "highball", "spritz", "julep", "smash", "swizzle",
+    "cobbler", "flip", "punch", "duo-and-trio", "tiki",
+}
+
+
+# Every source cocktail is listed, including deliberately unclassified cocktails.
+# Styles are optional and non-exclusive; an empty tuple is preferable to a forced fit.
+STYLES_BY_COCKTAIL = {
+    "alexander": ("duo-and-trio",),
+    "americano": ("negroni", "highball"),
+    "angel-face": ("duo-and-trio",),
+    "aviation": ("sour", "daisy"),
+    "bees-knees": ("sour",),
+    "bellini": (),
+    "between-the-sheets": ("sour", "daisy"),
+    "black-russian": ("duo-and-trio",),
+    "bloody-mary": (),
+    "boulevardier": ("negroni",),
+    "bramble": ("sour",),
+    "brandy-crusta": ("sour", "daisy"),
+    "caipirinha": ("sour",),
+    "canchanchara": ("sour",),
+    "cardinale": ("martini", "negroni"),
+    "casino": ("sour", "daisy"),
+    "champagne-cocktail": (),
+    "chartreuse-swizzle": ("swizzle",),
+    "clover-club": ("sour",),
+    "corpse-reviver-2": ("sour", "daisy"),
+    "cosmopolitan": ("sour", "daisy"),
+    "cuba-libre": ("highball",),
+    "daiquiri": ("sour",),
+    "dark-n-stormy": ("highball",),
+    "dons-special-daiquiri": ("sour", "tiki"),
+    "dry-martini": ("martini",),
+    "espresso-martini": (),
+    "fernandito": ("highball",),
+    "french-75": ("sour", "collins"),
+    "french-connection": ("duo-and-trio",),
+    "french-martini": (),
+    "garibaldi": ("highball",),
+    "gin-basil-smash": ("sour", "smash"),
+    "gin-fizz": ("sour", "fizz"),
+    "grand-margarita": ("sour", "daisy"),
+    "grasshopper": ("duo-and-trio",),
+    "hanky-panky": ("martini",),
+    "hemingway-special": ("sour",),
+    "horses-neck": ("highball",),
+    "iba-tiki": ("tiki",),
+    "illegal": ("sour",),
+    "irish-coffee": (),
+    "john-collins": ("sour", "collins"),
+    "jungle-bird": ("sour", "tiki"),
+    "kir": ("duo-and-trio",),
+    "last-word": ("sour",),
+    "lemon-drop-martini": ("sour", "daisy"),
+    "long-island-iced-tea": ("highball",),
+    "mai-tai": ("sour", "tiki"),
+    "manhattan": ("manhattan",),
+    "margarita": ("sour", "daisy"),
+    "martinez": ("martini",),
+    "mary-pickford": (),
+    "mimosa": (),
+    "mint-julep": ("julep",),
+    "missionarys-downfall": ("sour", "tiki"),
+    "mojito": ("sour", "collins"),
+    "monkey-gland": (),
+    "moscow-mule": ("highball",),
+    "naked-and-famous": ("sour",),
+    "negroni": ("negroni",),
+    "new-york-sour": ("sour",),
+    "old-cuban": ("sour", "collins"),
+    "old-fashioned": ("old-fashioned",),
+    "paloma": ("highball",),
+    "paper-plane": ("sour",),
+    "paradise": (),
+    "penicillin": ("sour",),
+    "pina-colada": ("tiki",),
+    "pisco-punch": ("punch",),
+    "pisco-sour": ("sour",),
+    "planters-punch": ("punch", "tiki"),
+    "porn-star-martini": (),
+    "porto-flip": ("flip",),
+    "rabo-de-galo": (),
+    "ramos-fizz": ("sour", "fizz"),
+    "remember-the-maine": ("manhattan",),
+    "russian-spring-punch": ("sour", "punch"),
+    "rusty-nail": ("duo-and-trio",),
+    "sazerac": ("old-fashioned",),
+    "sea-breeze": ("highball",),
+    "sex-on-the-beach": ("highball",),
+    "sherry-cobbler": ("cobbler",),
+    "sidecar": ("sour", "daisy"),
+    "singapore-sling": ("highball",),
+    "south-side": ("sour",),
+    "spicy-fifty": ("sour",),
+    "spritz": ("spritz",),
+    "stinger": ("duo-and-trio",),
+    "suffering-bastard": ("highball",),
+    "tequila-sunrise": ("highball",),
+    "three-dots-and-a-dash": ("tiki",),
+    "tipperary": ("manhattan",),
+    "tommys-margarita": ("sour",),
+    "trinidad-sour": ("sour",),
+    "tuxedo": ("martini",),
+    "ve-n-to": ("sour",),
+    "vesper": ("martini",),
+    "vieux-carre": ("manhattan",),
+    "whiskey-sour": ("sour",),
+    "white-lady": ("sour", "daisy"),
+    "zombie": ("tiki",),
+}
+
+
 HEAVY_ONE_AND_HALF_50_ML = {
     ("bellini", 2),
     ("canchanchara", 4),
@@ -686,11 +801,50 @@ def ingredient_id(name: str) -> str:
     return f"ingredient:{slug}"
 
 
+def json_number(value: float | None) -> float | int | None:
+    if value is not None and value.is_integer():
+        return int(value)
+    return value
+
+
+def measurement(
+    quantity: float | None,
+    maximum_quantity: float | None,
+    unit: str,
+    modifier: str | None,
+) -> dict[str, Any]:
+    return {
+        "quantity": json_number(quantity),
+        "maximumQuantity": json_number(maximum_quantity),
+        "unit": unit,
+        "modifier": modifier,
+    }
+
+
+def measurements(parsed: ParsedLine) -> dict[str, dict[str, Any]]:
+    us = measurement(parsed.quantity, parsed.maximum_quantity, parsed.unit, parsed.modifier)
+    if parsed.source_unit == "milliliter":
+        metric = measurement(parsed.source_quantity, None, "milliliter", None)
+    else:
+        metric = us.copy()
+    return {"us": us, "metric": metric}
+
+
 def build_catalog(snapshot: dict[str, Any]) -> dict[str, Any]:
     if snapshot.get("cocktailCount") != EXPECTED_COCKTAIL_COUNT:
         raise ValueError(f"Expected {EXPECTED_COCKTAIL_COUNT} source cocktails")
     if set(GLASSWARE) != {cocktail["slug"] for cocktail in snapshot["cocktails"]}:
         raise ValueError("Glassware decisions do not exactly cover the source cocktails")
+    if set(STYLES_BY_COCKTAIL) != {cocktail["slug"] for cocktail in snapshot["cocktails"]}:
+        raise ValueError("Style decisions do not exactly cover the source cocktails")
+    unknown_styles = {
+        style
+        for styles in STYLES_BY_COCKTAIL.values()
+        for style in styles
+        if style not in STYLE_VOCABULARY
+    }
+    if unknown_styles:
+        raise ValueError(f"Unknown cocktail styles: {sorted(unknown_styles)}")
 
     cocktails = []
     ingredient_names: set[str] = set()
@@ -720,23 +874,12 @@ def build_catalog(snapshot: dict[str, Any]) -> dict[str, Any]:
                 "position": position,
                 "ingredientId": parsed_ingredient_id,
                 "recipeDisplayName": recipe_display_name(corrected_text),
-                "quantity": parsed.quantity,
-                "maximumQuantity": parsed.maximum_quantity,
-                "unit": parsed.unit,
-                "quantityModifier": parsed.modifier,
-                "displayQuantity": parsed.display_quantity,
+                "measurements": measurements(parsed),
                 "requirement": "optional" if parsed.optional else "required",
                 "preparation": RECIPE_PREPARATION_OVERRIDES.get(
                     (cocktail["slug"], position), parsed.preparation
                 ),
-                "sourceMeasurement": {
-                    "text": parsed.source_text,
-                    "quantity": parsed.source_quantity,
-                    "unit": parsed.source_unit,
-                },
             }
-            if parsed.curation_notes:
-                line["curationNotes"] = parsed.curation_notes
             recipe_ingredients.append(line)
 
         garnish = cocktail["garnish"].strip()
@@ -744,24 +887,21 @@ def build_catalog(snapshot: dict[str, Any]) -> dict[str, Any]:
             garnish = None
         else:
             garnish = GARNISH_OVERRIDES.get(cocktail["slug"], garnish)
+        output_slug = "tiki" if cocktail["slug"] == "iba-tiki" else cocktail["slug"]
+        output_name = "Tiki" if cocktail["slug"] == "iba-tiki" else cocktail["name"]
         cocktails.append({
-            "id": f"cocktail:{cocktail['slug']}",
-            "slug": cocktail["slug"],
-            "name": cocktail["name"],
-            "ibaCategory": normalized_key(cocktail["ibaCategory"]).replace(" ", "-"),
+            "id": f"cocktail:{output_slug}",
+            "slug": output_slug,
+            "name": output_name,
             "primarySpiritId": primary_spirit,
+            "styles": list(STYLES_BY_COCKTAIL[cocktail["slug"]]),
             "recipes": [{
-                "id": f"recipe:{cocktail['slug']}:iba",
-                "name": "IBA official recipe",
-                "source": {
-                    "url": cocktail["sourceUrl"],
-                    "retrievedOn": snapshot["source"]["retrievedOn"],
-                },
+                "id": f"recipe:{output_slug}:default",
+                "name": "Default recipe",
                 "ingredients": recipe_ingredients,
                 "instructions": INSTRUCTION_OVERRIDES.get(cocktail["slug"], cocktail["method"]),
                 "glassware": GLASSWARE[cocktail["slug"]],
                 "garnish": garnish,
-                "curationNotes": sorted(set(cocktail_notes)),
             }],
         })
 
@@ -772,59 +912,13 @@ def build_catalog(snapshot: dict[str, Any]) -> dict[str, Any]:
         {"id": ingredient_id(name), "name": name, "category": CATEGORY_BY_INGREDIENT[name]}
         for name in sorted(ingredient_names, key=str.casefold)
     ]
-    all_lines = [
-        line
-        for cocktail in cocktails
-        for recipe in cocktail["recipes"]
-        for line in recipe["ingredients"]
-    ]
-    judgment_lines = [
-        line
-        for line in all_lines
-        if line["sourceMeasurement"]["quantity"] in {10, 20, 50}
-        and line["sourceMeasurement"]["unit"] == "milliliter"
-    ]
-    corrected_lines_count = sum(
-        1
-        for line in all_lines
-        if any(
-            note.startswith(("Added ", "Split "))
-            for note in line.get("curationNotes", [])
-        )
-    )
     return {
         "schemaVersion": 1,
         "catalog": {
-            "id": f"catalog:iba-official:{snapshot['source']['retrievedOn']}",
-            "name": "IBA official cocktails",
-            "status": "pending-human-review",
-            "source": snapshot["source"],
-            "sourceSnapshot": f"sources/iba-{snapshot['source']['retrievedOn']}.json",
-            "measurementPolicy": {
-                "millilitersPerOunce": ML_PER_OUNCE,
-                "default": "Round milliliters to the nearest quarter ounce.",
-                "fiveMilliliters": "Present as one barspoon.",
-                "judgmentAmounts": [10, 20, 50],
-                "preservedUnits": [
-                    "barspoon", "teaspoon", "tablespoon", "dash", "drop", "piece",
-                    "slice", "sprig", "wheel", "cube", "pinch", "shot", "splash",
-                    "top-up", "to-taste",
-                ],
-            },
+            "id": "catalog:bar-buddy",
+            "name": "Bar Buddy cocktail catalog",
+            "defaultMeasurementSystem": "us",
         },
-        "review": {
-            "status": "pending-product-owner-review",
-            "judgmentConversionCount": len(judgment_lines),
-            "sourceCorrectionLineCount": corrected_lines_count,
-            "focus": [
-                "All 10 ml, 20 ml, and 50 ml presentation decisions",
-                "Canonical ingredient matching and categories",
-                "Required versus optional ingredients",
-                "Glassware, instructions, and garnish",
-            ],
-        },
-        "ingredientCount": len(ingredients),
-        "cocktailCount": len(cocktails),
         "ingredients": ingredients,
         "cocktails": cocktails,
     }

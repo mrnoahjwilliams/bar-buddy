@@ -150,11 +150,11 @@ No public app or application entity schema yet.
 
 #### 2.2.1 — Tags, aliases and mocktails
 
-- [ ] **Decide:** general/seasonal/occasion tag vocabulary, ingredient/search alias matching and alcohol-free/mocktail classification/coverage. Extend existing catalog fields and reviewed data; support combined search/filtering without new persistent entities. **Verify:** aliases such as OJ → Orange Juice, duplicate matches, tags and mocktail results with normal availability grouping; do not infer precise strength before Release 7.
+- [ ] Use the reviewed optional cocktail styles and **decide:** general/seasonal/occasion tag vocabulary, ingredient/search alias matching and alcohol-free/mocktail classification/coverage. Extend existing catalog fields and reviewed data; support combined search/filtering without new persistent entities. **Verify:** unclassified and multi-style cocktails, aliases such as OJ → Orange Juice, duplicate matches, later tags and mocktail results with normal availability grouping; do not infer precise strength before Release 7.
 
 #### 2.2.2 — Filters and sorting
 
-- [ ] Extend existing search/filter combinations with the new metadata and alphabetical/ingredient-count sorting. Define distinct-count treatment of optional ingredients, stable ties and invalid/empty parameters. Extend mobile controls, active indicators and reset. **Verify:** combinations/ties/empty results, makeable/one-away grouping, cache/navigation state and query cost. Frequency, rating and strength sorts arrive in 4, 6 and 7 respectively.
+- [ ] Extend existing search/filter combinations with optional cocktail styles and the new metadata, plus alphabetical/ingredient-count sorting. Define distinct-count treatment of optional ingredients, stable ties and invalid/empty parameters. Extend mobile controls, active indicators and reset. **Verify:** unclassified/multi-style results, combinations/ties/empty results, makeable/one-away grouping, cache/navigation state and query cost. Frequency, rating and strength sorts arrive in 4, 6 and 7 respectively.
 
 #### 2.2.3 — Recently viewed cocktails
 
@@ -264,7 +264,7 @@ Logging does not deduct inventory in this release.
 
 #### 5.3.2 — US/metric display and recipe scaling
 
-- [ ] **Decide:** supported display units, automatic conversion/rounding, preference persistence, serving range and treatment of non-volume/optional ingredients. Add US/metric recipe display, compatible measurement conversion and multiple-serving scaling using shared measurement rules. **Verify:** equivalent quantities, repeated lines, incompatible units, fractional servings and round-trip display; preserve canonical recipes and keep logging servings explicit. Print/mixing/share outputs use the selected display/servings where supported by their agreed contracts.
+- [ ] **Decide:** preference persistence, serving range, scaling/rounding of the catalog's reviewed US/metric pairs, fallback conversion for recipes without a pair, and treatment of non-volume/optional ingredients. Add US/metric recipe display, compatible measurement conversion where needed and multiple-serving scaling using shared measurement rules. **Verify:** reviewed pair selection, equivalent quantities, repeated lines, incompatible units, fractional servings and fallback round trips; preserve canonical recipes and keep logging servings explicit. Print/mixing/share outputs use the selected display/servings where supported by their agreed contracts.
 
 #### 5.3.3 — Batch cocktail mode
 
