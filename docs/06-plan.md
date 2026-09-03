@@ -34,15 +34,15 @@ No public app or application entity schema yet.
 
 #### 0.1.1 — Application roots
 
-- [ ] Create Bar Buddy backend/frontend roots and initial needed feature boundaries using `com.barbuddy`; preserve the prepared documents. Use the existing GitHub repository and open the first development PR under Workflow. **Verify:** structure/package identity, remote/base and PR are correct; no later-release features are scaffolded as implemented behavior.
+- [x] Create Bar Buddy backend/frontend roots and initial needed feature boundaries using `com.barbuddy`; preserve the prepared documents. Use the existing GitHub repository and open the first development PR under Workflow. **Verify:** structure/package identity, remote/base and PR are correct; no later-release features are scaffolded as implemented behavior.
 
 #### 0.1.2 — Runnable backend and local database
 
-- [ ] Configure the accepted Java/Spring dependencies and compatible versions, Maven wrapper, runtime/example configuration, local PostgreSQL and backend test runners. Add selected formatting/static checks. Document prerequisites, startup, database lifecycle and commands in README. **Verify:** backend starts, package/unit checks run, and a real PostgreSQL Testcontainers check works without production credentials; do not create future application tables for a smoke test.
+- [x] Configure the accepted Java/Spring dependencies and compatible versions, Maven wrapper, runtime/example configuration, local PostgreSQL and backend test runners. Add selected formatting/static checks. Document prerequisites, startup, database lifecycle and commands in README. **Verify:** backend starts, package/unit checks run, and a real PostgreSQL Testcontainers check works without production credentials; do not create future application tables for a smoke test.
 
 #### 0.1.3 — Runnable frontend
 
-- [ ] Configure React/TypeScript/Vite and the accepted frontend libraries, providers, package manager/lockfile, formatting/lint/type checks and behavioral test runner. Document install/start/build/test commands. **Verify:** clean installation, app startup, meaningful shell test and production build; leave authenticated navigation to 1.1.
+- [x] Configure React/TypeScript/Vite and the accepted frontend libraries, providers, package manager/lockfile, formatting/lint/type checks and behavioral test runner. Document install/start/build/test commands. **Verify:** clean installation, app startup, meaningful shell test and production build; leave authenticated navigation to 1.1.
 
 #### 0.1.4 — Generated API pipeline
 

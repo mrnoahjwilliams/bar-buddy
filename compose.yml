@@ -1,0 +1,21 @@
+name: bar-buddy
+
+services:
+  postgres:
+    image: postgres:17.11-alpine
+    environment:
+      POSTGRES_DB: bar_buddy
+      POSTGRES_USER: bar_buddy
+      POSTGRES_PASSWORD: bar_buddy_local
+    ports:
+      - "127.0.0.1:54329:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bar_buddy -d bar_buddy"]
+      interval: 2s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  postgres-data:
