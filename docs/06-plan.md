@@ -2,11 +2,11 @@
 
 ## How to execute
 
-Follow releases and work units in order. A heading ending in three numbers is a child unit; where there are no children, the two-number milestone is the unit. Default one development task/PR to one smallest unit. Parent milestones finish only when all children and applicable verification finish. Milestones group related work; subdivisions identify reviewable tasks. The roadmap includes every scheduled feature in Requirements.
+Follow releases and work units in order. A heading ending in three numbers is a child unit; where there are no children, the two-number milestone is the unit. Units are implementation and verification checkpoints; Workflow defines how to group them into coherent PRs with multiple commits. A milestone may take one PR or several. Parent milestones finish only when all children and applicable verification finish. The roadmap includes every scheduled feature in Requirements.
 
 Each unchecked unit names an outcome, its work and its distinguishing verification. **Decide** marks choices to settle and record before dependent implementation, not permission to invent a rule. Routine tooling choices within Design may be made by the implementer. Read the corresponding Requirements release/domain rules and Design model/API sections; use Workflow for Git/approval/docs and Guidelines for implementation conventions.
 
-For every unit: implement its full stated scope, run meaningful checks, update affected docs and check it only when verified. A checkbox is not proof of merge; Workflow requires checking that prerequisite work is on the base. Preserve partial completion as smaller checkboxes within the unit if needed. Do not duplicate the product specification in this plan.
+For every unit: implement its full stated scope, run meaningful checks, update affected docs and check it only when verified. A checkbox is not proof of merge; Workflow distinguishes prerequisites on the base from verified work included in the same PR. Preserve partial completion as smaller checkboxes within the unit if needed. Do not duplicate the product specification in this plan.
 
 ### Shared verification
 

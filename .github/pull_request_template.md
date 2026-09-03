@@ -1,6 +1,6 @@
 ## Change
 
-<!-- Explain the problem and resulting behavior. Link the numbered plan milestone and list the completed part if this is a partial milestone. -->
+<!-- Explain the problem and resulting behavior. Identify the included Plan units or portions, the coherent outcome, and any remaining milestone work. Related changes and multiple commits may share this PR. -->
 
 ## Verification
 

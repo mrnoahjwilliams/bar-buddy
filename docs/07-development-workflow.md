@@ -2,27 +2,33 @@
 
 Execution and Git/CI policy live here. Use [AGENTS.md](../AGENTS.md) to load only task-relevant context. Plan is the ordered backlog; Documentation records actual implementation. No separate session handoff/log or duplicate issue tracker is required.
 
+## PR scope
+
+Choose one coherent, verifiable outcome with a clear stopping point. A PR may cover part of a Plan unit, one unit, or several related units; a whole milestone fits only when the combined change remains practical to review and test. Group work by its outcome and dependencies, not a fixed number of units or commits. For example, an inventory API and its Bar controls may share a PR; foundation can be split into several useful outcomes.
+
+Select routine grouping autonomously and state the included units, outcome, checks and stopping point before editing. Complete them in order on one branch with as many focused commits as useful. If work grows, explain a narrower coherent boundary and leave remaining items incomplete. Present the result for review at that boundary; do not keep adding work just to finish a milestone. Review fixes stay in the same PR.
+
 ## Before
 
 1. Inspect files, applicable instructions, branch/status, staged/unstaged work and relevant history. With a remote, fetch and inspect related PRs. Preserve unrelated changes; do not reset, clean, stash or switch away from another person's work without understanding ownership.
-2. For development, select the earliest incomplete **smallest numbered work unit** in Plan, reconcile it with actual implementation, and read its requirements/design and Guidelines. An explicit user task overrides the default selection. “What's next?” requests guidance only.
-3. The user normally merges PRs before returning. Still verify prerequisite work is present in current `origin/main`; a checked implementation item on an unmerged branch is not a usable dependency. If a prerequisite PR is pending, resume its checks/review or report the pending merge. Do not recreate the work or silently start dependent work from an older base. Without a remote, apply the same check against local `main`.
-4. Ask only for decisions blocking the current action, record accepted answers in the owning document, and continue independent authorized work. Briefly state the unit/outcome and relevant checks. Missing tooling is expected until its foundation unit.
+2. For development, start from the earliest incomplete work in Plan, reconcile it with actual implementation, choose PR scope above, and read the included units' requirements/design and Guidelines. “Start development” and “Continue development” authorize this routine; “What's next?” requests guidance only. An explicit user scope overrides the default selection.
+3. The user normally merges PRs before returning. Verify prerequisites outside the selected scope are present in current `origin/main`. Within the same PR, later units may use verified earlier work on that branch without an intermediate merge. If a separate prerequisite PR is pending, resume its checks/review or report the pending merge; do not recreate it or silently build from an older base. Without a remote, apply the base check against local `main`.
+4. Ask only for decisions blocking the current action, record accepted answers in the owning document, and continue independent authorized work. Routine PR grouping needs no separate approval. Missing tooling is expected until its foundation unit.
 5. Continue the related task branch/PR or create a branch from the verified base with a safe working tree. Run the focused baseline checks needed to identify pre-existing failures. Report unavailable remote/check access rather than assuming success.
 
 ## During
 
-1. Implement the selected unit under Guidelines and the accepted release scope. Make routine choices autonomously; never silently resolve a business decision or expand scope.
-2. Apply Guidelines' API/client compatibility rule within the selected Plan unit; keep its tests and affected docs together. Verify risky behavior as it changes and fix introduced failures. Never weaken checks or disguise missing verification.
+1. Implement the selected PR scope under Guidelines and the accepted release order. Make routine choices autonomously; never silently resolve a business decision or expand scope.
+2. Apply Guidelines' API/client compatibility rule across the included units; keep their tests and affected docs in the PR. Make focused commits along the way. Verify risky behavior as it changes and fix introduced failures. Never weaken checks or disguise missing verification.
 3. Give concise progress/blocker updates. Preserve useful partial work if blocked; leave incomplete Plan items unchecked and record implementation limitations in Documentation or the PR, without creating a handoff file.
 
 ## Finish and review
 
-1. Review the complete diff against the base, including new/generated files, migrations and docs. Remove accidental secrets, debug residue and unrelated changes. Run the unit's checks and applicable shared release checks from Plan. Documentation-only work needs link/content/consistency review, not invented application tests.
+1. Review the complete diff against the base, including new/generated files, migrations and docs. Remove accidental secrets, debug residue and unrelated changes. Run checks for the included work and applicable shared release checks from Plan. Documentation-only work needs link/content/consistency review, not invented application tests.
 2. Update only affected owners: Definition (purpose/terms); Requirements (obligations/releases/rules); Design (accepted technical decisions); Guidelines (engineering rules); Documentation (verified behavior/operational limits); Plan (completion/sequence); Workflow (execution/authority); AGENTS/README (routing/working setup commands). Link rather than duplicate.
 3. Check only completed, verified Plan items. Record CI/publication-dependent items only after their actual checks succeed; use PR check status for transient CI results. Implementation, verification, merge and deployment are distinct. All child work units and shared obligations must be complete before their parent is complete.
 4. Make focused commits, push the feature branch, and open/update a PR using the template. Use a draft for partial work. Inspect CI on the current PR commit and resolve findings before presenting the concrete result for merge approval. If no remote exists, keep the committed local branch reviewable and report that no PR exists.
-5. Merge only with user approval and passing applicable checks; squash into `main`. If the user merged, verify that result. Safely remove merged task branches and fast-forward the local base; do not discard other work. Do not silently start the next unit.
+5. Merge only with user approval and passing applicable checks; squash into `main`. “Merge” approves the current unambiguous PR; clarify the target only if needed. If the user merged, verify that result. Safely remove merged task branches and fast-forward the local base; do not discard other work or automatically start another PR scope.
 6. Deploy only at the relevant release unit with user authorization. Verify the actual deployment and record its result through the normal documentation/PR process; CI success alone is not deployment. Report outcome, actual checks, Git/PR status, remaining blockers and the next unit briefly.
 
 ## Standing agent authority
@@ -39,7 +45,7 @@ Use configured Git author identity; ask if missing. Repository rules cannot bypa
 
 ## Git and GitHub
 
-GitHub is the source/PR host; `main` is the base. Use short-lived `<type>/<work-unit>-<description>` branches (e.g. `feat/1.3.1-inventory`) or `docs/<description>` for unnumbered documentation work. Commit prefixes: `feat`, `fix`, `docs`, `test`, `refactor`, `chore`. Stage only reviewed task files. One PR covers one coherent unit or explicit scope; issues are optional because Plan remains the backlog.
+GitHub is the source/PR host; `main` is the base. Use short-lived `<type>/<starting-unit>-<description>` branches (e.g. `feat/1.3.1-inventory`) or `docs/<description>` for unnumbered documentation work. Commit prefixes: `feat`, `fix`, `docs`, `test`, `refactor`, `chore`. Stage only reviewed task files. Multiple commits and related changes belong on the branch/PR for the chosen scope; one squash merge produces one commit on `main`. Issues are optional because Plan remains the backlog.
 
 Avoid force pushes/shared-history rewrites; resolve conflicts carefully and keep branch-sync merge commits separate from product changes. Use squash merges and safe merged-branch cleanup. Keep `main` usable. The initial Bar Buddy repository starts with one reviewed documentation commit on `main`; subsequent work uses task branches/PRs. This one-time bootstrap does not authorize later history rewrites. Never overwrite existing remote history.
 

@@ -8,7 +8,7 @@ Build Bar Buddy from repository context. Read selectively; do not load every doc
 |---|---|
 | Understand the product | [Definition](docs/01-definition.md); relevant [Requirements](docs/02-requirements.md) |
 | “What's next?” / progress | [Documentation](docs/05-documentation.md), the first incomplete work unit in [Plan](docs/06-plan.md), and Git/PR state |
-| Implement / fix / continue | Selected Plan unit; relevant Requirements and [Design](docs/03-design.md) sections; [Guidelines](docs/04-development-guidelines.md); [Workflow](docs/07-development-workflow.md); affected code/tests |
+| Implement / fix / start / continue | Plan units included in the selected scope; relevant Requirements and [Design](docs/03-design.md) sections; [Guidelines](docs/04-development-guidelines.md); [Workflow](docs/07-development-workflow.md); affected code/tests |
 | Review | Changed code/docs, applicable requirements/design, Guidelines, and the review rules below |
 | Setup, commands, Git, CI, or permissions | [README](README.md), Workflow, and relevant foundation Plan units |
 | Edit a document | That document and its affected references; use the ownership map below |
@@ -25,10 +25,11 @@ Link to the owning document instead of copying its content. Resolve contradictio
 
 - Inspect the relevant files and Git state; preserve unrelated changes. Planned behavior is not implementation evidence.
 - “What's next?” requests guidance, not edits. Identify the first incomplete executable Plan unit, its outcome, and any blocking decision.
-- “Continue development” authorizes that unit under Workflow. Default to one smallest numbered work unit; do not silently start another. Follow an explicitly requested scope instead when provided.
-- Before dependent work, verify the preceding work is merged into the base. If its PR is pending, report that state instead of rebuilding or skipping it. The user normally merges before returning.
+- “Start development” and “Continue development” authorize one coherent PR scope under Workflow, starting from the earliest incomplete work. Choose and announce its outcome, included units and stopping point; related units and multiple commits may share a PR. Follow an explicitly requested scope instead when provided.
+- Verify prerequisites outside the selected PR scope are merged into the base. Included units may depend on verified earlier work on the same branch. If a separate prerequisite PR is pending, report that state instead of rebuilding or skipping it.
 - Make routine choices within accepted design. Ask only for unresolved decisions affecting the current task, complete independent authorized work, and record answers before dependent implementation.
 - Follow Workflow's standing authority: commits, feature-branch pushes, and PRs are allowed for requested work; merges and deployments need user approval.
+- “Merge” authorizes squash-merging the current unambiguous PR under Workflow's checks and review rules; ask which PR only when the target is unclear. Stop after completing the requested scope or merge.
 - Report changes, actual verification, Git/PR status, and blockers briefly. Never invent passing checks or update completion based only on intent.
 
 ## Code Review Rules
