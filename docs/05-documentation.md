@@ -26,4 +26,16 @@ The first [GitHub run](https://github.com/mrnoahjwilliams/bar-buddy/actions/runs
 
 `main` requires a pull request, resolved conversations, an up-to-date branch, and all three checks from the GitHub Actions app. Protection applies to administrators, disallows force pushes/deletion, and requires linear history. GitHub permits squash merges only. The public repository supports these protections; no account upgrade or visibility change was needed. The required approval count is zero for the solo-owner workflow; user review and merge authorization remain governed by [Workflow](07-development-workflow.md#finish-and-review).
 
-Full clean-checkout foundation acceptance remains 0.1.6. See [Plan](06-plan.md) for completion. Nothing has been deployed.
+## Foundation acceptance
+
+Unit 0.1.6 was verified on 2026-09-03 from a fresh clone of merged foundation commit `3bf8908`, with no existing `.env`, frontend dependencies, or build output. [README](../README.md#setup) provides the setup sequence. The acceptance run used the pinned Java 25.0.2, Node 24.20.0, npm 11.19.0, and a fresh npm cache; Maven used its existing dependency cache. Selecting Node before installation is necessary when a new checkout inherits another default version; the engine check correctly rejected Node 26 before the pinned version was selected.
+
+The existing development session remained running. The acceptance copy used a separate Compose project and fresh volume, changing only the temporary Compose host port to `54330`, the copied backend example's database/server ports to `54330`/`8081`, and the frontend startup port to `5174`. These temporary settings are not application changes. No hosted services or production credentials were required.
+
+- PostgreSQL became healthy from an empty volume. Backend startup loaded the copied example without exported database/server settings; health returned `UP` without database details, and application and API-documentation requests returned HTTP 401. Only Flyway's schema-history table existed. Compose stop/start reused the volume and retained that metadata.
+- Full backend verification passed formatting/static checks, packaging, two security tests and two PostgreSQL integration tests, with no skipped tests.
+- Clean frontend installation, formatting/lint, eight behavioral/transport tests, the API-tooling test, TypeScript and production build passed. Browser review confirmed the shell at desktop and mobile sizes, direct unknown-page loading and the return link, with no captured warnings or errors.
+- API generation, a subsequent frontend check, and independent API drift verification passed. Regenerated contract/client files were identical to the tracked files, and the clone's tracked working tree remained clean. Local settings, installed dependencies and build output were ignored by Git.
+- All three checks passed on the merged foundation PR [#6](https://github.com/mrnoahjwilliams/bar-buddy/pull/6) and on the [base commit's CI jobs](https://github.com/mrnoahjwilliams/bar-buddy/actions/runs/33777244132). Current acceptance-PR checks remain visible on its Checks tab.
+
+No application changes were needed for acceptance. Temporary app processes and the disposable database were removed after verification. Foundation is complete; [Plan](06-plan.md#021--catalog-decisions-and-format) next requires catalog decisions and format review. Nothing has been deployed.

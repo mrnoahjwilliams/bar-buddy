@@ -54,7 +54,7 @@ No public app or application entity schema yet.
 
 #### 0.1.6 — Foundation acceptance
 
-- [ ] Follow README from a clean checkout: configure examples, install dependencies, start both apps/database, run checks/builds and generate the API client. **Verify:** foundation PR checks pass, setup requires no undocumented secrets/manual steps, and relevant configuration/status documentation is accurate. Source hosting and CI now exist; production hosting remains in 1.6.
+- [x] Follow README from a clean checkout: configure examples, install dependencies, start both apps/database, run checks/builds and generate the API client. **Verify:** foundation PR checks pass, setup requires no undocumented secrets/manual steps, and relevant configuration/status documentation is accurate. Source hosting and CI now exist; production hosting remains in 1.6.
 
 ### 0.2 — Curated catalog
 
