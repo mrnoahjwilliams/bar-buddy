@@ -48,6 +48,7 @@ Recipe ingredient fields have these meanings:
 |---|---|
 | `position` | One-based display order within the recipe. |
 | `ingredientId` | Reference to one canonical ingredient. |
+| `recipeDisplayName` | Recipe-specific IBA wording shown beside the amount; it may be more specific than the canonical ingredient used for availability. |
 | `quantity`, `maximumQuantity` | Structured amount; the maximum is present only for a source range. |
 | `unit` | Normalized unit such as `ounce`, `barspoon`, `dash`, `piece`, or `top-up`. |
 | `quantityModifier` | `scant`, `heavy`, or null. |
@@ -65,12 +66,35 @@ Ingredient categories use the Design vocabulary in JSON-safe form:
 
 Matching ignores capitalization, accents, freshness wording, and minor spelling
 variation. Equivalent source terms such as `Sugar Syrup` and `Simple Syrup` share one
-canonical ingredient. Product names remain canonical when bartenders ordinarily use
-them as the recipe ingredient, such as Campari, Aperol, Cointreau, and Grand Marnier.
-Bottle-specific source entries are matched to a functional ingredient when the named
-bottle is not required by the recipe model; examples include Smirnoff to Vodka,
-Goslings to Dark rum, and Lagavulin 16 to Islay Scotch whisky. The original wording
-remains in `sourceMeasurement.text` for review.
+canonical ingredient. A canonical ingredient represents what a user can reasonably
+substitute from their bar; `recipeDisplayName` preserves the more specific IBA wording
+needed to make the official recipe. Product names remain canonical when they identify
+a distinct ingredient, such as Campari or Aperol. Bottle-specific source entries are
+matched to a functional ingredient when that exact bottle is not necessary.
+
+The reviewed matching pass applies these practical groups:
+
+- Cointreau, Triple Sec, Grand Marnier, Curaçao, and Orange Curaçao match Orange
+  liqueur. Brown/white crème de cacao and green/white crème de menthe each match one
+  canonical liqueur.
+- Champagne and Prosecco match Sparkling wine; Amontillado and Palo Cortado match
+  Sherry; Angostura matches Aromatic bitters.
+- Rum uses Rum, White rum, Aged rum, Dark rum, Overproof white rum, and Rhum
+  agricole. Country, blend, color, and named-bottle wording is retained on the recipe
+  line. Cuban rum matches White rum; unspecified Jamaican rum matches Rum;
+  gold/blended-aged/Martinique-molasses rum matches Aged rum; and
+  blackstrap/Demerara/smoky/dark rum matches Dark rum.
+- Blended, Islay, and named Islay Scotch match Scotch whisky. Bourbon, Rye whiskey,
+  Irish whiskey, and Scotch whisky remain distinct.
+- Agave nectar matches Agave syrup. Honey Mix matches Honey syrup, while undiluted
+  raw honey remains Honey. Demerara sugar syrup matches Simple syrup. Powdered,
+  superfine, white cane, and vanilla sugar match Sugar.
+- Apricot brandy, cherry brandy, and peach brandy/schnapps match their corresponding
+  fruit liqueur. Smirnoff matches Vodka, Kahlúa matches Coffee liqueur, Frangelico
+  matches Hazelnut liqueur, and Lagavulin 16 matches Scotch whisky.
+
+The original source line remains in `sourceMeasurement.text`, so every match is
+auditable even when the inventory vocabulary is broader.
 
 When an IBA line offers alternatives, the initial recipe uses its first-listed option
 so availability has one deterministic ingredient reference. The recipe records that

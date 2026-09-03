@@ -2,7 +2,7 @@
 
 ## Catalog curation draft
 
-The 0.2 branch contains a dated machine-readable snapshot of all 102 cocktails on the IBA official list as retrieved on September 3, 2026, plus a normalized JSON review candidate. The offline scraper verifies the expected unique page count and preserves every source URL, ingredient line, method and garnish. The builder currently resolves 416 ordered recipe lines against 143 canonical ingredients, retains source measurements, converts ordinary metric quantities to US bar notation, and records corrections and judgment conversions. [`catalog/README.md`](../catalog/README.md) owns the draft format, provenance, matching rules and review procedure.
+The 0.2 branch contains a dated machine-readable snapshot of all 102 cocktails on the IBA official list as retrieved on September 3, 2026, plus a normalized JSON review candidate. The offline scraper verifies the expected unique page count and preserves every source URL, ingredient line, method and garnish. The builder currently resolves 416 ordered recipe lines against 113 practical canonical ingredients, retains recipe-specific IBA ingredient wording and source measurements, converts ordinary metric quantities to US bar notation, and records corrections and judgment conversions. [`catalog/README.md`](../catalog/README.md) owns the draft format, provenance, matching rules and review procedure.
 
 The normalized catalog remains `pending-human-review`. It is not a database seed, no application runtime uses it, and Plan units 0.2.1 and 0.2.2 remain incomplete until product-owner review resolves the catalog decisions and content. Automated validation/import readiness remains separately scheduled in 0.3.
 

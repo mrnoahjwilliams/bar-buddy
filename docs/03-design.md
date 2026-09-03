@@ -102,7 +102,7 @@ Non-persistent results/value objects include AvailabilityResult, MissingIngredie
 
 ## Offline catalog format
 
-Release 0 catalog preparation uses a versioned JSON interchange format under [`catalog/`](../catalog/README.md). A dated source snapshot preserves the official IBA wording and page URL; a separate normalized file contains stable namespaced ingredient, cocktail and recipe identifiers, canonical ingredient references/categories, ordered requirement lines, presentation measurements, instructions, glassware and garnish. The application never scrapes the source website at runtime.
+Release 0 catalog preparation uses a versioned JSON interchange format under [`catalog/`](../catalog/README.md). A dated source snapshot preserves the official IBA wording and page URL; a separate normalized file contains stable namespaced ingredient, cocktail and recipe identifiers, canonical ingredient references/categories, recipe-specific display wording, ordered requirement lines, presentation measurements, instructions, glassware and garnish. Recipe wording may be more specific than its canonical inventory match so availability stays practical without losing the official recipe detail. The application never scrapes the source website at runtime.
 
 Each initial cocktail has one IBA recipe. Source quantities remain alongside the US presentation quantity so rounding and corrections are auditable. The normalized file may express a scant/heavy display modifier and a maximum for a source range without creating another persistent entity. Import mapping into the locked domain entities is decided in 0.3 and implemented with persistence in 1.2.1. Product-owner review is required before the normalized file becomes an import source.
 

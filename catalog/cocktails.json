@@ -49,7 +49,7 @@
       "Glassware, instructions, and garnish"
     ]
   },
-  "ingredientCount": 143,
+  "ingredientCount": 113,
   "cocktailCount": 102,
   "ingredients": [
     {
@@ -58,13 +58,18 @@
       "category": "spirit"
     },
     {
-      "id": "ingredient:agave-nectar",
-      "name": "Agave nectar",
+      "id": "ingredient:agave-syrup",
+      "name": "Agave syrup",
       "category": "syrup"
     },
     {
       "id": "ingredient:aged-rum",
       "name": "Aged rum",
+      "category": "spirit"
+    },
+    {
+      "id": "ingredient:aguardiente",
+      "name": "Aguardiente",
       "category": "spirit"
     },
     {
@@ -83,23 +88,13 @@
       "category": "liqueur"
     },
     {
-      "id": "ingredient:amontillado-sherry",
-      "name": "Amontillado sherry",
-      "category": "fortified_wine"
-    },
-    {
-      "id": "ingredient:angostura-bitters",
-      "name": "Angostura bitters",
-      "category": "bitters"
-    },
-    {
       "id": "ingredient:aperol",
       "name": "Aperol",
       "category": "liqueur"
     },
     {
-      "id": "ingredient:apricot-brandy",
-      "name": "Apricot brandy",
+      "id": "ingredient:apricot-liqueur",
+      "name": "Apricot liqueur",
       "category": "liqueur"
     },
     {
@@ -118,21 +113,6 @@
       "category": "other"
     },
     {
-      "id": "ingredient:blackstrap-rum",
-      "name": "Blackstrap rum",
-      "category": "spirit"
-    },
-    {
-      "id": "ingredient:blended-aged-rum",
-      "name": "Blended aged rum",
-      "category": "spirit"
-    },
-    {
-      "id": "ingredient:blended-scotch-whisky",
-      "name": "Blended Scotch whisky",
-      "category": "spirit"
-    },
-    {
       "id": "ingredient:bourbon",
       "name": "Bourbon",
       "category": "spirit"
@@ -141,11 +121,6 @@
       "id": "ingredient:brandy",
       "name": "Brandy",
       "category": "spirit"
-    },
-    {
-      "id": "ingredient:brown-creme-de-cacao",
-      "name": "Brown crème de cacao",
-      "category": "liqueur"
     },
     {
       "id": "ingredient:benedictine",
@@ -176,21 +151,6 @@
       "id": "ingredient:chamomile-cordial",
       "name": "Chamomile cordial",
       "category": "syrup"
-    },
-    {
-      "id": "ingredient:chamomile-honey-mix",
-      "name": "Chamomile honey mix",
-      "category": "syrup"
-    },
-    {
-      "id": "ingredient:champagne",
-      "name": "Champagne",
-      "category": "mixer"
-    },
-    {
-      "id": "ingredient:cherry-brandy",
-      "name": "Cherry brandy",
-      "category": "liqueur"
     },
     {
       "id": "ingredient:cherry-liqueur",
@@ -228,11 +188,6 @@
       "category": "spirit"
     },
     {
-      "id": "ingredient:cointreau",
-      "name": "Cointreau",
-      "category": "liqueur"
-    },
-    {
       "id": "ingredient:cola",
       "name": "Cola",
       "category": "mixer"
@@ -248,8 +203,18 @@
       "category": "other"
     },
     {
+      "id": "ingredient:creme-de-cacao",
+      "name": "Crème de cacao",
+      "category": "liqueur"
+    },
+    {
       "id": "ingredient:creme-de-cassis",
       "name": "Crème de cassis",
+      "category": "liqueur"
+    },
+    {
+      "id": "ingredient:creme-de-menthe",
+      "name": "Crème de menthe",
       "category": "liqueur"
     },
     {
@@ -263,39 +228,14 @@
       "category": "liqueur"
     },
     {
-      "id": "ingredient:cuban-aguardiente",
-      "name": "Cuban aguardiente",
-      "category": "spirit"
-    },
-    {
-      "id": "ingredient:cuban-rum",
-      "name": "Cuban rum",
-      "category": "spirit"
-    },
-    {
       "id": "ingredient:cynar",
       "name": "Cynar",
       "category": "liqueur"
     },
     {
-      "id": "ingredient:dark-jamaican-rum",
-      "name": "Dark Jamaican rum",
-      "category": "spirit"
-    },
-    {
       "id": "ingredient:dark-rum",
       "name": "Dark rum",
       "category": "spirit"
-    },
-    {
-      "id": "ingredient:demerara-rum",
-      "name": "Demerara rum",
-      "category": "spirit"
-    },
-    {
-      "id": "ingredient:demerara-syrup",
-      "name": "Demerara syrup",
-      "category": "syrup"
     },
     {
       "id": "ingredient:donns-mix",
@@ -368,21 +308,6 @@
       "category": "mixer"
     },
     {
-      "id": "ingredient:gold-jamaican-rum",
-      "name": "Gold Jamaican rum",
-      "category": "spirit"
-    },
-    {
-      "id": "ingredient:gold-rum",
-      "name": "Gold rum",
-      "category": "spirit"
-    },
-    {
-      "id": "ingredient:grand-marnier",
-      "name": "Grand Marnier",
-      "category": "liqueur"
-    },
-    {
       "id": "ingredient:grapefruit-juice",
       "name": "Grapefruit juice",
       "category": "juice"
@@ -403,11 +328,6 @@
       "category": "liqueur"
     },
     {
-      "id": "ingredient:green-creme-de-menthe",
-      "name": "Green crème de menthe",
-      "category": "liqueur"
-    },
-    {
       "id": "ingredient:grenadine",
       "name": "Grenadine",
       "category": "syrup"
@@ -423,11 +343,6 @@
       "category": "syrup"
     },
     {
-      "id": "ingredient:honey-mix",
-      "name": "Honey mix",
-      "category": "syrup"
-    },
-    {
       "id": "ingredient:honey-syrup",
       "name": "Honey syrup",
       "category": "syrup"
@@ -435,16 +350,6 @@
     {
       "id": "ingredient:irish-whiskey",
       "name": "Irish whiskey",
-      "category": "spirit"
-    },
-    {
-      "id": "ingredient:islay-scotch-whisky",
-      "name": "Islay Scotch whisky",
-      "category": "spirit"
-    },
-    {
-      "id": "ingredient:jamaican-rum",
-      "name": "Jamaican rum",
       "category": "spirit"
     },
     {
@@ -478,11 +383,6 @@
       "category": "liqueur"
     },
     {
-      "id": "ingredient:martinique-molasses-rum",
-      "name": "Martinique molasses rum",
-      "category": "spirit"
-    },
-    {
       "id": "ingredient:mezcal",
       "name": "Mezcal",
       "category": "spirit"
@@ -508,11 +408,6 @@
       "category": "bitters"
     },
     {
-      "id": "ingredient:orange-curacao",
-      "name": "Orange curaçao",
-      "category": "liqueur"
-    },
-    {
       "id": "ingredient:orange-flower-water",
       "name": "Orange flower water",
       "category": "other"
@@ -523,6 +418,11 @@
       "category": "juice"
     },
     {
+      "id": "ingredient:orange-liqueur",
+      "name": "Orange liqueur",
+      "category": "liqueur"
+    },
+    {
       "id": "ingredient:orgeat-syrup",
       "name": "Orgeat syrup",
       "category": "syrup"
@@ -531,11 +431,6 @@
       "id": "ingredient:overproof-white-rum",
       "name": "Overproof white rum",
       "category": "spirit"
-    },
-    {
-      "id": "ingredient:palo-cortado-sherry",
-      "name": "Palo Cortado sherry",
-      "category": "fortified_wine"
     },
     {
       "id": "ingredient:passion-fruit-liqueur",
@@ -553,13 +448,8 @@
       "category": "syrup"
     },
     {
-      "id": "ingredient:peach-brandy",
-      "name": "Peach brandy",
-      "category": "liqueur"
-    },
-    {
-      "id": "ingredient:peach-schnapps",
-      "name": "Peach schnapps",
+      "id": "ingredient:peach-liqueur",
+      "name": "Peach liqueur",
       "category": "liqueur"
     },
     {
@@ -586,16 +476,6 @@
       "id": "ingredient:pisco",
       "name": "Pisco",
       "category": "spirit"
-    },
-    {
-      "id": "ingredient:powdered-sugar",
-      "name": "Powdered sugar",
-      "category": "other"
-    },
-    {
-      "id": "ingredient:prosecco",
-      "name": "Prosecco",
-      "category": "mixer"
     },
     {
       "id": "ingredient:raspberry-liqueur",
@@ -643,14 +523,14 @@
       "category": "spirit"
     },
     {
+      "id": "ingredient:sherry",
+      "name": "Sherry",
+      "category": "fortified_wine"
+    },
+    {
       "id": "ingredient:simple-syrup",
       "name": "Simple syrup",
       "category": "syrup"
-    },
-    {
-      "id": "ingredient:smoky-rum",
-      "name": "Smoky rum",
-      "category": "spirit"
     },
     {
       "id": "ingredient:soda-water",
@@ -671,11 +551,6 @@
       "id": "ingredient:sugar-cane-juice",
       "name": "Sugar cane juice",
       "category": "juice"
-    },
-    {
-      "id": "ingredient:superfine-sugar",
-      "name": "Superfine sugar",
-      "category": "other"
     },
     {
       "id": "ingredient:sweet-vermouth",
@@ -703,18 +578,8 @@
       "category": "juice"
     },
     {
-      "id": "ingredient:triple-sec",
-      "name": "Triple sec",
-      "category": "liqueur"
-    },
-    {
       "id": "ingredient:vanilla-extract",
       "name": "Vanilla extract",
-      "category": "other"
-    },
-    {
-      "id": "ingredient:vanilla-sugar",
-      "name": "Vanilla sugar",
       "category": "other"
     },
     {
@@ -731,21 +596,6 @@
       "id": "ingredient:water",
       "name": "Water",
       "category": "other"
-    },
-    {
-      "id": "ingredient:white-cane-sugar",
-      "name": "White cane sugar",
-      "category": "other"
-    },
-    {
-      "id": "ingredient:white-creme-de-cacao",
-      "name": "White crème de cacao",
-      "category": "liqueur"
-    },
-    {
-      "id": "ingredient:white-creme-de-menthe",
-      "name": "White crème de menthe",
-      "category": "liqueur"
     },
     {
       "id": "ingredient:white-peach-puree",
@@ -787,6 +637,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:cognac",
+              "recipeDisplayName": "Cognac",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -802,7 +653,8 @@
             },
             {
               "position": 2,
-              "ingredientId": "ingredient:brown-creme-de-cacao",
+              "ingredientId": "ingredient:creme-de-cacao",
+              "recipeDisplayName": "Crème de Cacao (Brown)",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -819,6 +671,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:cream",
+              "recipeDisplayName": "Fresh Cream",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -858,6 +711,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:campari",
+              "recipeDisplayName": "Bitter Campari",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -874,6 +728,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:sweet-vermouth",
+              "recipeDisplayName": "Sweet Red Vermouth",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -890,6 +745,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:soda-water",
+              "recipeDisplayName": "Soda Water",
               "quantity": null,
               "maximumQuantity": null,
               "unit": "splash",
@@ -929,6 +785,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:gin",
+              "recipeDisplayName": "Gin",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -944,7 +801,8 @@
             },
             {
               "position": 2,
-              "ingredientId": "ingredient:apricot-brandy",
+              "ingredientId": "ingredient:apricot-liqueur",
+              "recipeDisplayName": "Apricot Brandy",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -961,6 +819,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:calvados",
+              "recipeDisplayName": "Calvados",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -1000,6 +859,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:gin",
+              "recipeDisplayName": "Gin",
               "quantity": 1.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -1016,6 +876,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:maraschino-liqueur",
+              "recipeDisplayName": "Maraschino Luxardo",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -1032,6 +893,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:lemon-juice",
+              "recipeDisplayName": "Fresh Lemon Juice",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -1048,6 +910,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:creme-de-violette",
+              "recipeDisplayName": "Crème de Violette",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "barspoon",
@@ -1087,6 +950,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:gin",
+              "recipeDisplayName": "Dry Gin",
               "quantity": 1.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -1103,6 +967,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:honey-syrup",
+              "recipeDisplayName": "Honey Syrup",
               "quantity": 2.0,
               "maximumQuantity": null,
               "unit": "teaspoon",
@@ -1119,6 +984,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:lemon-juice",
+              "recipeDisplayName": "Fresh Lemon Juice",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -1135,6 +1001,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:orange-juice",
+              "recipeDisplayName": "Fresh Orange Juice",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -1173,7 +1040,8 @@
           "ingredients": [
             {
               "position": 1,
-              "ingredientId": "ingredient:prosecco",
+              "ingredientId": "ingredient:sparkling-wine",
+              "recipeDisplayName": "Prosecco",
               "quantity": 3.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -1190,6 +1058,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:white-peach-puree",
+              "recipeDisplayName": "White Peach Puree",
               "quantity": 1.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -1235,6 +1104,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:white-rum",
+              "recipeDisplayName": "White Rum",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -1251,6 +1121,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:cognac",
+              "recipeDisplayName": "Cognac",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -1266,7 +1137,8 @@
             },
             {
               "position": 3,
-              "ingredientId": "ingredient:triple-sec",
+              "ingredientId": "ingredient:orange-liqueur",
+              "recipeDisplayName": "Triple Sec",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -1283,6 +1155,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:lemon-juice",
+              "recipeDisplayName": "Fresh Lemon Juice",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -1326,6 +1199,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:vodka",
+              "recipeDisplayName": "Vodka",
               "quantity": 2,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -1346,6 +1220,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:coffee-liqueur",
+              "recipeDisplayName": "Coffee Liqueur",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -1391,6 +1266,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:vodka",
+              "recipeDisplayName": "Vodka",
               "quantity": 1.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -1407,6 +1283,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:tomato-juice",
+              "recipeDisplayName": "Tomato Juice",
               "quantity": 3.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -1423,6 +1300,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:lemon-juice",
+              "recipeDisplayName": "Fresh Lemon Juice",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -1439,6 +1317,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:worcestershire-sauce",
+              "recipeDisplayName": "Worcestershire Sauce",
               "quantity": 2.0,
               "maximumQuantity": null,
               "unit": "dash",
@@ -1455,6 +1334,7 @@
             {
               "position": 5,
               "ingredientId": "ingredient:tabasco-sauce",
+              "recipeDisplayName": "Tabasco Sauce",
               "quantity": null,
               "maximumQuantity": null,
               "unit": "to-taste",
@@ -1474,6 +1354,7 @@
             {
               "position": 6,
               "ingredientId": "ingredient:celery-salt",
+              "recipeDisplayName": "Celery Salt",
               "quantity": null,
               "maximumQuantity": null,
               "unit": "to-taste",
@@ -1493,6 +1374,7 @@
             {
               "position": 7,
               "ingredientId": "ingredient:black-pepper",
+              "recipeDisplayName": "Black Pepper",
               "quantity": null,
               "maximumQuantity": null,
               "unit": "to-taste",
@@ -1537,6 +1419,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:bourbon",
+              "recipeDisplayName": "Bourbon or Rye Whiskey",
               "quantity": 1.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -1553,6 +1436,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:campari",
+              "recipeDisplayName": "Bitter Campari",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -1569,6 +1453,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:sweet-vermouth",
+              "recipeDisplayName": "Sweet Red Vermouth",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -1587,7 +1472,7 @@
           "glassware": "cocktail glass",
           "garnish": "Garnish with a orange zest, optionally a lemon zest.",
           "curationNotes": [
-            "45 ml Bourbon or Rye Whiskey: selected Bourbon as the initial recipe's first-listed alternative."
+            "45 ml Bourbon or Rye Whiskey: Selected Bourbon as the initial recipe's first-listed alternative."
           ]
         }
       ]
@@ -1610,6 +1495,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:gin",
+              "recipeDisplayName": "Gin",
               "quantity": 2,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -1630,6 +1516,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:lemon-juice",
+              "recipeDisplayName": "Fresh Lemon Juice",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -1646,6 +1533,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:simple-syrup",
+              "recipeDisplayName": "Sugar Syrup",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -1662,6 +1550,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:creme-de-mure",
+              "recipeDisplayName": "Crème de Mûre",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -1701,6 +1590,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:brandy",
+              "recipeDisplayName": "Brandy",
               "quantity": 1.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -1717,6 +1607,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:maraschino-liqueur",
+              "recipeDisplayName": "Maraschino Luxardo",
               "quantity": 0.25,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -1732,7 +1623,8 @@
             },
             {
               "position": 3,
-              "ingredientId": "ingredient:orange-curacao",
+              "ingredientId": "ingredient:orange-liqueur",
+              "recipeDisplayName": "Curacao",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "barspoon",
@@ -1749,6 +1641,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:lemon-juice",
+              "recipeDisplayName": "Fresh Lemon Juice",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -1765,6 +1658,7 @@
             {
               "position": 5,
               "ingredientId": "ingredient:simple-syrup",
+              "recipeDisplayName": "Simple Syrup",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "barspoon",
@@ -1781,6 +1675,7 @@
             {
               "position": 6,
               "ingredientId": "ingredient:aromatic-bitters",
+              "recipeDisplayName": "Aromatic Bitters",
               "quantity": 2.0,
               "maximumQuantity": null,
               "unit": "dash",
@@ -1820,6 +1715,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:cachaca",
+              "recipeDisplayName": "Cachaça",
               "quantity": 2.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -1836,6 +1732,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:lime",
+              "recipeDisplayName": "Lime",
               "quantity": 1,
               "maximumQuantity": null,
               "unit": "piece",
@@ -1851,7 +1748,8 @@
             },
             {
               "position": 3,
-              "ingredientId": "ingredient:white-cane-sugar",
+              "ingredientId": "ingredient:sugar",
+              "recipeDisplayName": "White Cane Sugar",
               "quantity": 4.0,
               "maximumQuantity": null,
               "unit": "teaspoon",
@@ -1880,7 +1778,7 @@
       "slug": "canchanchara",
       "name": "Canchanchara",
       "ibaCategory": "new-era",
-      "primarySpiritId": "ingredient:cuban-aguardiente",
+      "primarySpiritId": "ingredient:aguardiente",
       "recipes": [
         {
           "id": "recipe:canchanchara:iba",
@@ -1892,7 +1790,8 @@
           "ingredients": [
             {
               "position": 1,
-              "ingredientId": "ingredient:cuban-aguardiente",
+              "ingredientId": "ingredient:aguardiente",
+              "recipeDisplayName": "Cuban Aguardiente",
               "quantity": 2.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -1909,6 +1808,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:lime-juice",
+              "recipeDisplayName": "Fresh Lime Juice",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -1925,6 +1825,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:honey",
+              "recipeDisplayName": "Raw Honey",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -1941,6 +1842,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:water",
+              "recipeDisplayName": "Water",
               "quantity": 1.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -1986,6 +1888,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:gin",
+              "recipeDisplayName": "Gin",
               "quantity": 1.25,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -2002,6 +1905,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:dry-vermouth",
+              "recipeDisplayName": "Dry Vermouth",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -2022,6 +1926,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:campari",
+              "recipeDisplayName": "Bitter Campari",
               "quantity": 0.25,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -2065,6 +1970,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:old-tom-gin",
+              "recipeDisplayName": "Old Tom Gin",
               "quantity": 1.25,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -2081,6 +1987,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:maraschino-liqueur",
+              "recipeDisplayName": "Maraschino Luxardo",
               "quantity": 0.25,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -2101,6 +2008,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:lemon-juice",
+              "recipeDisplayName": "Fresh Lemon Juice",
               "quantity": 0.25,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -2121,6 +2029,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:orange-bitters",
+              "recipeDisplayName": "Orange Bitters",
               "quantity": 2.0,
               "maximumQuantity": null,
               "unit": "dash",
@@ -2159,7 +2068,8 @@
           "ingredients": [
             {
               "position": 1,
-              "ingredientId": "ingredient:champagne",
+              "ingredientId": "ingredient:sparkling-wine",
+              "recipeDisplayName": "Chilled Champagne",
               "quantity": 3.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -2176,6 +2086,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:cognac",
+              "recipeDisplayName": "Cognac",
               "quantity": 0.25,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -2195,7 +2106,8 @@
             },
             {
               "position": 3,
-              "ingredientId": "ingredient:angostura-bitters",
+              "ingredientId": "ingredient:aromatic-bitters",
+              "recipeDisplayName": "Angostura bitters",
               "quantity": 2.0,
               "maximumQuantity": null,
               "unit": "dash",
@@ -2211,7 +2123,8 @@
             },
             {
               "position": 4,
-              "ingredientId": "ingredient:grand-marnier",
+              "ingredientId": "ingredient:orange-liqueur",
+              "recipeDisplayName": "Grand Marnier",
               "quantity": null,
               "maximumQuantity": null,
               "unit": "drop",
@@ -2228,6 +2141,7 @@
             {
               "position": 5,
               "ingredientId": "ingredient:sugar",
+              "recipeDisplayName": "Sugar",
               "quantity": 1,
               "maximumQuantity": null,
               "unit": "cube",
@@ -2267,6 +2181,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:green-chartreuse",
+              "recipeDisplayName": "Green Chartreuse",
               "quantity": 1.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -2283,6 +2198,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:pineapple-juice",
+              "recipeDisplayName": "Fresh Pineapple Juice",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -2299,6 +2215,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:lime-juice",
+              "recipeDisplayName": "Fresh Lime Juice",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -2315,6 +2232,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:falernum",
+              "recipeDisplayName": "Falernum",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -2354,6 +2272,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:gin",
+              "recipeDisplayName": "Gin",
               "quantity": 1.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -2370,6 +2289,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:raspberry-syrup",
+              "recipeDisplayName": "Raspberry Syrup",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -2386,6 +2306,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:lemon-juice",
+              "recipeDisplayName": "Fresh Lemon Juice",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -2402,6 +2323,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:egg-white",
+              "recipeDisplayName": "Egg White",
               "quantity": null,
               "maximumQuantity": null,
               "unit": "drop",
@@ -2441,6 +2363,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:gin",
+              "recipeDisplayName": "Gin",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -2456,7 +2379,8 @@
             },
             {
               "position": 2,
-              "ingredientId": "ingredient:cointreau",
+              "ingredientId": "ingredient:orange-liqueur",
+              "recipeDisplayName": "Cointreau",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -2473,6 +2397,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:lillet-blanc",
+              "recipeDisplayName": "Lillet Blanc",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -2489,6 +2414,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:lemon-juice",
+              "recipeDisplayName": "Fresh Lemon Juice",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -2505,6 +2431,7 @@
             {
               "position": 5,
               "ingredientId": "ingredient:absinthe",
+              "recipeDisplayName": "Absinthe",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "dash",
@@ -2544,6 +2471,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:citrus-vodka",
+              "recipeDisplayName": "Vodka Citron",
               "quantity": 1.25,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -2559,7 +2487,8 @@
             },
             {
               "position": 2,
-              "ingredientId": "ingredient:cointreau",
+              "ingredientId": "ingredient:orange-liqueur",
+              "recipeDisplayName": "Cointreau",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -2576,6 +2505,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:lime-juice",
+              "recipeDisplayName": "Fresh Lime Juice",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -2592,6 +2522,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:cranberry-juice",
+              "recipeDisplayName": "Cranberry Juice",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -2631,6 +2562,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:white-rum",
+              "recipeDisplayName": "White Rum",
               "quantity": 2,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -2651,6 +2583,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:cola",
+              "recipeDisplayName": "Cola",
               "quantity": 4.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -2667,6 +2600,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:lime-juice",
+              "recipeDisplayName": "Fresh Lime Juice",
               "quantity": 0.25,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -2710,6 +2644,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:white-rum",
+              "recipeDisplayName": "White Cuban Ron",
               "quantity": 2.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -2726,6 +2661,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:lime-juice",
+              "recipeDisplayName": "Fresh Lime Juice",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -2745,7 +2681,8 @@
             },
             {
               "position": 3,
-              "ingredientId": "ingredient:superfine-sugar",
+              "ingredientId": "ingredient:sugar",
+              "recipeDisplayName": "Superfine Sugar",
               "quantity": 2.0,
               "maximumQuantity": null,
               "unit": "barspoon",
@@ -2785,6 +2722,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:dark-rum",
+              "recipeDisplayName": "Goslings Rum",
               "quantity": 2.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -2801,6 +2739,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:ginger-beer",
+              "recipeDisplayName": "Ginger Beer",
               "quantity": 3.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -2827,7 +2766,7 @@
       "slug": "dons-special-daiquiri",
       "name": "Don’s Special Daiquiri",
       "ibaCategory": "new-era",
-      "primarySpiritId": "ingredient:gold-jamaican-rum",
+      "primarySpiritId": "ingredient:aged-rum",
       "recipes": [
         {
           "id": "recipe:dons-special-daiquiri:iba",
@@ -2839,7 +2778,8 @@
           "ingredients": [
             {
               "position": 1,
-              "ingredientId": "ingredient:gold-jamaican-rum",
+              "ingredientId": "ingredient:aged-rum",
+              "recipeDisplayName": "Gold Jamaican Rum",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -2855,7 +2795,8 @@
             },
             {
               "position": 2,
-              "ingredientId": "ingredient:cuban-rum",
+              "ingredientId": "ingredient:white-rum",
+              "recipeDisplayName": "Cuban Rum",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -2872,6 +2813,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:passion-fruit-syrup",
+              "recipeDisplayName": "Passion Fruit Syrup",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -2888,6 +2830,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:lime-juice",
+              "recipeDisplayName": "Fresh lime juice",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -2904,6 +2847,7 @@
             {
               "position": 5,
               "ingredientId": "ingredient:honey-syrup",
+              "recipeDisplayName": "Honey Syrup",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -2943,6 +2887,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:gin",
+              "recipeDisplayName": "Gin",
               "quantity": 2.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -2959,6 +2904,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:dry-vermouth",
+              "recipeDisplayName": "Dry Vermouth",
               "quantity": 0.25,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -3002,6 +2948,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:vodka",
+              "recipeDisplayName": "Vodka",
               "quantity": 2,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -3022,6 +2969,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:coffee-liqueur",
+              "recipeDisplayName": "Kahlúa",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -3038,6 +2986,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:simple-syrup",
+              "recipeDisplayName": "Sugar Syrup",
               "quantity": 0.25,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -3058,6 +3007,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:espresso",
+              "recipeDisplayName": "Espresso",
               "quantity": 1,
               "maximumQuantity": null,
               "unit": "shot",
@@ -3097,6 +3047,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:fernet",
+              "recipeDisplayName": "Fernet Branca",
               "quantity": 2,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -3117,6 +3068,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:cola",
+              "recipeDisplayName": "Cola",
               "quantity": null,
               "maximumQuantity": null,
               "unit": "top-up",
@@ -3156,6 +3108,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:gin",
+              "recipeDisplayName": "Gin",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -3172,6 +3125,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:lemon-juice",
+              "recipeDisplayName": "Fresh Lemon Juice",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -3188,6 +3142,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:simple-syrup",
+              "recipeDisplayName": "Sugar Syrup",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -3203,7 +3158,8 @@
             },
             {
               "position": 4,
-              "ingredientId": "ingredient:champagne",
+              "ingredientId": "ingredient:sparkling-wine",
+              "recipeDisplayName": "Champagne",
               "quantity": 2.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -3243,6 +3199,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:cognac",
+              "recipeDisplayName": "Cognac",
               "quantity": 1.25,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -3259,6 +3216,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:amaretto",
+              "recipeDisplayName": "Amaretto",
               "quantity": 1.25,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -3298,6 +3256,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:vodka",
+              "recipeDisplayName": "Vodka",
               "quantity": 1.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -3314,6 +3273,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:raspberry-liqueur",
+              "recipeDisplayName": "Raspberry Liqueur",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -3330,6 +3290,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:pineapple-juice",
+              "recipeDisplayName": "Fresh Pineapple Juice",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -3369,6 +3330,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:campari",
+              "recipeDisplayName": "Bitter Campari",
               "quantity": 1.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -3385,6 +3347,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:orange-juice",
+              "recipeDisplayName": "Freshly Squeezed Orange Juice",
               "quantity": 4.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -3424,6 +3387,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:gin",
+              "recipeDisplayName": "Gin",
               "quantity": 2.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -3443,6 +3407,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:lemon-juice",
+              "recipeDisplayName": "Freshly Squeezed Lemon Juice",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -3459,6 +3424,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:simple-syrup",
+              "recipeDisplayName": "Sugar Syrup",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -3475,6 +3441,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:basil",
+              "recipeDisplayName": "Basil",
               "quantity": 10.0,
               "maximumQuantity": null,
               "unit": "leaf",
@@ -3514,6 +3481,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:gin",
+              "recipeDisplayName": "Gin",
               "quantity": 1.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -3530,6 +3498,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:lemon-juice",
+              "recipeDisplayName": "Fresh Lemon Juice",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -3546,6 +3515,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:simple-syrup",
+              "recipeDisplayName": "Simple Syrup",
               "quantity": 0.25,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -3566,6 +3536,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:soda-water",
+              "recipeDisplayName": "Soda Water",
               "quantity": null,
               "maximumQuantity": null,
               "unit": "splash",
@@ -3607,6 +3578,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:tequila",
+              "recipeDisplayName": "Tequila 100% agave",
               "quantity": 1.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -3622,7 +3594,8 @@
             },
             {
               "position": 2,
-              "ingredientId": "ingredient:grand-marnier",
+              "ingredientId": "ingredient:orange-liqueur",
+              "recipeDisplayName": "Grand Marnier",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -3639,6 +3612,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:lime-juice",
+              "recipeDisplayName": "Fresh Lime Juice",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -3677,7 +3651,8 @@
           "ingredients": [
             {
               "position": 1,
-              "ingredientId": "ingredient:white-creme-de-cacao",
+              "ingredientId": "ingredient:creme-de-cacao",
+              "recipeDisplayName": "Crème de Cacao (White)",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -3697,7 +3672,8 @@
             },
             {
               "position": 2,
-              "ingredientId": "ingredient:green-creme-de-menthe",
+              "ingredientId": "ingredient:creme-de-menthe",
+              "recipeDisplayName": "Crème de Menthe (Green)",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -3718,6 +3694,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:cream",
+              "recipeDisplayName": "Fresh Cream",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -3761,6 +3738,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:gin",
+              "recipeDisplayName": "London Dry Gin",
               "quantity": 1.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -3777,6 +3755,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:sweet-vermouth",
+              "recipeDisplayName": "Sweet Red Vermouth",
               "quantity": 1.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -3793,6 +3772,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:fernet",
+              "recipeDisplayName": "Fernet",
               "quantity": 0.25,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -3832,6 +3812,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:rum",
+              "recipeDisplayName": "Rum",
               "quantity": 2.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -3848,6 +3829,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:grapefruit-juice",
+              "recipeDisplayName": "Grapefruit Juice",
               "quantity": 1.25,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -3864,6 +3846,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:maraschino-liqueur",
+              "recipeDisplayName": "Maraschino Luxardo",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -3880,6 +3863,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:lime-juice",
+              "recipeDisplayName": "Fresh Lime",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -3919,6 +3903,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:cognac",
+              "recipeDisplayName": "Cognac",
               "quantity": 1.25,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -3935,6 +3920,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:ginger-ale",
+              "recipeDisplayName": "Ginger Ale",
               "quantity": 4.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -3950,7 +3936,8 @@
             },
             {
               "position": 3,
-              "ingredientId": "ingredient:angostura-bitters",
+              "ingredientId": "ingredient:aromatic-bitters",
+              "recipeDisplayName": "Angostura Bitters",
               "quantity": 1,
               "maximumQuantity": null,
               "unit": "dash",
@@ -3990,6 +3977,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:dark-rum",
+              "recipeDisplayName": "Ron Profundo Havana Club",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -4005,7 +3993,8 @@
             },
             {
               "position": 2,
-              "ingredientId": "ingredient:smoky-rum",
+              "ingredientId": "ingredient:dark-rum",
+              "recipeDisplayName": "Ron Smoky Havana Club",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -4022,6 +4011,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:amaretto",
+              "recipeDisplayName": "Licor Amaretto",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -4038,6 +4028,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:hazelnut-liqueur",
+              "recipeDisplayName": "Licor Frangelico",
               "quantity": 1,
               "maximumQuantity": null,
               "unit": "barspoon",
@@ -4054,6 +4045,7 @@
             {
               "position": 5,
               "ingredientId": "ingredient:maraschino-liqueur",
+              "recipeDisplayName": "Maraschino Luxardo",
               "quantity": 5.0,
               "maximumQuantity": null,
               "unit": "drop",
@@ -4070,6 +4062,7 @@
             {
               "position": 6,
               "ingredientId": "ingredient:passion-fruit-puree",
+              "recipeDisplayName": "Passion Fruit Puree",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -4086,6 +4079,7 @@
             {
               "position": 7,
               "ingredientId": "ingredient:pineapple-juice",
+              "recipeDisplayName": "Fresh Pineapple Juice",
               "quantity": 3.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -4105,6 +4099,7 @@
             {
               "position": 8,
               "ingredientId": "ingredient:lime-juice",
+              "recipeDisplayName": "Fresh Lime Juice",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -4124,6 +4119,7 @@
             {
               "position": 9,
               "ingredientId": "ingredient:ginger",
+              "recipeDisplayName": "Ginger",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "slice",
@@ -4163,6 +4159,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:mezcal",
+              "recipeDisplayName": "Espadin Mezcal",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -4179,6 +4176,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:overproof-white-rum",
+              "recipeDisplayName": "Jamaica Overproof White Rum",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -4195,6 +4193,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:falernum",
+              "recipeDisplayName": "Falernum",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -4211,6 +4210,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:maraschino-liqueur",
+              "recipeDisplayName": "Maraschino Luxardo",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "barspoon",
@@ -4227,6 +4227,7 @@
             {
               "position": 5,
               "ingredientId": "ingredient:lime-juice",
+              "recipeDisplayName": "Fresh Lime Juice",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -4243,6 +4244,7 @@
             {
               "position": 6,
               "ingredientId": "ingredient:simple-syrup",
+              "recipeDisplayName": "Simple Syrup",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -4259,6 +4261,7 @@
             {
               "position": 7,
               "ingredientId": "ingredient:egg-white",
+              "recipeDisplayName": "Egg White",
               "quantity": null,
               "maximumQuantity": null,
               "unit": "drop",
@@ -4298,6 +4301,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:irish-whiskey",
+              "recipeDisplayName": "Irish Whiskey",
               "quantity": 2,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -4318,6 +4322,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:coffee",
+              "recipeDisplayName": "Hot coffee",
               "quantity": 4.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -4334,13 +4339,14 @@
             {
               "position": 3,
               "ingredientId": "ingredient:cream",
+              "recipeDisplayName": "Fresh cream",
               "quantity": 1.5,
               "maximumQuantity": null,
               "unit": "ounce",
               "quantityModifier": "heavy",
               "displayQuantity": "heavy 1 ½ oz",
               "requirement": "required",
-              "preparation": null,
+              "preparation": "chilled",
               "sourceMeasurement": {
                 "text": "50 ml Fresh cream (Chilled)",
                 "quantity": 50.0,
@@ -4354,6 +4360,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:sugar",
+              "recipeDisplayName": "Sugar",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "teaspoon",
@@ -4393,6 +4400,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:gin",
+              "recipeDisplayName": "Gin",
               "quantity": 1.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -4409,6 +4417,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:lemon-juice",
+              "recipeDisplayName": "Fresh Lemon Juice",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -4425,6 +4434,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:simple-syrup",
+              "recipeDisplayName": "Simple Syrup",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -4441,6 +4451,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:soda-water",
+              "recipeDisplayName": "Soda Water",
               "quantity": 2.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -4469,7 +4480,7 @@
       "slug": "jungle-bird",
       "name": "Jungle Bird",
       "ibaCategory": "new-era",
-      "primarySpiritId": "ingredient:blackstrap-rum",
+      "primarySpiritId": "ingredient:dark-rum",
       "recipes": [
         {
           "id": "recipe:jungle-bird:iba",
@@ -4481,7 +4492,8 @@
           "ingredients": [
             {
               "position": 1,
-              "ingredientId": "ingredient:blackstrap-rum",
+              "ingredientId": "ingredient:dark-rum",
+              "recipeDisplayName": "Blackstrap rum",
               "quantity": 1.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -4498,6 +4510,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:campari",
+              "recipeDisplayName": "Campari",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -4514,6 +4527,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:pineapple-juice",
+              "recipeDisplayName": "Pineapple juice",
               "quantity": 1.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -4530,6 +4544,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:lime-juice",
+              "recipeDisplayName": "Freshly Squeezed Lime juice",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -4545,7 +4560,8 @@
             },
             {
               "position": 5,
-              "ingredientId": "ingredient:demerara-syrup",
+              "ingredientId": "ingredient:simple-syrup",
+              "recipeDisplayName": "Demerara sugar syrup",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -4585,6 +4601,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:dry-white-wine",
+              "recipeDisplayName": "Dry White Wine",
               "quantity": 3.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -4601,6 +4618,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:creme-de-cassis",
+              "recipeDisplayName": "Crème de Cassis",
               "quantity": 0.25,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -4647,6 +4665,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:gin",
+              "recipeDisplayName": "Gin",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -4663,6 +4682,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:green-chartreuse",
+              "recipeDisplayName": "Green Chartreuse",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -4679,6 +4699,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:maraschino-liqueur",
+              "recipeDisplayName": "Maraschino Luxardo",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -4695,6 +4716,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:lime-juice",
+              "recipeDisplayName": "Fresh Lime Juice",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -4734,6 +4756,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:vodka",
+              "recipeDisplayName": "Vodka",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -4749,7 +4772,8 @@
             },
             {
               "position": 2,
-              "ingredientId": "ingredient:triple-sec",
+              "ingredientId": "ingredient:orange-liqueur",
+              "recipeDisplayName": "Triple Sec",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -4770,6 +4794,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:lemon-juice",
+              "recipeDisplayName": "Fresh Squeezed Lemon Juice",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -4809,6 +4834,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:vodka",
+              "recipeDisplayName": "Vodka",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -4825,6 +4851,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:tequila",
+              "recipeDisplayName": "Tequila",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -4841,6 +4868,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:white-rum",
+              "recipeDisplayName": "White rum",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -4857,6 +4885,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:gin",
+              "recipeDisplayName": "Gin",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -4872,7 +4901,8 @@
             },
             {
               "position": 5,
-              "ingredientId": "ingredient:cointreau",
+              "ingredientId": "ingredient:orange-liqueur",
+              "recipeDisplayName": "Cointreau",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -4889,6 +4919,7 @@
             {
               "position": 6,
               "ingredientId": "ingredient:lemon-juice",
+              "recipeDisplayName": "Lemon juice",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -4905,6 +4936,7 @@
             {
               "position": 7,
               "ingredientId": "ingredient:simple-syrup",
+              "recipeDisplayName": "Simple syrup",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -4921,6 +4953,7 @@
             {
               "position": 8,
               "ingredientId": "ingredient:cola",
+              "recipeDisplayName": "Cola",
               "quantity": null,
               "maximumQuantity": null,
               "unit": "top-up",
@@ -4947,7 +4980,7 @@
       "slug": "mai-tai",
       "name": "Mai-Tai",
       "ibaCategory": "contemporary-classics",
-      "primarySpiritId": "ingredient:gold-jamaican-rum",
+      "primarySpiritId": "ingredient:aged-rum",
       "recipes": [
         {
           "id": "recipe:mai-tai:iba",
@@ -4959,7 +4992,8 @@
           "ingredients": [
             {
               "position": 1,
-              "ingredientId": "ingredient:gold-jamaican-rum",
+              "ingredientId": "ingredient:aged-rum",
+              "recipeDisplayName": "Amber Jamaican Rum",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -4975,7 +5009,8 @@
             },
             {
               "position": 2,
-              "ingredientId": "ingredient:martinique-molasses-rum",
+              "ingredientId": "ingredient:aged-rum",
+              "recipeDisplayName": "Martinique Molasses Rhum",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -4991,7 +5026,8 @@
             },
             {
               "position": 3,
-              "ingredientId": "ingredient:orange-curacao",
+              "ingredientId": "ingredient:orange-liqueur",
+              "recipeDisplayName": "Orange Curacao",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -5008,6 +5044,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:orgeat-syrup",
+              "recipeDisplayName": "Orgeat Syrup (Almond)",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -5024,6 +5061,7 @@
             {
               "position": 5,
               "ingredientId": "ingredient:lime-juice",
+              "recipeDisplayName": "Fresh Squeezed Lime Juice",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -5040,6 +5078,7 @@
             {
               "position": 6,
               "ingredientId": "ingredient:simple-syrup",
+              "recipeDisplayName": "Simple Syrup",
               "quantity": 0.25,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -5079,6 +5118,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:rye-whiskey",
+              "recipeDisplayName": "Rye Whiskey",
               "quantity": 2,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -5099,6 +5139,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:sweet-vermouth",
+              "recipeDisplayName": "Sweet Red Vermouth",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -5118,7 +5159,8 @@
             },
             {
               "position": 3,
-              "ingredientId": "ingredient:angostura-bitters",
+              "ingredientId": "ingredient:aromatic-bitters",
+              "recipeDisplayName": "Angostura Bitters",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "dash",
@@ -5158,6 +5200,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:tequila",
+              "recipeDisplayName": "Tequila 100% Agave",
               "quantity": 2,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -5177,7 +5220,8 @@
             },
             {
               "position": 2,
-              "ingredientId": "ingredient:triple-sec",
+              "ingredientId": "ingredient:orange-liqueur",
+              "recipeDisplayName": "Triple Sec",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -5198,6 +5242,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:lime-juice",
+              "recipeDisplayName": "Freshly Squeezed Lime Juice",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -5237,6 +5282,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:gin",
+              "recipeDisplayName": "London Dry Gin",
               "quantity": 1.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -5253,6 +5299,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:sweet-vermouth",
+              "recipeDisplayName": "Sweet Red Vermouth",
               "quantity": 1.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -5269,6 +5316,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:maraschino-liqueur",
+              "recipeDisplayName": "Maraschino Luxardo",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "barspoon",
@@ -5285,6 +5333,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:orange-bitters",
+              "recipeDisplayName": "Orange Bitters",
               "quantity": 2.0,
               "maximumQuantity": null,
               "unit": "dash",
@@ -5324,6 +5373,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:white-rum",
+              "recipeDisplayName": "White Rum",
               "quantity": 1.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -5340,6 +5390,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:pineapple-juice",
+              "recipeDisplayName": "Fresh Pineapple Juice",
               "quantity": 1.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -5356,6 +5407,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:maraschino-liqueur",
+              "recipeDisplayName": "Maraschino Luxardo",
               "quantity": 0.25,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -5372,6 +5424,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:grenadine",
+              "recipeDisplayName": "Grenadine Syrup",
               "quantity": 1,
               "maximumQuantity": null,
               "unit": "barspoon",
@@ -5411,6 +5464,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:orange-juice",
+              "recipeDisplayName": "Freshly Squeezed Orange Juice",
               "quantity": 2.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -5426,7 +5480,8 @@
             },
             {
               "position": 2,
-              "ingredientId": "ingredient:prosecco",
+              "ingredientId": "ingredient:sparkling-wine",
+              "recipeDisplayName": "Prosecco",
               "quantity": 2.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -5468,6 +5523,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:bourbon",
+              "recipeDisplayName": "Bourbon Whiskey",
               "quantity": 2.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -5484,6 +5540,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:mint",
+              "recipeDisplayName": "Mint",
               "quantity": 4.0,
               "maximumQuantity": null,
               "unit": "sprig",
@@ -5499,7 +5556,8 @@
             },
             {
               "position": 3,
-              "ingredientId": "ingredient:powdered-sugar",
+              "ingredientId": "ingredient:sugar",
+              "recipeDisplayName": "Powdered Sugar",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "teaspoon",
@@ -5516,6 +5574,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:water",
+              "recipeDisplayName": "Water",
               "quantity": 2.0,
               "maximumQuantity": null,
               "unit": "teaspoon",
@@ -5555,6 +5614,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:white-rum",
+              "recipeDisplayName": "White rum",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -5570,7 +5630,8 @@
             },
             {
               "position": 2,
-              "ingredientId": "ingredient:peach-brandy",
+              "ingredientId": "ingredient:peach-liqueur",
+              "recipeDisplayName": "Peach Brandy",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -5587,6 +5648,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:lime-juice",
+              "recipeDisplayName": "Fresh lime juice",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -5602,7 +5664,8 @@
             },
             {
               "position": 4,
-              "ingredientId": "ingredient:honey-mix",
+              "ingredientId": "ingredient:honey-syrup",
+              "recipeDisplayName": "Honey Mix",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -5619,6 +5682,7 @@
             {
               "position": 5,
               "ingredientId": "ingredient:mint",
+              "recipeDisplayName": "Mint",
               "quantity": 10.0,
               "maximumQuantity": null,
               "unit": "leaf",
@@ -5635,6 +5699,7 @@
             {
               "position": 6,
               "ingredientId": "ingredient:pineapple",
+              "recipeDisplayName": "Pineapple",
               "quantity": 3.0,
               "maximumQuantity": 4.0,
               "unit": "piece",
@@ -5677,6 +5742,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:white-rum",
+              "recipeDisplayName": "White Cuban Ron",
               "quantity": 1.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -5693,6 +5759,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:lime-juice",
+              "recipeDisplayName": "Fresh Lime Juice",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -5713,6 +5780,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:mint",
+              "recipeDisplayName": "Mint",
               "quantity": 6.0,
               "maximumQuantity": null,
               "unit": "sprig",
@@ -5728,7 +5796,8 @@
             },
             {
               "position": 4,
-              "ingredientId": "ingredient:white-cane-sugar",
+              "ingredientId": "ingredient:sugar",
+              "recipeDisplayName": "White Cane Sugar",
               "quantity": 2.0,
               "maximumQuantity": null,
               "unit": "teaspoon",
@@ -5745,6 +5814,7 @@
             {
               "position": 5,
               "ingredientId": "ingredient:soda-water",
+              "recipeDisplayName": "Soda Water",
               "quantity": null,
               "maximumQuantity": null,
               "unit": "top-up",
@@ -5786,6 +5856,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:gin",
+              "recipeDisplayName": "Dry Gin",
               "quantity": 1.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -5802,6 +5873,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:orange-juice",
+              "recipeDisplayName": "Fresh Orange Juice",
               "quantity": 1.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -5818,6 +5890,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:absinthe",
+              "recipeDisplayName": "Absinthe",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "tablespoon",
@@ -5834,6 +5907,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:grenadine",
+              "recipeDisplayName": "Grenadine Syrup",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "tablespoon",
@@ -5873,6 +5947,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:vodka",
+              "recipeDisplayName": "Smirnoff Vodka",
               "quantity": 1.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -5889,6 +5964,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:ginger-beer",
+              "recipeDisplayName": "Ginger Beer",
               "quantity": 4.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -5905,6 +5981,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:lime-juice",
+              "recipeDisplayName": "Fresh lime juice",
               "quantity": 0.25,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -5948,6 +6025,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:mezcal",
+              "recipeDisplayName": "Mezcal",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -5964,6 +6042,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:yellow-chartreuse",
+              "recipeDisplayName": "Yellow Chartreuse",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -5980,6 +6059,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:aperol",
+              "recipeDisplayName": "Aperol",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -5996,6 +6076,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:lime-juice",
+              "recipeDisplayName": "Fresh Lime Juice",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -6035,6 +6116,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:gin",
+              "recipeDisplayName": "Gin",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -6051,6 +6133,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:campari",
+              "recipeDisplayName": "Bitter Campari",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -6067,6 +6150,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:sweet-vermouth",
+              "recipeDisplayName": "Sweet Red Vermouth",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -6106,6 +6190,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:rye-whiskey",
+              "recipeDisplayName": "Rye Whiskey or Bourbon",
               "quantity": 2.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -6122,6 +6207,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:simple-syrup",
+              "recipeDisplayName": "Simple syrup",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -6138,6 +6224,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:lemon-juice",
+              "recipeDisplayName": "Fresh lemon juice",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -6154,6 +6241,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:egg-white",
+              "recipeDisplayName": "Egg White",
               "quantity": null,
               "maximumQuantity": null,
               "unit": "drop",
@@ -6170,6 +6258,7 @@
             {
               "position": 5,
               "ingredientId": "ingredient:red-wine",
+              "recipeDisplayName": "Red wine (Shiraz or Malbech)",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -6188,7 +6277,7 @@
           "glassware": "rocks glass",
           "garnish": "Garnish with lemon or orange zest with cherry.",
           "curationNotes": [
-            "60 ml Rye Whiskey or Bourbon: selected Rye whiskey as the initial recipe's first-listed alternative."
+            "60 ml Rye Whiskey or Bourbon: Selected Rye whiskey as the initial recipe's first-listed alternative."
           ]
         }
       ]
@@ -6211,6 +6300,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:mint",
+              "recipeDisplayName": "Mint",
               "quantity": 6.0,
               "maximumQuantity": 8.0,
               "unit": "leaf",
@@ -6230,6 +6320,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:aged-rum",
+              "recipeDisplayName": "Aged Rum",
               "quantity": 1.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -6246,6 +6337,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:lime-juice",
+              "recipeDisplayName": "Fresh Lime Juice",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -6262,6 +6354,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:simple-syrup",
+              "recipeDisplayName": "Simple Syrup",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -6277,7 +6370,8 @@
             },
             {
               "position": 5,
-              "ingredientId": "ingredient:angostura-bitters",
+              "ingredientId": "ingredient:aromatic-bitters",
+              "recipeDisplayName": "Angostura Bitters",
               "quantity": 2.0,
               "maximumQuantity": null,
               "unit": "dash",
@@ -6293,7 +6387,8 @@
             },
             {
               "position": 6,
-              "ingredientId": "ingredient:champagne",
+              "ingredientId": "ingredient:sparkling-wine",
+              "recipeDisplayName": "Brut Champagne or Prosecco",
               "quantity": 2.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -6312,7 +6407,7 @@
           "glassware": "cocktail glass",
           "garnish": "Garnish with mint springs.",
           "curationNotes": [
-            "60 ml Brut Champagne or Prosecco: selected Champagne as the initial recipe's first-listed alternative."
+            "60 ml Brut Champagne or Prosecco: Matched both allowed alternatives to Sparkling wine."
           ]
         }
       ]
@@ -6335,6 +6430,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:bourbon",
+              "recipeDisplayName": "Bourbon or Rye Whiskey",
               "quantity": 1.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -6351,6 +6447,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:sugar",
+              "recipeDisplayName": "Sugar",
               "quantity": 1,
               "maximumQuantity": null,
               "unit": "cube",
@@ -6366,7 +6463,8 @@
             },
             {
               "position": 3,
-              "ingredientId": "ingredient:angostura-bitters",
+              "ingredientId": "ingredient:aromatic-bitters",
+              "recipeDisplayName": "Angostura Bitters",
               "quantity": null,
               "maximumQuantity": null,
               "unit": "dash",
@@ -6383,6 +6481,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:water",
+              "recipeDisplayName": "Plain Water",
               "quantity": null,
               "maximumQuantity": null,
               "unit": "dash",
@@ -6401,7 +6500,7 @@
           "glassware": "rocks glass",
           "garnish": "Garnish with orange slice or zest, and a cocktail cherry.",
           "curationNotes": [
-            "45 ml Bourbon or Rye Whiskey: selected Bourbon as the initial recipe's first-listed alternative."
+            "45 ml Bourbon or Rye Whiskey: Selected Bourbon as the initial recipe's first-listed alternative."
           ]
         }
       ]
@@ -6424,6 +6523,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:tequila",
+              "recipeDisplayName": "100% Agave Tequila",
               "quantity": 2,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -6444,6 +6544,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:lime-juice",
+              "recipeDisplayName": "Fresh lime",
               "quantity": 1,
               "maximumQuantity": null,
               "unit": "barspoon",
@@ -6460,6 +6561,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:salt",
+              "recipeDisplayName": "Salt",
               "quantity": 1,
               "maximumQuantity": null,
               "unit": "pinch",
@@ -6476,6 +6578,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:grapefruit-soda",
+              "recipeDisplayName": "Pink Grapefruit Soda",
               "quantity": 3.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -6515,6 +6618,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:bourbon",
+              "recipeDisplayName": "Bourbon Whiskey",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -6531,6 +6635,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:amaro-nonino",
+              "recipeDisplayName": "Amaro Nonino",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -6547,6 +6652,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:aperol",
+              "recipeDisplayName": "Aperol",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -6563,6 +6669,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:lemon-juice",
+              "recipeDisplayName": "Fresh Lemon Juice",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -6602,6 +6709,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:gin",
+              "recipeDisplayName": "Gin",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -6617,7 +6725,8 @@
             },
             {
               "position": 2,
-              "ingredientId": "ingredient:apricot-brandy",
+              "ingredientId": "ingredient:apricot-liqueur",
+              "recipeDisplayName": "Apricot Brandy",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -6638,6 +6747,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:orange-juice",
+              "recipeDisplayName": "Fresh Orange Juice",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -6664,7 +6774,7 @@
       "slug": "penicillin",
       "name": "Penicillin",
       "ibaCategory": "new-era",
-      "primarySpiritId": "ingredient:blended-scotch-whisky",
+      "primarySpiritId": "ingredient:scotch-whisky",
       "recipes": [
         {
           "id": "recipe:penicillin:iba",
@@ -6676,7 +6786,8 @@
           "ingredients": [
             {
               "position": 1,
-              "ingredientId": "ingredient:blended-scotch-whisky",
+              "ingredientId": "ingredient:scotch-whisky",
+              "recipeDisplayName": "Blended scotch whisky",
               "quantity": 2.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -6692,7 +6803,8 @@
             },
             {
               "position": 2,
-              "ingredientId": "ingredient:islay-scotch-whisky",
+              "ingredientId": "ingredient:scotch-whisky",
+              "recipeDisplayName": "Lagavulin 16y",
               "quantity": 0.25,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -6709,6 +6821,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:lemon-juice",
+              "recipeDisplayName": "Fresh lemon juice",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -6725,6 +6838,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:honey-syrup",
+              "recipeDisplayName": "Honey syrup",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -6741,6 +6855,7 @@
             {
               "position": 5,
               "ingredientId": "ingredient:ginger",
+              "recipeDisplayName": "Ginger",
               "quantity": 2.0,
               "maximumQuantity": 3.0,
               "unit": "piece",
@@ -6783,6 +6898,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:white-rum",
+              "recipeDisplayName": "White Rum",
               "quantity": 2,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -6803,6 +6919,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:coconut-cream",
+              "recipeDisplayName": "Coconut Cream",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -6819,6 +6936,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:pineapple-juice",
+              "recipeDisplayName": "Fresh Pineapple Juice",
               "quantity": 2,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -6864,6 +6982,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:pisco",
+              "recipeDisplayName": "Pisco",
               "quantity": 2.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -6880,6 +6999,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:pineapple-juice",
+              "recipeDisplayName": "Fresh Pineapple Juice",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -6896,6 +7016,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:simple-syrup",
+              "recipeDisplayName": "Simple Syrup",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -6912,6 +7033,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:lemon-juice",
+              "recipeDisplayName": "Fresh Lemon Juice",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -6928,6 +7050,7 @@
             {
               "position": 5,
               "ingredientId": "ingredient:dry-white-wine",
+              "recipeDisplayName": "Dry White Wine",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -6944,6 +7067,7 @@
             {
               "position": 6,
               "ingredientId": "ingredient:cloves",
+              "recipeDisplayName": "Cloves",
               "quantity": 3.0,
               "maximumQuantity": null,
               "unit": "piece",
@@ -6983,6 +7107,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:pisco",
+              "recipeDisplayName": "Pisco",
               "quantity": 2.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -6999,6 +7124,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:lemon-juice",
+              "recipeDisplayName": "Fresh Lemon Juice",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -7015,6 +7141,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:simple-syrup",
+              "recipeDisplayName": "Simple Syrup",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -7035,6 +7162,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:egg-white",
+              "recipeDisplayName": "Egg White",
               "quantity": 1,
               "maximumQuantity": null,
               "unit": "piece",
@@ -7061,7 +7189,7 @@
       "slug": "planters-punch",
       "name": "Planters Punch",
       "ibaCategory": "the-unforgettables",
-      "primarySpiritId": "ingredient:jamaican-rum",
+      "primarySpiritId": "ingredient:rum",
       "recipes": [
         {
           "id": "recipe:planters-punch:iba",
@@ -7073,7 +7201,8 @@
           "ingredients": [
             {
               "position": 1,
-              "ingredientId": "ingredient:jamaican-rum",
+              "ingredientId": "ingredient:rum",
+              "recipeDisplayName": "Jamaican Rum",
               "quantity": 1.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -7090,6 +7219,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:lime-juice",
+              "recipeDisplayName": "Lime Juice",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -7106,6 +7236,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:sugar-cane-juice",
+              "recipeDisplayName": "Sugar Cane Juice",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -7145,6 +7276,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:vanilla-vodka",
+              "recipeDisplayName": "Vanilla Vodka",
               "quantity": 2,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -7165,6 +7297,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:passion-fruit-liqueur",
+              "recipeDisplayName": "Passion Fruit Liqueur",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -7185,6 +7318,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:passion-fruit-puree",
+              "recipeDisplayName": "Passion Fruit Puree",
               "quantity": 2,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -7204,7 +7338,8 @@
             },
             {
               "position": 4,
-              "ingredientId": "ingredient:vanilla-sugar",
+              "ingredientId": "ingredient:sugar",
+              "recipeDisplayName": "Vanilla Sugar",
               "quantity": 2.0,
               "maximumQuantity": null,
               "unit": "barspoon",
@@ -7220,14 +7355,15 @@
             },
             {
               "position": 5,
-              "ingredientId": "ingredient:champagne",
+              "ingredientId": "ingredient:sparkling-wine",
+              "recipeDisplayName": "Champagne",
               "quantity": 2,
               "maximumQuantity": null,
               "unit": "ounce",
               "quantityModifier": null,
               "displayQuantity": "2 oz",
               "requirement": "required",
-              "preparation": null,
+              "preparation": "serve on the side",
               "sourceMeasurement": {
                 "text": "50 ml Champagne to serve on the side",
                 "quantity": 50.0,
@@ -7264,6 +7400,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:brandy",
+              "recipeDisplayName": "Brandy",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -7280,6 +7417,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:tawny-port",
+              "recipeDisplayName": "Red Tawny Port Wine",
               "quantity": 1.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -7296,6 +7434,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:egg-yolk",
+              "recipeDisplayName": "Egg Yolk",
               "quantity": 0.25,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -7339,6 +7478,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:cachaca",
+              "recipeDisplayName": "Cachaca",
               "quantity": 2.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -7355,6 +7495,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:sweet-vermouth",
+              "recipeDisplayName": "Sweet Vermouth Cinzano Rosso",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -7375,6 +7516,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:cynar",
+              "recipeDisplayName": "Cynar",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -7390,7 +7532,8 @@
             },
             {
               "position": 4,
-              "ingredientId": "ingredient:angostura-bitters",
+              "ingredientId": "ingredient:aromatic-bitters",
+              "recipeDisplayName": "Angostura",
               "quantity": 2.0,
               "maximumQuantity": null,
               "unit": "drop",
@@ -7430,6 +7573,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:gin",
+              "recipeDisplayName": "Gin",
               "quantity": 1.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -7446,6 +7590,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:lime-juice",
+              "recipeDisplayName": "Fresh Lime Juice",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -7462,6 +7607,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:lemon-juice",
+              "recipeDisplayName": "Fresh Lemon Juice",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -7478,6 +7624,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:simple-syrup",
+              "recipeDisplayName": "Sugar Syrup",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -7494,6 +7641,7 @@
             {
               "position": 5,
               "ingredientId": "ingredient:cream",
+              "recipeDisplayName": "Cream",
               "quantity": 2.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -7510,6 +7658,7 @@
             {
               "position": 6,
               "ingredientId": "ingredient:egg-white",
+              "recipeDisplayName": "Egg white",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -7529,6 +7678,7 @@
             {
               "position": 7,
               "ingredientId": "ingredient:orange-flower-water",
+              "recipeDisplayName": "Orange Flower Water",
               "quantity": 3.0,
               "maximumQuantity": null,
               "unit": "dash",
@@ -7545,6 +7695,7 @@
             {
               "position": 8,
               "ingredientId": "ingredient:vanilla-extract",
+              "recipeDisplayName": "Vanilla Extract",
               "quantity": 2.0,
               "maximumQuantity": null,
               "unit": "drop",
@@ -7561,6 +7712,7 @@
             {
               "position": 9,
               "ingredientId": "ingredient:soda-water",
+              "recipeDisplayName": "Soda Water",
               "quantity": null,
               "maximumQuantity": null,
               "unit": "top-up",
@@ -7602,6 +7754,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:rye-whiskey",
+              "recipeDisplayName": "Rye Whiskey",
               "quantity": 2.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -7618,6 +7771,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:sweet-vermouth",
+              "recipeDisplayName": "Sweet Vermouth",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -7633,7 +7787,8 @@
             },
             {
               "position": 3,
-              "ingredientId": "ingredient:cherry-brandy",
+              "ingredientId": "ingredient:cherry-liqueur",
+              "recipeDisplayName": "Cherry Brandy Luxardo",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -7650,6 +7805,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:absinthe",
+              "recipeDisplayName": "Absinthe",
               "quantity": 0.25,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -7689,6 +7845,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:vodka",
+              "recipeDisplayName": "Vodka",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -7705,6 +7862,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:lemon-juice",
+              "recipeDisplayName": "Fresh Lemon Juice",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -7721,6 +7879,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:creme-de-cassis",
+              "recipeDisplayName": "Creme de Cassis",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -7737,6 +7896,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:simple-syrup",
+              "recipeDisplayName": "Sugar Syrup",
               "quantity": 0.25,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -7757,6 +7917,7 @@
             {
               "position": 5,
               "ingredientId": "ingredient:sparkling-wine",
+              "recipeDisplayName": "Sparkling Wine",
               "quantity": null,
               "maximumQuantity": null,
               "unit": "top-up",
@@ -7796,6 +7957,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:scotch-whisky",
+              "recipeDisplayName": "Scotch Whisky",
               "quantity": 1.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -7812,6 +7974,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:drambuie",
+              "recipeDisplayName": "Drambuie",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -7851,6 +8014,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:cognac",
+              "recipeDisplayName": "Cognac",
               "quantity": 2,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -7871,6 +8035,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:absinthe",
+              "recipeDisplayName": "Absinthe",
               "quantity": 0.25,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -7891,6 +8056,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:sugar",
+              "recipeDisplayName": "Sugar",
               "quantity": 1,
               "maximumQuantity": null,
               "unit": "cube",
@@ -7907,6 +8073,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:peychauds-bitters",
+              "recipeDisplayName": "Peychaud’s Bitters",
               "quantity": 2.0,
               "maximumQuantity": null,
               "unit": "dash",
@@ -7948,6 +8115,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:vodka",
+              "recipeDisplayName": "Vodka",
               "quantity": 1.25,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -7964,6 +8132,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:cranberry-juice",
+              "recipeDisplayName": "Cranberry Juice",
               "quantity": 4.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -7980,6 +8149,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:grapefruit-juice",
+              "recipeDisplayName": "Grapefruit Juice",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -8019,6 +8189,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:vodka",
+              "recipeDisplayName": "Vodka",
               "quantity": 1.25,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -8034,7 +8205,8 @@
             },
             {
               "position": 2,
-              "ingredientId": "ingredient:peach-schnapps",
+              "ingredientId": "ingredient:peach-liqueur",
+              "recipeDisplayName": "Peach Schnapps",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -8055,6 +8227,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:orange-juice",
+              "recipeDisplayName": "Fresh Orange Juice",
               "quantity": 1.25,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -8071,6 +8244,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:cranberry-juice",
+              "recipeDisplayName": "Cranberry Juice",
               "quantity": 1.25,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -8109,7 +8283,8 @@
           "ingredients": [
             {
               "position": 1,
-              "ingredientId": "ingredient:amontillado-sherry",
+              "ingredientId": "ingredient:sherry",
+              "recipeDisplayName": "Amontillado sherry",
               "quantity": 1.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -8125,7 +8300,8 @@
             },
             {
               "position": 2,
-              "ingredientId": "ingredient:palo-cortado-sherry",
+              "ingredientId": "ingredient:sherry",
+              "recipeDisplayName": "Palo Cortado",
               "quantity": 1.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -8141,7 +8317,8 @@
             },
             {
               "position": 3,
-              "ingredientId": "ingredient:superfine-sugar",
+              "ingredientId": "ingredient:sugar",
+              "recipeDisplayName": "Superfine Sugar (or granulated)",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "teaspoon",
@@ -8158,6 +8335,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:orange",
+              "recipeDisplayName": "Orange",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "wheel",
@@ -8174,6 +8352,7 @@
             {
               "position": 5,
               "ingredientId": "ingredient:lemon",
+              "recipeDisplayName": "Lemon",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "wheel",
@@ -8213,6 +8392,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:cognac",
+              "recipeDisplayName": "Cognac",
               "quantity": 2,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -8232,7 +8412,8 @@
             },
             {
               "position": 2,
-              "ingredientId": "ingredient:triple-sec",
+              "ingredientId": "ingredient:orange-liqueur",
+              "recipeDisplayName": "Triple Sec",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -8253,6 +8434,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:lemon-juice",
+              "recipeDisplayName": "Fresh Lemon Juice",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -8296,6 +8478,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:gin",
+              "recipeDisplayName": "Gin",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -8312,6 +8495,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:cherry-liqueur",
+              "recipeDisplayName": "Cherry Sangue Morlacco",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -8327,7 +8511,8 @@
             },
             {
               "position": 3,
-              "ingredientId": "ingredient:cointreau",
+              "ingredientId": "ingredient:orange-liqueur",
+              "recipeDisplayName": "Cointreau",
               "quantity": 0.25,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -8344,6 +8529,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:benedictine",
+              "recipeDisplayName": "DOM Bénédictine",
               "quantity": 0.25,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -8360,6 +8546,7 @@
             {
               "position": 5,
               "ingredientId": "ingredient:pineapple-juice",
+              "recipeDisplayName": "Fresh Pineapple Juice",
               "quantity": 4.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -8376,6 +8563,7 @@
             {
               "position": 6,
               "ingredientId": "ingredient:lime-juice",
+              "recipeDisplayName": "Fresh Lime Juice",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -8392,6 +8580,7 @@
             {
               "position": 7,
               "ingredientId": "ingredient:grenadine",
+              "recipeDisplayName": "Grenadine Syrup",
               "quantity": 0.25,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -8411,7 +8600,8 @@
             },
             {
               "position": 8,
-              "ingredientId": "ingredient:angostura-bitters",
+              "ingredientId": "ingredient:aromatic-bitters",
+              "recipeDisplayName": "Angostura bitters",
               "quantity": 1,
               "maximumQuantity": null,
               "unit": "dash",
@@ -8451,6 +8641,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:gin",
+              "recipeDisplayName": "London dry Gin",
               "quantity": 2.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -8467,6 +8658,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:lemon-juice",
+              "recipeDisplayName": "Fresh Lemon Juice",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -8483,6 +8675,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:simple-syrup",
+              "recipeDisplayName": "Simple syrup",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -8499,6 +8692,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:mint",
+              "recipeDisplayName": "Mint",
               "quantity": 5.0,
               "maximumQuantity": 6.0,
               "unit": "leaf",
@@ -8518,6 +8712,7 @@
             {
               "position": 5,
               "ingredientId": "ingredient:egg-white",
+              "recipeDisplayName": "Egg white",
               "quantity": null,
               "maximumQuantity": null,
               "unit": "drop",
@@ -8557,6 +8752,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:vanilla-vodka",
+              "recipeDisplayName": "Vodka Vanilla",
               "quantity": 2,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -8577,6 +8773,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:elderflower-cordial",
+              "recipeDisplayName": "Elderflower Cordial",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -8593,6 +8790,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:lime-juice",
+              "recipeDisplayName": "Fresh Lime Juice",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -8609,6 +8807,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:honey-syrup",
+              "recipeDisplayName": "Monin Honey Syrup",
               "quantity": 0.25,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -8629,6 +8828,7 @@
             {
               "position": 5,
               "ingredientId": "ingredient:red-chili-pepper",
+              "recipeDisplayName": "Red chili pepper",
               "quantity": 2.0,
               "maximumQuantity": null,
               "unit": "slice",
@@ -8667,7 +8867,8 @@
           "ingredients": [
             {
               "position": 1,
-              "ingredientId": "ingredient:prosecco",
+              "ingredientId": "ingredient:sparkling-wine",
+              "recipeDisplayName": "Prosecco",
               "quantity": 3.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -8684,6 +8885,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:aperol",
+              "recipeDisplayName": "Aperol",
               "quantity": 2.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -8700,6 +8902,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:soda-water",
+              "recipeDisplayName": "Soda water",
               "quantity": null,
               "maximumQuantity": null,
               "unit": "splash",
@@ -8741,6 +8944,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:cognac",
+              "recipeDisplayName": "Cognac",
               "quantity": 2,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -8760,7 +8964,8 @@
             },
             {
               "position": 2,
-              "ingredientId": "ingredient:white-creme-de-menthe",
+              "ingredientId": "ingredient:creme-de-menthe",
+              "recipeDisplayName": "White Crème de Menthe",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -8804,6 +9009,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:cognac",
+              "recipeDisplayName": "Cognac or Brandy",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -8820,6 +9026,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:gin",
+              "recipeDisplayName": "Gin",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -8836,6 +9043,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:lime-juice",
+              "recipeDisplayName": "Fresh Lime Juice",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -8851,7 +9059,8 @@
             },
             {
               "position": 4,
-              "ingredientId": "ingredient:angostura-bitters",
+              "ingredientId": "ingredient:aromatic-bitters",
+              "recipeDisplayName": "Angostura Bitters",
               "quantity": 2.0,
               "maximumQuantity": null,
               "unit": "dash",
@@ -8868,6 +9077,7 @@
             {
               "position": 5,
               "ingredientId": "ingredient:ginger-beer",
+              "recipeDisplayName": "Ginger beer",
               "quantity": null,
               "maximumQuantity": null,
               "unit": "top-up",
@@ -8886,7 +9096,7 @@
           "glassware": "Collins glass",
           "garnish": "Garnish with mint spring and optionally an orange slice as well.",
           "curationNotes": [
-            "30 ml Cognac or Brandy: selected Cognac as the initial recipe's first-listed alternative."
+            "30 ml Cognac or Brandy: Selected Cognac as the initial recipe's first-listed alternative."
           ]
         }
       ]
@@ -8909,6 +9119,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:tequila",
+              "recipeDisplayName": "Tequila",
               "quantity": 1.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -8925,6 +9136,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:orange-juice",
+              "recipeDisplayName": "Fresh Orange Juice",
               "quantity": 3.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -8941,6 +9153,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:grenadine",
+              "recipeDisplayName": "Grenadine Syrup",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -8980,6 +9193,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:rhum-agricole",
+              "recipeDisplayName": "Rhum Martinique Agricole",
               "quantity": 1.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -8995,7 +9209,8 @@
             },
             {
               "position": 2,
-              "ingredientId": "ingredient:blended-aged-rum",
+              "ingredientId": "ingredient:aged-rum",
+              "recipeDisplayName": "Blended Aged Rum",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -9012,6 +9227,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:falernum",
+              "recipeDisplayName": "Falernum",
               "quantity": 0.25,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -9028,6 +9244,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:allspice-dram",
+              "recipeDisplayName": "Allspice Saint Elizabeth",
               "quantity": 0.25,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -9047,6 +9264,7 @@
             {
               "position": 5,
               "ingredientId": "ingredient:lime-juice",
+              "recipeDisplayName": "Fresh Lime Juice",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -9066,6 +9284,7 @@
             {
               "position": 6,
               "ingredientId": "ingredient:orange-juice",
+              "recipeDisplayName": "Fresh Orange juice",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -9082,6 +9301,7 @@
             {
               "position": 7,
               "ingredientId": "ingredient:honey-syrup",
+              "recipeDisplayName": "Honey Syrup",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -9097,7 +9317,8 @@
             },
             {
               "position": 8,
-              "ingredientId": "ingredient:angostura-bitters",
+              "ingredientId": "ingredient:aromatic-bitters",
+              "recipeDisplayName": "Angostura Bitters",
               "quantity": 2.0,
               "maximumQuantity": null,
               "unit": "dash",
@@ -9137,6 +9358,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:irish-whiskey",
+              "recipeDisplayName": "Irish Whiskey",
               "quantity": 2,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -9157,6 +9379,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:sweet-vermouth",
+              "recipeDisplayName": "Sweet Red Vermouth",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -9173,6 +9396,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:green-chartreuse",
+              "recipeDisplayName": "Green Chartreuse",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -9188,7 +9412,8 @@
             },
             {
               "position": 4,
-              "ingredientId": "ingredient:angostura-bitters",
+              "ingredientId": "ingredient:aromatic-bitters",
+              "recipeDisplayName": "Angostura Bitters",
               "quantity": 2.0,
               "maximumQuantity": null,
               "unit": "dash",
@@ -9228,6 +9453,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:tequila",
+              "recipeDisplayName": "Tequila 100% agave",
               "quantity": 2.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -9244,6 +9470,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:lime-juice",
+              "recipeDisplayName": "Fresh Lime Juice",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -9259,7 +9486,8 @@
             },
             {
               "position": 3,
-              "ingredientId": "ingredient:agave-nectar",
+              "ingredientId": "ingredient:agave-syrup",
+              "recipeDisplayName": "Agave Nectar",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -9298,7 +9526,8 @@
           "ingredients": [
             {
               "position": 1,
-              "ingredientId": "ingredient:angostura-bitters",
+              "ingredientId": "ingredient:aromatic-bitters",
+              "recipeDisplayName": "Angostura Bitters",
               "quantity": 1.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -9315,6 +9544,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:orgeat-syrup",
+              "recipeDisplayName": "Orgeat Syrup",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -9331,6 +9561,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:lemon-juice",
+              "recipeDisplayName": "Fresh Lemon Juice",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -9347,6 +9578,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:rye-whiskey",
+              "recipeDisplayName": "Rye Whiskey",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -9386,6 +9618,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:old-tom-gin",
+              "recipeDisplayName": "Old Tom Gin",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -9402,6 +9635,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:dry-vermouth",
+              "recipeDisplayName": "Dry Vermouth",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -9418,6 +9652,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:maraschino-liqueur",
+              "recipeDisplayName": "Maraschino Luxardo",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "barspoon",
@@ -9434,6 +9669,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:absinthe",
+              "recipeDisplayName": "Absinthe",
               "quantity": 0.25,
               "maximumQuantity": null,
               "unit": "barspoon",
@@ -9450,6 +9686,7 @@
             {
               "position": 5,
               "ingredientId": "ingredient:orange-bitters",
+              "recipeDisplayName": "Orange Bitters",
               "quantity": 3.0,
               "maximumQuantity": null,
               "unit": "dash",
@@ -9489,6 +9726,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:grappa",
+              "recipeDisplayName": "White Smooth Grappa",
               "quantity": 1.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -9505,6 +9743,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:lemon-juice",
+              "recipeDisplayName": "Fresh lemon Juice",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -9520,14 +9759,15 @@
             },
             {
               "position": 3,
-              "ingredientId": "ingredient:chamomile-honey-mix",
+              "ingredientId": "ingredient:honey-syrup",
+              "recipeDisplayName": "Honey mix",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
               "quantityModifier": null,
               "displayQuantity": "½ oz",
               "requirement": "required",
-              "preparation": null,
+              "preparation": "water may be replaced with chamomile infusion",
               "sourceMeasurement": {
                 "text": "15 ml Honey mix (replace water with chamomile)*",
                 "quantity": 15.0,
@@ -9537,6 +9777,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:chamomile-cordial",
+              "recipeDisplayName": "Chamomile cordial",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -9553,6 +9794,7 @@
             {
               "position": 5,
               "ingredientId": "ingredient:egg-white",
+              "recipeDisplayName": "Egg White",
               "quantity": null,
               "maximumQuantity": null,
               "unit": "drop",
@@ -9592,6 +9834,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:gin",
+              "recipeDisplayName": "Gin",
               "quantity": 1.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -9608,6 +9851,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:vodka",
+              "recipeDisplayName": "Vodka",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -9624,6 +9868,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:lillet-blanc",
+              "recipeDisplayName": "Lillet Blanc",
               "quantity": 0.25,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -9663,6 +9908,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:rye-whiskey",
+              "recipeDisplayName": "Rye Whiskey",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -9679,6 +9925,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:cognac",
+              "recipeDisplayName": "Cognac",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -9695,6 +9942,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:sweet-vermouth",
+              "recipeDisplayName": "Sweet Vermouth",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -9711,6 +9959,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:benedictine",
+              "recipeDisplayName": "Bénédictine",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "barspoon",
@@ -9727,6 +9976,7 @@
             {
               "position": 5,
               "ingredientId": "ingredient:peychauds-bitters",
+              "recipeDisplayName": "Peychaud’s Bitters",
               "quantity": 2.0,
               "maximumQuantity": null,
               "unit": "dash",
@@ -9766,6 +10016,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:bourbon",
+              "recipeDisplayName": "Bourbon Whiskey",
               "quantity": 1.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -9782,6 +10033,7 @@
             {
               "position": 2,
               "ingredientId": "ingredient:lemon-juice",
+              "recipeDisplayName": "Fresh Lemon Juice",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -9798,6 +10050,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:simple-syrup",
+              "recipeDisplayName": "Sugar Syrup",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -9818,6 +10071,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:egg-white",
+              "recipeDisplayName": "Egg White",
               "quantity": null,
               "maximumQuantity": null,
               "unit": "drop",
@@ -9857,6 +10111,7 @@
             {
               "position": 1,
               "ingredientId": "ingredient:gin",
+              "recipeDisplayName": "Gin",
               "quantity": 1.25,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -9872,7 +10127,8 @@
             },
             {
               "position": 2,
-              "ingredientId": "ingredient:triple-sec",
+              "ingredientId": "ingredient:orange-liqueur",
+              "recipeDisplayName": "Triple Sec",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -9889,6 +10145,7 @@
             {
               "position": 3,
               "ingredientId": "ingredient:lemon-juice",
+              "recipeDisplayName": "Fresh Lemon Juice",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -9919,7 +10176,7 @@
       "slug": "zombie",
       "name": "Zombie",
       "ibaCategory": "contemporary-classics",
-      "primarySpiritId": "ingredient:dark-jamaican-rum",
+      "primarySpiritId": "ingredient:dark-rum",
       "recipes": [
         {
           "id": "recipe:zombie:iba",
@@ -9931,7 +10188,8 @@
           "ingredients": [
             {
               "position": 1,
-              "ingredientId": "ingredient:dark-jamaican-rum",
+              "ingredientId": "ingredient:dark-rum",
+              "recipeDisplayName": "Jamaican dark rum",
               "quantity": 1.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -9947,7 +10205,8 @@
             },
             {
               "position": 2,
-              "ingredientId": "ingredient:gold-rum",
+              "ingredientId": "ingredient:aged-rum",
+              "recipeDisplayName": "Gold Puerto Rican rum",
               "quantity": 1.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -9963,7 +10222,8 @@
             },
             {
               "position": 3,
-              "ingredientId": "ingredient:demerara-rum",
+              "ingredientId": "ingredient:dark-rum",
+              "recipeDisplayName": "Demerara Rum",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -9980,6 +10240,7 @@
             {
               "position": 4,
               "ingredientId": "ingredient:lime-juice",
+              "recipeDisplayName": "Fresh lime juice",
               "quantity": 0.75,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -10000,6 +10261,7 @@
             {
               "position": 5,
               "ingredientId": "ingredient:falernum",
+              "recipeDisplayName": "Falernum",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -10016,6 +10278,7 @@
             {
               "position": 6,
               "ingredientId": "ingredient:donns-mix",
+              "recipeDisplayName": "Donn’s Mix",
               "quantity": 0.5,
               "maximumQuantity": null,
               "unit": "ounce",
@@ -10032,6 +10295,7 @@
             {
               "position": 7,
               "ingredientId": "ingredient:grenadine",
+              "recipeDisplayName": "Grenadine syrup",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "teaspoon",
@@ -10047,7 +10311,8 @@
             },
             {
               "position": 8,
-              "ingredientId": "ingredient:angostura-bitters",
+              "ingredientId": "ingredient:aromatic-bitters",
+              "recipeDisplayName": "Angostura bitters",
               "quantity": 1.0,
               "maximumQuantity": null,
               "unit": "dash",
@@ -10064,6 +10329,7 @@
             {
               "position": 9,
               "ingredientId": "ingredient:pernod",
+              "recipeDisplayName": "Pernod",
               "quantity": 6.0,
               "maximumQuantity": null,
               "unit": "drop",
