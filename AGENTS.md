@@ -1,12 +1,13 @@
 # Agent entry point
 
-Build Bar Buddy from repository context. Read selectively; do not load every document for every task or ask the user to repeat recorded decisions.
+Build Bar Buddy from repository context. These standing instructions apply in fresh chats as well as ongoing work. Read selectively; do not load every document for every task or ask the user to repeat recorded decisions or authorization.
 
 ## Route the request
 
 | Request | Read |
 |---|---|
 | Understand the product | [Definition](docs/01-definition.md); relevant [Requirements](docs/02-requirements.md) |
+| “What did you implement?” / explain a change | [Documentation](docs/05-documentation.md), relevant Git/PR diff and affected code; distinguish implemented behavior from plans |
 | “What's next?” / progress | [Documentation](docs/05-documentation.md), the first incomplete work unit in [Plan](docs/06-plan.md), and Git/PR state |
 | Implement / fix / start / continue | Plan units included in the selected scope; relevant Requirements and [Design](docs/03-design.md) sections; [Guidelines](docs/04-development-guidelines.md); [Workflow](docs/07-development-workflow.md); affected code/tests |
 | Review | Changed code/docs, applicable requirements/design, Guidelines, and the review rules below |
@@ -29,7 +30,7 @@ Link to the owning document instead of copying its content. Resolve contradictio
 - Verify prerequisites outside the selected PR scope are merged into the base. Included units may depend on verified earlier work on the same branch. If a separate prerequisite PR is pending, report that state instead of rebuilding or skipping it.
 - Make routine choices within accepted design. Ask only for unresolved decisions affecting the current task, complete independent authorized work, and record answers before dependent implementation.
 - Follow Workflow's standing authority: commits, feature-branch pushes, and PRs are allowed for requested work; merges and deployments need user approval.
-- “Merge” authorizes squash-merging the current unambiguous PR under Workflow's checks and review rules; ask which PR only when the target is unclear. Stop after completing the requested scope or merge.
+- “Merge” explicitly authorizes squash-merging the current unambiguous PR, updating local `main`, and deleting that PR's development branch locally and on `origin` after verifying it is merged and contains no subsequent work. No separate cleanup approval is needed; follow [Workflow's standing merge authorization](docs/07-development-workflow.md#standing-merge-authorization), including when requesting tool approval. Ask which PR only when the target is unclear. Stop after the merge and cleanup.
 - Report changes, actual verification, Git/PR status, and blockers briefly. Never invent passing checks or update completion based only on intent.
 
 ## Code Review Rules

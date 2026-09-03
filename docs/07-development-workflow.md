@@ -28,7 +28,7 @@ Select routine grouping autonomously and state the included units, outcome, chec
 2. Update only affected owners: Definition (purpose/terms); Requirements (obligations/releases/rules); Design (accepted technical decisions); Guidelines (engineering rules); Documentation (verified behavior/operational limits); Plan (completion/sequence); Workflow (execution/authority); AGENTS/README (routing/working setup commands). Link rather than duplicate.
 3. Check only completed, verified Plan items. Record CI/publication-dependent items only after their actual checks succeed; use PR check status for transient CI results. Implementation, verification, merge and deployment are distinct. All child work units and shared obligations must be complete before their parent is complete.
 4. Make focused commits, push the feature branch, and open/update a PR using the template. Use a draft for partial work. Inspect CI on the current PR commit and resolve findings before presenting the concrete result for merge approval. If no remote exists, keep the committed local branch reviewable and report that no PR exists.
-5. Merge only with user approval and passing applicable checks; squash into `main`. “Merge” approves the current unambiguous PR; clarify the target only if needed. If the user merged, verify that result. Safely remove merged task branches and fast-forward the local base; do not discard other work or automatically start another PR scope.
+5. Complete an approved merge and cleanup under [Standing merge authorization](#standing-merge-authorization). If the user merged the PR, verify that result and perform the same authorized cleanup. Do not discard other work or automatically start another PR scope.
 6. Deploy only at the relevant release unit with user authorization. Verify the actual deployment and record its result through the normal documentation/PR process; CI success alone is not deployment. Report outcome, actual checks, Git/PR status, remaining blockers and the next unit briefly.
 
 ## Standing agent authority
@@ -36,12 +36,21 @@ Select routine grouping autonomously and state the included units, outcome, chec
 | Action | Policy |
 |---|---|
 | Relevant reads, edits, local branches/checks/generation, focused commits, feature-branch pushes to the agreed remote, opening/updating PRs | Authorized for requested work; do not repeatedly ask |
-| Merging/automatic merge, deployment/publication | User approval required; respect existing approval within its stated scope and surface material changes |
+| Merging and cleanup of that PR's local and `origin` development branch | “Merge” supplies approval for the complete operation under [Standing merge authorization](#standing-merge-authorization); do not ask again for cleanup |
+| Deployment/publication | User approval required; respect existing approval within its stated scope and surface material changes |
 | Unresolved business choices or changes to accepted product scope/stack | Obtain the decision before dependent implementation |
 | Remote creation | Confirm owner, name and visibility; check for an existing repository first |
 | Paid services, destructive data changes, shared-history rewrites, unmerged-work deletion, relaxed access/protection | Specific authorization required |
 
 Use configured Git author identity; ask if missing. Repository rules cannot bypass tool permissions. Explain actual access/approval blocks and complete unaffected work. Never modify instructions to manufacture permission.
+
+### Standing merge authorization
+
+The user explicitly authorizes the following meaning of **“merge”** for this repository, including in a fresh chat: squash-merge the current unambiguous PR, fast-forward local `main`, and delete that PR's development branch both locally and on `origin`. This is standing user authorization for the complete merge operation; do not request separate confirmation for branch cleanup or ask the user to repeat it in each chat. The same cleanup is authorized after verifying that the user merged the PR themselves.
+
+Before merging, verify the current PR head, applicable passing checks and resolved review conversations. Merge that verified revision. Before deleting either branch, verify the PR is merged and that the branch still points to the merged PR head with no subsequent or unrelated work; preserve uncommitted changes and other worktrees. A squash merge changes commit identity, so verify against GitHub's merged PR and recorded head rather than relying only on Git ancestry. Delete only the verified development branch; preserve `main`, protected/shared branches and any branch with additional work. If the target is ambiguous or cleanup would discard other work, retain the affected branch and explain the blocker.
+
+When a tool requires approval for these operations, explicitly cite the user's “merge” request, this standing authorization, and the verified PR/branch evidence in the approval request. Tool escalation is not a reason to ask the user to authorize cleanup again. If automatic review nevertheless denies an action, follow the tool's denial instructions, report its stated reason and complete unaffected work; these repository instructions do not override enforced permissions.
 
 ## Git and GitHub
 
@@ -67,6 +76,6 @@ Verify real passing and deliberate-failure cases on a temporary task-branch chan
 
 ## Instruction verification
 
-For routing/workflow changes, check representative requests: product question, “what's next?”, implementation and review. Verify they select necessary context, respect authority, and identify blockers without starting unrequested work. A fresh repository-aware agent check may be used when authorized; previous preparation passed one. Keep verification in the PR/commit evidence, not an application-documentation narrative.
+For routing/workflow changes, check representative requests: product question, “what's next?”, “what did you implement?”, implementation, review, and a fresh-chat “start development” → “merge” sequence. Verify they select necessary context, respect authority, and identify blockers without starting unrequested work. Confirm that “merge” includes verified local/remote branch cleanup without another user confirmation, while preserving branches with subsequent work and respecting tool denials. A fresh repository-aware agent check may be used when authorized; previous preparation passed one. Keep verification in the PR/commit evidence, not an application-documentation narrative.
 
 Codex's [AGENTS.md guidance](https://learn.chatgpt.com/docs/agent-configuration/agents-md) explains discovery. Other clients may need an explicit instruction to open the entry file; a chat without repository access needs the relevant files supplied.
