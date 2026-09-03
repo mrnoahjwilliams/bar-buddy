@@ -30,7 +30,7 @@ management:
     health:
       show-details: never
 
-# Enabled in an isolated configuration when the generation pipeline arrives.
+# Enabled only in the isolated OpenApiGenerationIT configuration.
 springdoc:
   api-docs:
     enabled: false

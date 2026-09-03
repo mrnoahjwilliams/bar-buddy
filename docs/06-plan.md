@@ -46,7 +46,7 @@ No public app or application entity schema yet.
 
 #### 0.1.4 — Generated API pipeline
 
-- [ ] Configure springdoc and Orval; choose tracked contract/client locations and narrow transport integration. Document deterministic generation using local/test configuration. **Verify:** generation runs and frontend compiles; the drift check detects missing/stale/modified/untracked output. Demonstrate a disposable contract change and remove it; do not add a permanent fake product endpoint or handwritten duplicate client.
+- [x] Configure springdoc and Orval; choose tracked contract/client locations and narrow transport integration. Document deterministic generation using local/test configuration. **Verify:** generation runs and frontend compiles; the drift check detects missing/stale/modified/untracked output. Demonstrate a disposable contract change and remove it; do not add a permanent fake product endpoint or handwritten duplicate client.
 
 #### 0.1.5 — Executable CI and protection
 
