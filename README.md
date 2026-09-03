@@ -8,7 +8,7 @@ Start with [AGENTS.md](AGENTS.md) for the document map and task-specific reading
 
 ## Setup
 
-The local foundation includes a Spring backend, PostgreSQL, a React development shell, and generated API contracts/clients. CI is the next foundation unit; authentication and application features begin in Release 1.
+The local foundation includes a Spring backend, PostgreSQL, a React development shell, generated API contracts/clients, and GitHub Actions checks. Authentication and application features begin in Release 1.
 
 ### Prerequisites
 
@@ -111,6 +111,26 @@ npm run api:check
 
 The [request adapter](frontend/src/api/http.ts) preserves Orval request options/cancellation, returns successful JSON or empty bodies, and rejects HTTP errors with their status and response body. Requests use relative URLs. API origin routing and JWT attachment arrive with the first authenticated flow in unit 1.1.2.
 
+### GitHub Actions
+
+[CI](.github/workflows/ci.yml) runs three independent jobs for every pull request targeting `main`, including documentation changes, and for pushes to `main`. Each uses the same commands documented above:
+
+| Check | Commands and environment |
+|---|---|
+| `backend-checks` | In `backend/`: `./mvnw --batch-mode --no-transfer-progress verify`; Java 25.0.2 and disposable PostgreSQL Testcontainers |
+| `frontend-checks` | In `frontend/`: `npm ci` then `npm run check`; Node from `.node-version` |
+| `api-contract` | In `frontend/`: `npm ci` then `npm run api:check`; the same Java, Node and Docker environment |
+
+Jobs use Ubuntu 24.04, immutable GitHub Action revisions, dependency caches, read-only repository permissions, and timeouts. Superseded runs for the same PR or branch are canceled. CI requires no repository secrets, Compose database, or production services.
+
+View a branch's checks with `gh pr checks` or the PR's Checks tab. After the workflow is merged into `main`, rerun it from the Actions tab or with:
+
+```sh
+gh workflow run ci.yml --ref main
+```
+
+[Documentation](docs/05-documentation.md#repository-and-ci) records verified CI and branch protection. [Workflow](docs/07-development-workflow.md#finish-and-review) owns merge authority.
+
 ### Remaining foundation work
 
-[Plan](docs/06-plan.md#015--executable-ci-and-protection) owns the remaining executable GitHub checks/protection and clean-checkout foundation acceptance.
+[Plan](docs/06-plan.md#016--foundation-acceptance) owns clean-checkout foundation acceptance.

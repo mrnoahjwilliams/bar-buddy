@@ -50,7 +50,7 @@ No public app or application entity schema yet.
 
 #### 0.1.5 — Executable CI and protection
 
-- [ ] Implement the Workflow CI contract using the verified local commands: backend/PostgreSQL checks, frontend checks/build and API drift. Run a controlled failure and a final successful GitHub run; enable real required checks and supported branch protections. **Verify:** failures propagate, required checks appear for docs PRs too, and enforcement works where supported. Record actual check names and any protection limitation; surface unavailable account features without buying/changing visibility.
+- [x] Implement the Workflow CI contract using the verified local commands: backend/PostgreSQL checks, frontend checks/build and API drift. Run a controlled failure and a final successful GitHub run; enable real required checks and supported branch protections. **Verify:** failures propagate, required checks appear for docs PRs too, and enforcement works where supported. Record actual check names and any protection limitation; surface unavailable account features without buying/changing visibility.
 
 #### 0.1.6 — Foundation acceptance
 
