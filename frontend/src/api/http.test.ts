@@ -1,7 +1,11 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { setApiAuthBridge } from './auth';
 import { ApiError, apiFetch } from './http';
 
-afterEach(() => vi.unstubAllGlobals());
+afterEach(() => {
+  setApiAuthBridge(undefined);
+  vi.unstubAllGlobals();
+});
 
 describe('generated-client transport', () => {
   it('returns JSON and preserves generated request options and cancellation', async () => {
@@ -16,7 +20,13 @@ describe('generated-client transport', () => {
     await expect(apiFetch('/api/v1/example', options)).resolves.toEqual({
       id: 'example',
     });
-    expect(fetch).toHaveBeenCalledWith('/api/v1/example', options);
+    expect(fetch).toHaveBeenCalledWith('/api/v1/example', {
+      ...options,
+      headers: expect.any(Headers),
+    });
+    expect((fetch.mock.calls[0]?.[1] as RequestInit).headers).toSatisfy(
+      (headers: Headers) => headers.get('Content-Type') === 'application/json',
+    );
   });
 
   it('accepts no-content responses', async () => {
@@ -68,5 +78,36 @@ describe('generated-client transport', () => {
     await expect(apiFetch('/api/v1/example')).rejects.toBeInstanceOf(
       SyntaxError,
     );
+  });
+
+  it('attaches a bearer token and retries once after refreshing a 401', async () => {
+    const fetch = vi
+      .fn()
+      .mockResolvedValueOnce(new Response(null, { status: 401 }))
+      .mockResolvedValueOnce(Response.json({ id: 'current-user' }));
+    vi.stubGlobal('fetch', fetch);
+    let token = 'expired-token';
+    const handleUnauthorized = vi.fn();
+    setApiAuthBridge({
+      async getAccessToken(forceRefresh) {
+        if (forceRefresh) token = 'fresh-token';
+        return token;
+      },
+      handleUnauthorized,
+    });
+
+    await expect(apiFetch('/api/v1/me')).resolves.toEqual({
+      id: 'current-user',
+    });
+    expect(fetch).toHaveBeenCalledTimes(2);
+    expect((fetch.mock.calls[0]?.[1] as RequestInit).headers).toSatisfy(
+      (headers: Headers) =>
+        headers.get('Authorization') === 'Bearer expired-token',
+    );
+    expect((fetch.mock.calls[1]?.[1] as RequestInit).headers).toSatisfy(
+      (headers: Headers) =>
+        headers.get('Authorization') === 'Bearer fresh-token',
+    );
+    expect(handleUnauthorized).not.toHaveBeenCalled();
   });
 });

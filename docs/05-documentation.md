@@ -1,5 +1,13 @@
 # Documentation
 
+## Frontend session and navigation
+
+The React app now uses the official Supabase browser client for persisted email/password sessions, automatic token refresh, signup, login, logout and password recovery. Only the project URL and publishable key are browser configuration; server database credentials, secret/service-role keys and signing material remain excluded. Missing browser configuration produces a visible disabled login state. Local Vite routes relative `/api` requests to Spring, while deployed hosting is expected to preserve the same-origin `/api` route.
+
+Protected Home, Bar, Drinks and More routes wait for session restoration and send signed-out visitors to login while retaining their requested destination. The responsive shell presents desktop navigation and a mobile bottom bar. Home calls the generated `GET /me` hook as the first identity check; the shared generated-client adapter attaches the current access token, performs one refresh-and-retry after HTTP 401 and ends a session that remains unauthorized. Logout and any direct account identity change clear the complete TanStack Query cache before the next user's requests can populate it.
+
+Sixteen frontend behavior/transport tests pass, covering signed-in/out routing, requested-page return, bearer attachment, refresh retry, expired sessions, account switching and refetch, cache isolation, logout, email-confirmation signup, recovery request/update, provider errors, API response handling and unknown routes. Desktop and 335-pixel mobile login layouts were browser-reviewed without console warnings or errors. The real hosted frontend signup/login/recovery and browser → Spring → PostgreSQL journey still require the project's publishable browser key and therefore remain the completion gate for unit 1.1.2.
+
 ## Backend identity
 
 The backend now has its first application entity and endpoint. Flyway migration V1 creates `app_user` with an application UUID, a unique nonblank Supabase JWT subject and creation time. `GET /api/v1/me` derives that subject only from the validated bearer token, atomically creates the local identity on first access and returns only its stable `id` and `createdAt`; the provider subject is not exposed. A unique constraint plus conflict-safe insert makes simultaneous first requests converge without a duplicate or failed transaction.

@@ -83,6 +83,8 @@ No public app or application entity schema yet.
 #### 1.1.2 — Session and navigation
 
 - [ ] Build signup/login/logout/recovery and expired-session/error handling; attach JWTs through generated-client transport and create responsive Home/Bar/Drinks/More navigation. **Verify:** signed-in/out transitions, recovery, API authorization, account switching and removal of previous-user cached data. This is the first authenticated frontend → API → database journey.
+  - [x] Implement and locally verify the Supabase session flows, generated-client JWT attachment/refresh, account-safe query caching and responsive application navigation without hosted credentials.
+  - [ ] Configure the hosted browser publishable key and redirect URLs; verify real signup/login/recovery, account switching and frontend → Spring → PostgreSQL identity access before completing the unit.
 
 ### 1.2 — Catalog persistence and browsing
 

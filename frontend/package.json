@@ -25,6 +25,7 @@
     "check": "npm run format:check && npm run lint && npm run test && npm run test:api-tooling && npm run build"
   },
   "dependencies": {
+    "@supabase/supabase-js": "2.115.0",
     "@tanstack/react-query": "5.102.8",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
