@@ -38,29 +38,6 @@ jobs:
   frontend-checks:
     name: frontend-checks
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - name: Set up Node.js
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        with:
-          node-version-file: .node-version
-          cache: npm
-          cache-dependency-path: frontend/package-lock.json
-      - name: Verify catalog
-        working-directory: catalog
-        run: npm run check
-      - name: Install frontend dependencies
-        working-directory: frontend
-        run: npm ci
-      - name: Verify frontend
-        working-directory: frontend
-        run: npm run check
-
-  api-contract:
-    name: api-contract
-    runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
       - name: Check out repository
@@ -78,9 +55,15 @@ jobs:
           node-version-file: .node-version
           cache: npm
           cache-dependency-path: frontend/package-lock.json
+      - name: Verify catalog
+        working-directory: catalog
+        run: npm run check
       - name: Install frontend dependencies
         working-directory: frontend
-        run: npm ci
+        run: npm ci --prefer-offline --no-audit --no-fund
+      - name: Verify frontend
+        working-directory: frontend
+        run: npm run check
       - name: Verify generated API contract and client
         working-directory: frontend
         run: npm run api:check

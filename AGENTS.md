@@ -31,7 +31,7 @@ Link to the owning document instead of copying its content. Resolve contradictio
 - Make routine choices within accepted design. Ask only for unresolved decisions affecting the current task, complete independent authorized work, and record answers before dependent implementation.
 - Follow Workflow's standing authority: commits, feature-branch pushes, and PRs are allowed for requested work; merges and deployments need user approval.
 - “Merge” explicitly authorizes squash-merging the current unambiguous PR, updating local `main`, and deleting that PR's development branch locally and on `origin` after verifying it is merged and contains no subsequent work. No separate cleanup approval is needed; follow [Workflow's standing merge authorization](docs/07-development-workflow.md#standing-merge-authorization), including when requesting tool approval. Ask which PR only when the target is unclear. Stop after the merge and cleanup.
-- Report changes, actual verification, Git/PR status, and blockers briefly. Never invent passing checks or update completion based only on intent.
+- Report changes, actual verification, Git/PR status, blockers, and the concrete next user instruction briefly. Follow [Workflow's CI handoff rule](docs/07-development-workflow.md#finish-and-review) instead of keeping a turn active only to poll; never invent passing checks or update completion based only on intent.
 
 ## Code Review Rules
 
