@@ -8,7 +8,7 @@ Start with [AGENTS.md](AGENTS.md) for the document map and task-specific reading
 
 ## Setup
 
-The local foundation includes a Spring backend, PostgreSQL, a React development shell, generated API contracts/clients, and GitHub Actions checks. The backend identity flow and `AppUser` schema are implemented; hosted Supabase configuration and verification remain before unit 1.1.1 is complete.
+The local foundation includes a Spring backend, PostgreSQL, a React development shell, generated API contracts/clients, and GitHub Actions checks. The backend identity flow, `AppUser` schema and hosted Supabase boundary are implemented and verified; browser signup, login and session handling follow in unit 1.1.2.
 
 ### Prerequisites
 
@@ -76,7 +76,7 @@ Check `http://127.0.0.1:8080/actuator/health` with a browser or:
 curl --fail http://127.0.0.1:8080/actuator/health
 ```
 
-Expect status `UP`. Database details are hidden. Other requests are denied until authentication is implemented. Stop the backend with Ctrl+C. The example binds it to loopback; runtime settings are in [application.yml](backend/src/main/resources/application.yml). Flyway currently creates only its schema-history metadata, and its “No migrations found” warning is expected. There are no application migrations or tables yet.
+Expect status `UP`. Database details are hidden. Application requests require a valid configured bearer token; unrelated routes remain denied. Stop the backend with Ctrl+C. The example binds it to loopback; runtime settings are in [application.yml](backend/src/main/resources/application.yml). Flyway migration V1 creates the `app_user` identity table and hardens its current and future provider-role privileges.
 
 From `backend/`:
 
@@ -119,6 +119,8 @@ from unnest(array['anon', 'authenticated', 'service_role']) as role_name;
 ```
 
 Finally, call both Supabase REST and GraphQL with no token and with access tokens for two test users. The disabled Data API must not permit either user to read or modify `app_user`. Confirm that both users can call Spring's `/api/v1/me`, receive distinct local IDs, and still cannot select one another through client input. Record these actual results in [Documentation](docs/05-documentation.md); local simulations do not substitute for the hosted checks.
+
+The accepted hosted environment is the `bar-buddy` Free-plan project in Supabase's East US (Ohio) region. It uses the free IPv4 session pooler with required TLS for the server's ordinary PostgreSQL connection, an ECC P-256 current signing key exposed as ES256 through JWKS, and a disabled Data API. Flyway V1, current/default grant inspection, genuine two-user Supabase token access through Spring, concurrent first access, ownership isolation and anonymous/two-user REST and GraphQL denial passed on September 3, 2026. Temporary Auth identities and application rows were removed afterward. The database password remains only in an ignored owner-readable local environment file; tests, CI, tracked files and browser configuration contain no database or signing secrets.
 
 ### Frontend
 
