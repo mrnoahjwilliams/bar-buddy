@@ -181,12 +181,16 @@ class IdentityApplicationIT {
         new NimbusJwtEncoder(new ImmutableJWKSet<SecurityContext>(new JWKSet(key)));
     var algorithm = key instanceof ECKey ? SignatureAlgorithm.ES256 : SignatureAlgorithm.RS256;
     var now = Instant.now();
+    var issuedAt =
+        expiresAt.isBefore(now)
+            ? expiresAt.minus(10, ChronoUnit.MINUTES)
+            : now.minus(2, ChronoUnit.MINUTES);
     var claims =
         JwtClaimsSet.builder()
             .issuer(issuer)
             .subject(subject)
             .audience(List.of(audience))
-            .issuedAt(now.minus(2, ChronoUnit.MINUTES))
+            .issuedAt(issuedAt)
             .expiresAt(expiresAt)
             .build();
     return encoder
