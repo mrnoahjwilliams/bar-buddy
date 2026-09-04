@@ -8,7 +8,7 @@ Start with [AGENTS.md](AGENTS.md) for the document map and task-specific reading
 
 ## Setup
 
-The local foundation includes a Spring backend, PostgreSQL, a React development shell, generated API contracts/clients, and GitHub Actions checks. The backend identity flow, `AppUser` schema and hosted Supabase boundary are implemented and verified; browser signup, login and session handling follow in unit 1.1.2.
+The local foundation includes a Spring backend, PostgreSQL, a React application shell, generated API contracts/clients, and GitHub Actions checks. Backend identity, the `AppUser` schema, hosted Supabase authentication, browser sessions and responsive authenticated navigation are implemented and verified.
 
 ### Prerequisites
 
@@ -128,13 +128,16 @@ In another terminal:
 
 ```sh
 cd frontend
+cp .env.example .env
 npm ci
 npm run dev
 ```
 
 `npm ci` is needed on first setup or when dependencies change. For ordinary restarts, run only `npm run dev` from `frontend/` using the required Node version.
 
-Open `http://127.0.0.1:5173`. The shell needs no environment variables or running API. Stop it with Ctrl+C. It displays the development status and handles unknown URLs with a return link; authenticated navigation comes later.
+Set `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` in the copied file from the same Supabase project used by the backend. These are browser-facing Auth settings; never put the database password, JWT signing secret, service-role key or Supabase secret key in a `VITE_` variable. In Supabase Auth URL Configuration, use `http://127.0.0.1:5173` as the local Site URL and allow `http://127.0.0.1:5173/reset-password` as a redirect URL. Add production URLs only when deployment is configured.
+
+Enable backend authentication for that project and start it on `127.0.0.1:8080`, then open `http://127.0.0.1:5173`. Vite proxies `/api` to that backend during local development; deployed hosting must route `/api` to Spring on the same public origin. The app supports email signup, login, logout and password recovery, protects Home/Bar/Drinks/More routes, and verifies a signed-in session through `GET /api/v1/me`. If the browser settings are absent, the login screen explains the configuration problem without attempting authentication. Stop the frontend with Ctrl+C.
 
 From `frontend/`:
 
@@ -156,7 +159,7 @@ npm run api:generate
 npm run check
 ```
 
-Generation starts with a clean backend build and `OpenApiGenerationIT`, using a disposable PostgreSQL container and no listening application server. The test disables the local `.env` import, enables springdoc only in its test context, and reads the schema in-process without changing runtime security. Normal application startup still disables `/v3/api-docs`. The generated contract includes bearer authentication and `GET /api/v1/me`; JWT attachment to the shared request adapter remains in unit 1.1.2.
+Generation starts with a clean backend build and `OpenApiGenerationIT`, using a disposable PostgreSQL container and no listening application server. The test disables the local `.env` import, enables springdoc only in its test context, and reads the schema in-process without changing runtime security. Normal application startup still disables `/v3/api-docs`. The generated contract includes bearer authentication and `GET /api/v1/me`; the shared request adapter attaches the current Supabase access token.
 
 The pipeline copies the exported schema to [contracts/openapi.json](contracts/openapi.json) and uses [Orval configuration](frontend/orval.config.ts) to generate `frontend/src/api/generated/`. These two locations contain generated output only and are replaced by `api:generate`; review and commit them with the backend changes. Never edit generated files by hand. The current contract intentionally has no product paths; types and query hooks appear when real controllers/DTOs arrive in Release 1.
 
@@ -169,7 +172,7 @@ npm run api:check
 
 `api:check` independently rebuilds the contract and client in temporary storage, compares them with working files and Git tracking, and exits nonzero for missing, stale, modified, unstaged, untracked, or obsolete generated output. It does not repair working files. Generation failures also fail the command; old output cannot make a failed generation pass. Keep other backend builds/generation runs sequential because they share `backend/target/`. This check is separate from `npm run check` because it also requires Java and Docker. `npm run test:api-tooling` tests the drift checker using temporary Git repositories without Docker.
 
-The [request adapter](frontend/src/api/http.ts) preserves Orval request options/cancellation, returns successful JSON or empty bodies, and rejects HTTP errors with their status and response body. Requests use relative URLs. API origin routing and JWT attachment arrive with the first authenticated flow in unit 1.1.2.
+The [request adapter](frontend/src/api/http.ts) preserves Orval request options/cancellation, returns successful JSON or empty bodies, and rejects HTTP errors with their status and response body. Requests use relative `/api` URLs so local Vite and deployed same-origin routing remain outside generated clients. The adapter attaches the current Supabase access token, attempts one provider refresh after HTTP 401 and expires the local session when authorization still fails. Account changes and logout clear TanStack Query's user-specific cache.
 
 ### GitHub Actions
 
@@ -192,4 +195,4 @@ gh workflow run ci.yml --ref main
 
 ### Development status
 
-[Documentation](docs/05-documentation.md#backend-identity) records the implemented and hosted-verified identity behavior. [Plan](docs/06-plan.md#112--frontend-authentication) identifies frontend signup, login and session handling as the next development unit.
+[Documentation](docs/05-documentation.md#frontend-session-and-navigation) records the implemented and hosted-verified identity journey. [Plan](docs/06-plan.md#121--persist-and-import-catalog) identifies catalog persistence and import as the next development unit.

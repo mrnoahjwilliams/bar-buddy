@@ -1,3 +1,5 @@
+import { getApiAuthBridge } from '@/api/auth';
+
 export class ApiError extends Error {
   constructor(
     public readonly status: number,
@@ -13,7 +15,22 @@ export async function apiFetch<T>(
   url: string,
   options?: RequestInit,
 ): Promise<T> {
-  const response = await fetch(url, options);
+  const bridge = getApiAuthBridge();
+  const request = async (forceRefresh: boolean) => {
+    const headers = new Headers(options?.headers);
+    const accessToken = await bridge?.getAccessToken(forceRefresh);
+    if (accessToken && !headers.has('Authorization')) {
+      headers.set('Authorization', `Bearer ${accessToken}`);
+    }
+    return fetch(url, { ...options, headers });
+  };
+
+  let response = await request(false);
+  if (response.status === 401 && bridge) {
+    const refreshedToken = await bridge.getAccessToken(true);
+    if (refreshedToken) response = await request(false);
+    if (response.status === 401) await bridge.handleUnauthorized();
+  }
   const text = await response.text();
   const contentType = response.headers.get('content-type') ?? '';
   let body: unknown = text || undefined;
