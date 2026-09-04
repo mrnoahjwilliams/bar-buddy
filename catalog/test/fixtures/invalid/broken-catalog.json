@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "catalog": {
+    "id": "catalog:bar-buddy",
+    "name": "Broken fixture catalog",
+    "defaultMeasurementSystem": "us"
+  },
+  "ingredients": [
+    {
+      "id": "ingredient:fixture-spirit",
+      "name": "Fixture spirit",
+      "category": "spirit"
+    },
+    {
+      "id": "ingredient:fixture-spirit",
+      "name": "FIXTURE SPIRIT",
+      "category": "pantry"
+    }
+  ],
+  "cocktails": [
+    {
+      "id": "cocktail:wrong-id",
+      "slug": "broken-drink",
+      "name": "Broken Drink",
+      "primarySpiritId": "ingredient:missing-spirit",
+      "styles": ["sour", "sour", "unknown-style"],
+      "recipes": [
+        {
+          "id": "recipe:broken-drink:other",
+          "name": "Default recipe",
+          "ingredients": [
+            {
+              "position": 2,
+              "ingredientId": "ingredient:missing-ingredient",
+              "recipeDisplayName": "Missing ingredient",
+              "measurements": {
+                "us": {
+                  "quantity": null,
+                  "maximumQuantity": 2,
+                  "unit": "ounce",
+                  "modifier": "scant"
+                },
+                "metric": {
+                  "quantity": 30,
+                  "maximumQuantity": 20,
+                  "unit": "teaspoon",
+                  "modifier": "heavy"
+                }
+              },
+              "requirement": "sometimes",
+              "preparation": null
+            }
+          ],
+          "instructions": "Mix.",
+          "glassware": "fixture glass",
+          "garnish": null
+        }
+      ]
+    }
+  ]
+}

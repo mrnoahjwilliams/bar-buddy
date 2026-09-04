@@ -2,8 +2,8 @@
 
 [`cocktails.json`](cocktails.json) is the approved permanent Bar Buddy dataset. It
 contains 102 cocktails, one default recipe for each cocktail, and 113 canonical
-ingredients. The application will import this file only after the later
-validation/import work; it is not a database seed yet.
+ingredients. It is validated and ready to become the database import source in unit
+1.2.1; it is not a database seed yet.
 
 ## Dataset shape
 
@@ -30,6 +30,56 @@ canonical Scotch whisky ingredient.
 
 Ingredient categories are `spirit`, `liqueur`, `fortified_wine`, `bitters`, `syrup`,
 `juice`, `mixer`, `fruit`, `herb`, `garnish`, and `other`.
+
+## Validation
+
+Run the complete catalog check from this directory with the repository's pinned Node
+and npm versions:
+
+```sh
+npm run check
+```
+
+The dependency-free check first runs the validator tests, then validates
+`cocktails.json`. It rejects missing or unexpected fields, malformed or duplicate
+stable identities and names, broken ingredient references, unsupported controlled
+values, invalid measurement pairs, and non-consecutive recipe display positions.
+Errors identify the JSON path and all detected problems are reported together.
+
+Small known-result fixtures live under [`test/fixtures/`](test/fixtures/), separate
+from the product catalog. The valid fixture covers required and optional lines and
+qualitative quantities. The deliberately invalid fixture covers duplicate identity,
+broken-reference, controlled-value, measurement, and display-order failures. Tests
+also preserve the intentional rule that an ingredient may appear more than once in
+one recipe. The validator is strict for schema version 1; changing fields or
+controlled vocabularies requires a versioned validator and import change rather than
+silently accepting drift.
+
+## Import and correction contract
+
+Unit 1.2.1 will implement persistence using this repeatable contract:
+
+1. Parse and validate the complete file before opening a write transaction. Any
+   error rejects the whole import.
+2. Match Ingredient, Cocktail, and Recipe records only by their immutable namespaced
+   catalog IDs, never by display name, current slug, or array order. Import in
+   dependency order and update matching records in place so repeat runs do not create
+   duplicates and database identities remain stable for future references.
+3. Within a matched Recipe, synchronize RecipeIngredient lines by the recipe's stable
+   ID and validated display position. The full ordered set is authoritative for that
+   recipe; line records are not external catalog identities.
+4. Correct names, categories, recipe text, measurements, and line order in place while
+   retaining the owning stable IDs. Display-name corrections never mint new IDs.
+   Existing IDs and cocktail slugs are compatibility values even if their wording
+   later looks imperfect.
+5. Do not infer renames from similar text and do not automatically delete a stable
+   Ingredient, Cocktail, or Recipe missing from a later file. An intentional identity
+   replacement or retirement requires an explicit migration/mapping reviewed with its
+   references; otherwise the import fails rather than orphaning future user data.
+
+The persistence implementation must test empty-database import, an identical repeat,
+and a correction run that retains referenced database identities. This contract does
+not create application tables or runtime import behavior in Release 0.
 
 ## Optional cocktail styles
 
@@ -97,4 +147,4 @@ automatically change it.
 
 The product owner approved the names, canonical ingredients, optional styles,
 measurement pairs, requirements, instructions, glassware, and garnish on September
-3, 2026. Validation and import work begins in milestone 0.3.
+3, 2026. The validated file is the only maintained import input; the archive is not.

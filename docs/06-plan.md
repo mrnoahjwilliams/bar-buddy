@@ -68,7 +68,7 @@ No public app or application entity schema yet.
 
 ### 0.3 — Validation and import readiness
 
-- [ ] Build repeatable validation for required fields, references, duplicates, measurements, requirement types and display order, with useful errors. Prepare small known-result fixtures separate from the full catalog. Define repeatable import/stable matching and correction behavior preserving identities and future references. **Verify:** valid and deliberately invalid fixtures, full catalog validation and documented import instructions. Persistence arrives in 1.2.
+- [x] Build repeatable validation for required fields, references, duplicates, measurements, requirement types and display order, with useful errors. Prepare small known-result fixtures separate from the full catalog. Define repeatable import/stable matching and correction behavior preserving identities and future references. **Verify:** valid and deliberately invalid fixtures, full catalog validation and documented import instructions. Persistence arrives in 1.2.
 
 ## Release 1 — Publishable Home Bar MVP
 

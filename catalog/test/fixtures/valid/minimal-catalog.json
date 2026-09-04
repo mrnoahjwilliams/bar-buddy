@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "catalog": {
+    "id": "catalog:bar-buddy",
+    "name": "Bar Buddy fixture catalog",
+    "defaultMeasurementSystem": "us"
+  },
+  "ingredients": [
+    {
+      "id": "ingredient:fixture-spirit",
+      "name": "Fixture spirit",
+      "category": "spirit"
+    },
+    {
+      "id": "ingredient:fixture-garnish",
+      "name": "Fixture garnish",
+      "category": "garnish"
+    }
+  ],
+  "cocktails": [
+    {
+      "id": "cocktail:fixture-drink",
+      "slug": "fixture-drink",
+      "name": "Fixture Drink",
+      "primarySpiritId": "ingredient:fixture-spirit",
+      "styles": [],
+      "recipes": [
+        {
+          "id": "recipe:fixture-drink:default",
+          "name": "Default recipe",
+          "ingredients": [
+            {
+              "position": 1,
+              "ingredientId": "ingredient:fixture-spirit",
+              "recipeDisplayName": "Fixture spirit",
+              "measurements": {
+                "us": {
+                  "quantity": 1,
+                  "maximumQuantity": null,
+                  "unit": "ounce",
+                  "modifier": null
+                },
+                "metric": {
+                  "quantity": 30,
+                  "maximumQuantity": null,
+                  "unit": "milliliter",
+                  "modifier": null
+                }
+              },
+              "requirement": "required",
+              "preparation": null
+            },
+            {
+              "position": 2,
+              "ingredientId": "ingredient:fixture-garnish",
+              "recipeDisplayName": "Fixture garnish",
+              "measurements": {
+                "us": {
+                  "quantity": null,
+                  "maximumQuantity": null,
+                  "unit": "to-taste",
+                  "modifier": null
+                },
+                "metric": {
+                  "quantity": null,
+                  "maximumQuantity": null,
+                  "unit": "to-taste",
+                  "modifier": null
+                }
+              },
+              "requirement": "optional",
+              "preparation": "Freshly prepared"
+            }
+          ],
+          "instructions": "Combine the required ingredient and finish with the optional garnish.",
+          "glassware": "fixture glass",
+          "garnish": null
+        }
+      ]
+    }
+  ]
+}

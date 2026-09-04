@@ -4,7 +4,15 @@
 
 Milestone 0.2 produced an approved, source-neutral Bar Buddy JSON catalog with 102 cocktails, one default recipe per cocktail, 416 ordered recipe lines and 113 practical canonical ingredients. Each line retains recipe-specific wording and reviewed US/metric measurements; US is the declared default. Cocktail styles are optional and non-exclusive across an 18-value controlled vocabulary: 12 cocktails remain deliberately unclassified instead of using an `other` fallback. [`catalog/README.md`](../catalog/README.md) owns the format and measurement, matching, style, and curation rules.
 
-The dated source snapshot, scraper, and final one-time builder are retained only under `catalog/archive/` for provenance; upstream list changes do not update the Bar Buddy dataset. The product owner approved the catalog on September 3, 2026. It is not yet a database seed and no application runtime uses it. Automated validation and import readiness remain separately scheduled in 0.3, with persistence in 1.2.1.
+The dated source snapshot, scraper, and final one-time builder are retained only under `catalog/archive/` for provenance; upstream list changes do not update the Bar Buddy dataset. The product owner approved the catalog on September 3, 2026. It is not yet a database seed and no application runtime uses it. Persistence remains separately scheduled in 1.2.1.
+
+## Catalog validation and import readiness
+
+The maintained catalog has dependency-free Node validation in the existing pinned toolchain and required `frontend-checks` CI job. Validation covers the exact version 1 structure, required fields, stable ID/name duplicates, ingredient references, controlled categories/styles/requirements/units/modifiers, compatible reviewed measurement pairs, and consecutive array/display order. Errors include JSON paths and accumulate so one run exposes all found problems.
+
+Known-result fixtures are isolated from the 102-cocktail product file. The valid fixture covers required/optional lines and qualitative quantities; a deliberately invalid fixture verifies 16 precise failures across identity, reference, controlled-value, measurement, and order rules. Separate tests confirm required/exact fields and preserve valid repeated ingredient references. The complete check passed 4 tests and validated 113 ingredients, 102 cocktails, 102 recipes, and 416 recipe lines.
+
+[`catalog/README.md`](../catalog/README.md#import-and-correction-contract) owns the future import contract. It requires whole-file validation before writes, immutable-ID matching and in-place corrections for Ingredient/Cocktail/Recipe, recipe-line synchronization by recipe ID and display position, no name-similarity matching, and no implicit deletion/identity replacement. Empty, repeated, and correction imports with reference preservation remain implementation verification for 1.2.1. Release 0 adds no application tables or runtime importer.
 
 ## Local application foundation
 
@@ -44,4 +52,4 @@ The existing development session remained running. The acceptance copy used a se
 - API generation, a subsequent frontend check, and independent API drift verification passed. Regenerated contract/client files were identical to the tracked files, and the clone's tracked working tree remained clean. Local settings, installed dependencies and build output were ignored by Git.
 - All three checks passed on the merged foundation PR [#6](https://github.com/mrnoahjwilliams/bar-buddy/pull/6) and on the [base commit's CI jobs](https://github.com/mrnoahjwilliams/bar-buddy/actions/runs/33777244132). Current acceptance-PR checks remain visible on its Checks tab.
 
-No application changes were needed for acceptance. Temporary app processes and the disposable database were removed after verification. Foundation is complete; [Plan](06-plan.md#021--catalog-decisions-and-format) next requires catalog decisions and format review. Nothing has been deployed.
+No application changes were needed for acceptance. Temporary app processes and the disposable database were removed after verification. Foundation acceptance did not deploy anything; current catalog readiness is recorded above.

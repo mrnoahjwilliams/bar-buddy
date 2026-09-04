@@ -48,6 +48,9 @@ jobs:
           node-version-file: .node-version
           cache: npm
           cache-dependency-path: frontend/package-lock.json
+      - name: Verify catalog
+        working-directory: catalog
+        run: npm run check
       - name: Install frontend dependencies
         working-directory: frontend
         run: npm ci
