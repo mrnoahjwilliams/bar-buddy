@@ -145,7 +145,7 @@ npm run test:watch
 npm run preview
 ```
 
-`check` runs Prettier, ESLint, Vitest/React Testing Library routing and transport tests, API artifact-checker tests, TypeScript, and the production build. Individual commands are `format:check`, `lint`, `test`, `test:api-tooling`, `typecheck`, and `build`. Build output is in `frontend/dist/`; `preview` serves that output at `http://127.0.0.1:4173` after a successful build. shadcn/ui is configured in [components.json](frontend/components.json); add needed components with `npx --no-install shadcn add <component>`.
+`check` runs Prettier, ESLint, Vitest/React Testing Library routing and transport tests, API artifact-checker tests, TypeScript, and the production build. Individual commands are `format:check`, `lint`, `test`, `test:api-tooling`, `typecheck`, and `build`. Build output is in `frontend/dist/`; `preview` serves that output at `http://127.0.0.1:4173` after a successful build. shadcn/ui is configured in [components.json](frontend/components.json); add needed components with `npm run ui:add -- <component>`. The command downloads the pinned generator only when UI scaffolding is requested, keeping it out of normal installs and CI.
 
 ### API generation and drift
 
@@ -173,15 +173,14 @@ The [request adapter](frontend/src/api/http.ts) preserves Orval request options/
 
 ### GitHub Actions
 
-[CI](.github/workflows/ci.yml) runs three independent jobs for every pull request targeting `main`, including documentation changes, and for pushes to `main`. Each uses the same commands documented above:
+[CI](.github/workflows/ci.yml) runs two independent jobs for every pull request targeting `main`, including documentation changes, and for pushes to `main`. Each uses the same commands documented above:
 
 | Check | Commands and environment |
 |---|---|
 | `backend-checks` | In `backend/`: `./mvnw --batch-mode --no-transfer-progress verify`; Java 25.0.2 and disposable PostgreSQL Testcontainers |
-| `frontend-checks` | In `catalog/`: `npm run check`; then in `frontend/`: `npm ci` and `npm run check`; Node from `.node-version` |
-| `api-contract` | In `frontend/`: `npm ci` then `npm run api:check`; the same Java, Node and Docker environment |
+| `frontend-checks` | In `catalog/`: `npm run check`; then in `frontend/`: `npm ci --prefer-offline --no-audit --no-fund`, `npm run check`, and `npm run api:check`; Node from `.node-version`, Java 25.0.2 and disposable PostgreSQL Testcontainers |
 
-Jobs use Ubuntu 24.04, immutable GitHub Action revisions, dependency caches, read-only repository permissions, and timeouts. Superseded runs for the same PR or branch are canceled. CI requires no repository secrets, Compose database, or production services.
+Jobs use Ubuntu 24.04, immutable GitHub Action revisions, dependency caches, read-only repository permissions, and timeouts. Superseded runs for the same PR or branch are canceled. The combined web job installs frontend dependencies once instead of once for frontend verification and again for API drift. CI requires no repository secrets, Compose database, or production services.
 
 View a branch's checks with `gh pr checks` or the PR's Checks tab. After the workflow is merged into `main`, rerun it from the Actions tab or with:
 
@@ -193,4 +192,4 @@ gh workflow run ci.yml --ref main
 
 ### Development status
 
-[Documentation](docs/05-documentation.md#backend-identity) records implemented identity behavior and the outstanding hosted-provider verification. [Plan](docs/06-plan.md#111--backend-identity) remains incomplete until those checks pass.
+[Documentation](docs/05-documentation.md#backend-identity) records the implemented and hosted-verified identity behavior. [Plan](docs/06-plan.md#112--frontend-authentication) identifies frontend signup, login and session handling as the next development unit.
