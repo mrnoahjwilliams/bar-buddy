@@ -1,11 +1,4 @@
-export type AuthEvent =
-  | 'INITIAL_SESSION'
-  | 'MFA_CHALLENGE_VERIFIED'
-  | 'PASSWORD_RECOVERY'
-  | 'SIGNED_IN'
-  | 'SIGNED_OUT'
-  | 'TOKEN_REFRESHED'
-  | 'USER_UPDATED';
+export type AuthEvent = 'session-changed' | 'password-recovery';
 
 export interface AppSession {
   accessToken: string;

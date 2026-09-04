@@ -1,5 +1,7 @@
 package com.barbuddy.shared.security;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -27,6 +29,8 @@ public class JwtConfiguration {
     requireText(properties.issuer(), "AUTH_ISSUER");
     requireText(properties.jwkSetUri(), "AUTH_JWK_SET_URI");
     requireText(properties.audience(), "AUTH_AUDIENCE");
+    requireSecureUri(properties.issuer(), "AUTH_ISSUER");
+    requireSecureUri(properties.jwkSetUri(), "AUTH_JWK_SET_URI");
 
     var decoder =
         NimbusJwtDecoder.withJwkSetUri(properties.jwkSetUri())
@@ -50,6 +54,31 @@ public class JwtConfiguration {
     if (!StringUtils.hasText(value)) {
       throw new IllegalStateException(
           environmentName + " is required when authentication is enabled");
+    }
+  }
+
+  private static void requireSecureUri(String value, String environmentName) {
+    if (value.contains("YOUR_PROJECT_REF")) {
+      throw new IllegalStateException(environmentName + " still contains an example placeholder");
+    }
+    final URI uri;
+    try {
+      uri = new URI(value);
+    } catch (URISyntaxException exception) {
+      throw new IllegalStateException(environmentName + " must be a valid URL", exception);
+    }
+
+    var host = uri.getHost();
+    if (!uri.isAbsolute() || host == null) {
+      throw new IllegalStateException(environmentName + " must be a valid URL");
+    }
+    var loopback =
+        host.equalsIgnoreCase("localhost") || host.equals("127.0.0.1") || host.equals("::1");
+    var secure = "https".equalsIgnoreCase(uri.getScheme());
+    var localHttp = loopback && "http".equalsIgnoreCase(uri.getScheme());
+    if (uri.getUserInfo() != null || uri.getFragment() != null || (!secure && !localHttp)) {
+      throw new IllegalStateException(
+          environmentName + " must use HTTPS outside loopback development");
     }
   }
 }

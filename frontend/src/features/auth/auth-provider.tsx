@@ -37,7 +37,7 @@ export function AuthProvider({ children, gateway }: AuthProviderProps) {
       sessionRef.current = nextSession;
       setSession(nextSession);
       setStatus(
-        event === 'PASSWORD_RECOVERY'
+        event === 'password-recovery'
           ? 'recovery'
           : nextSession
             ? 'authenticated'
@@ -54,7 +54,7 @@ export function AuthProvider({ children, gateway }: AuthProviderProps) {
     } catch {
       // The local session must still be discarded when provider sign-out fails.
     } finally {
-      applySession('SIGNED_OUT', null);
+      applySession('session-changed', null);
     }
   }, [applySession, gateway]);
 
@@ -67,13 +67,13 @@ export function AuthProvider({ children, gateway }: AuthProviderProps) {
       .getSession()
       .then((nextSession) => {
         if (active && lastUserId.current === undefined) {
-          applySession('INITIAL_SESSION', nextSession);
+          applySession('session-changed', nextSession);
         }
       })
       .catch(() => {
         if (active) {
           setNotice('We could not restore your session. Please sign in again.');
-          applySession('SIGNED_OUT', null);
+          applySession('session-changed', null);
         }
       });
     return () => {
@@ -88,7 +88,7 @@ export function AuthProvider({ children, gateway }: AuthProviderProps) {
         if (!forceRefresh) return sessionRef.current?.accessToken;
         try {
           const refreshed = await gateway.refreshSession();
-          if (refreshed) applySession('TOKEN_REFRESHED', refreshed);
+          if (refreshed) applySession('session-changed', refreshed);
           return refreshed?.accessToken;
         } catch {
           return undefined;
@@ -109,13 +109,13 @@ export function AuthProvider({ children, gateway }: AuthProviderProps) {
       async signIn(email, password) {
         const nextSession = await gateway.signIn(email, password);
         if (!nextSession) throw new Error('Sign in did not return a session.');
-        applySession('SIGNED_IN', nextSession);
+        applySession('session-changed', nextSession);
         setNotice(undefined);
       },
       async signUp(email, password) {
         const nextSession = await gateway.signUp(email, password);
         if (nextSession) {
-          applySession('SIGNED_IN', nextSession);
+          applySession('session-changed', nextSession);
           setNotice(undefined);
           return 'signed-in';
         }
@@ -134,7 +134,7 @@ export function AuthProvider({ children, gateway }: AuthProviderProps) {
       },
       async signOut() {
         await gateway.signOut();
-        applySession('SIGNED_OUT', null);
+        applySession('session-changed', null);
         setNotice('You’re signed out.');
       },
     }),

@@ -306,7 +306,8 @@ export function ResetPasswordPage() {
 
   if (auth.status === 'loading')
     return <p aria-live="polite">Opening your reset link…</p>;
-  if (auth.status !== 'recovery') return <Navigate to="/login" replace />;
+  if (auth.status === 'anonymous') return <Navigate to="/login" replace />;
+  if (auth.status === 'authenticated') return <Navigate to="/" replace />;
 
   async function submit(event: FormEvent) {
     event.preventDefault();

@@ -5,4 +5,5 @@
  * OpenAPI spec version: v1
  */
 
+export * from './apiProblemResponse.ts';
 export * from './meResponse.ts';

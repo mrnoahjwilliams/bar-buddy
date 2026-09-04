@@ -25,7 +25,7 @@ Select routine grouping autonomously and state the included units, outcome, chec
 ## Finish and review
 
 1. Review the complete diff against the base, including new/generated files, migrations and docs. Remove accidental secrets, debug residue and unrelated changes. Run checks for the included work and applicable shared release checks from Plan. Documentation-only work needs link/content/consistency review, not invented application tests.
-2. Update only affected owners: Definition (purpose/terms); Requirements (obligations/releases/rules); Design (accepted technical decisions); Guidelines (engineering rules); Documentation (verified behavior/operational limits); Plan (completion/sequence); Workflow (execution/authority); AGENTS/README (routing/working setup commands). Link rather than duplicate.
+2. Update only affected owners: Definition (purpose/terms); Requirements (obligations/releases/rules); Design (accepted technical decisions); Guidelines (engineering rules); Documentation (verified behavior/operational limits); Plan (completion/sequence); Workflow (execution/authority); AGENTS (routing); README (overview/quick start/status); Local development (detailed setup and checks). Link rather than duplicate.
 3. Check only completed, verified Plan items. Record CI/publication-dependent items only after their actual checks succeed; use PR check status for transient CI results. Implementation, verification, merge and deployment are distinct. All child work units and shared obligations must be complete before their parent is complete.
 4. Make focused commits, push the feature branch, and open/update a PR using the template. Use a draft for partial work. Inspect CI once on the current PR commit. Do not keep an agent turn active solely to wait for or repeatedly poll pending CI: report the pending checks, stop, and give the user the exact next instruction to resume (for example, `Continue PR #12 after CI finishes`). When resumed, inspect the current status, resolve failures, or present a passing revision for merge approval. Poll or monitor continuously only when the user explicitly requests it. If no remote exists, keep the committed local branch reviewable and report that no PR exists.
 5. Complete an approved merge and cleanup under [Standing merge authorization](#standing-merge-authorization). If the user merged the PR, verify that result and perform the same authorized cleanup. Do not discard other work or automatically start another PR scope.
@@ -62,7 +62,7 @@ GitHub permits squash merges only; always squash-merge development branches. Fou
 
 ## CI contract
 
-**GitHub Actions**, implemented during foundation once local commands work. Use pinned compatible tooling, committed wrappers/lockfiles and the same commands locally and in CI. README owns exact commands; Documentation records the configured repository, actual check names and enforcement limits.
+**GitHub Actions**, implemented during foundation once local commands work. Use pinned compatible tooling, committed wrappers/lockfiles and the same commands locally and in CI. [Local development](08-local-development.md) owns exact commands; Documentation records the configured repository, actual check names and enforcement limits.
 
 | Proposed check | Required work |
 |---|---|
