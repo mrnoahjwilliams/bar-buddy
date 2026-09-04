@@ -1,9 +1,9 @@
 # Bar Buddy cocktail catalog
 
-[`cocktails.json`](cocktails.json) is the proposed permanent Bar Buddy dataset. It
+[`cocktails.json`](cocktails.json) is the approved permanent Bar Buddy dataset. It
 contains 102 cocktails, one default recipe for each cocktail, and 113 canonical
-ingredients. The application will import this file only after product-owner review
-and the later validation/import work; it is not a database seed yet.
+ingredients. The application will import this file only after the later
+validation/import work; it is not a database seed yet.
 
 ## Dataset shape
 
@@ -95,6 +95,6 @@ the application, normal catalog maintenance, import, or CI contract. Bar Buddy n
 maintains `cocktails.json` as its own fixed catalog; upstream list changes do not
 automatically change it.
 
-Review all names, canonical ingredients, optional styles, measurement pairs,
-requirements, instructions, glassware, and garnish before approving the file for
-validation and import work.
+The product owner approved the names, canonical ingredients, optional styles,
+measurement pairs, requirements, instructions, glassware, and garnish on September
+3, 2026. Validation and import work begins in milestone 0.3.

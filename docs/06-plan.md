@@ -60,11 +60,11 @@ No public app or application entity schema yet.
 
 #### 0.2.1 — Catalog decisions and format
 
-- [ ] **Decide:** catalog size, sources/use rights, curation/update process and the initial recipe for each cocktail before preferences exist. Define the import format, stable ingredient/cocktail/recipe identifiers and correction/matching rules before bulk curation. **Verify:** a reviewed sample represents canonical ingredients, required versus optional lines, units, order, instructions, glassware and garnish without bottle/SKU dependencies.
+- [x] **Decide:** catalog size, sources/use rights, curation/update process and the initial recipe for each cocktail before preferences exist. Define the import format, stable ingredient/cocktail/recipe identifiers and correction/matching rules before bulk curation. **Verify:** a reviewed sample represents canonical ingredients, required versus optional lines, units, order, instructions, glassware and garnish without bottle/SKU dependencies.
 
 #### 0.2.2 — Reviewed dataset
 
-- [ ] Curate the agreed ingredient names/categories and cocktail recipes in that format; resolve ambiguous measurements, duplicates and broken references. AI-assisted data still requires review. **Verify:** sample makeable/one-away/multiple-missing cases, repeated ingredients and optional garnishes are correct; source/use-rights and curation records accompany the data.
+- [x] Curate the agreed ingredient names/categories and cocktail recipes in that format; resolve ambiguous measurements, duplicates and broken references. AI-assisted data still requires review. **Verify:** sample makeable/one-away/multiple-missing cases, repeated ingredients and optional garnishes are correct; source/use-rights and curation records accompany the data.
 
 ### 0.3 — Validation and import readiness
 

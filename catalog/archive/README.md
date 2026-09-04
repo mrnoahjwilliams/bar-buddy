@@ -12,8 +12,8 @@ cocktail catalog:
 These files are historical provenance, not maintained product tooling. The
 application, database import, and CI do not depend on them. The scraper may stop
 working as the source site changes, and upstream changes do not update Bar Buddy's
-catalog. [`../cocktails.json`](../cocktails.json) is the proposed permanent dataset and
-becomes the source of truth after product-owner review.
+catalog. [`../cocktails.json`](../cocktails.json) is the approved permanent dataset and
+source of truth.
 
 The archived builder can reproduce the current review candidate from the frozen
 snapshot if historical inspection is needed:

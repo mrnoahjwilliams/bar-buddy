@@ -1,10 +1,10 @@
 # Documentation
 
-## Catalog curation draft
+## Curated cocktail catalog
 
-The 0.2 branch contains a lean, source-neutral Bar Buddy JSON review candidate with 102 cocktails, one default recipe per cocktail, 416 ordered recipe lines and 113 practical canonical ingredients. Each line retains recipe-specific wording and reviewed US/metric measurements; US is the declared default. Cocktail styles are optional and non-exclusive across an 18-value controlled vocabulary: 12 cocktails remain deliberately unclassified instead of using an `other` fallback. [`catalog/README.md`](../catalog/README.md) owns the draft format, measurement/matching/style rules and review procedure.
+Milestone 0.2 produced an approved, source-neutral Bar Buddy JSON catalog with 102 cocktails, one default recipe per cocktail, 416 ordered recipe lines and 113 practical canonical ingredients. Each line retains recipe-specific wording and reviewed US/metric measurements; US is the declared default. Cocktail styles are optional and non-exclusive across an 18-value controlled vocabulary: 12 cocktails remain deliberately unclassified instead of using an `other` fallback. [`catalog/README.md`](../catalog/README.md) owns the format and measurement, matching, style, and curation rules.
 
-The dated source snapshot, scraper, and final one-time builder are retained only under `catalog/archive/` for provenance; upstream list changes do not update the Bar Buddy dataset. The normalized catalog remains pending human review even though review workflow fields have been removed from the product data. It is not a database seed, no application runtime uses it, and Plan units 0.2.1 and 0.2.2 remain incomplete until product-owner review resolves the catalog decisions and content. Automated validation/import readiness remains separately scheduled in 0.3.
+The dated source snapshot, scraper, and final one-time builder are retained only under `catalog/archive/` for provenance; upstream list changes do not update the Bar Buddy dataset. The product owner approved the catalog on September 3, 2026. It is not yet a database seed and no application runtime uses it. Automated validation and import readiness remain separately scheduled in 0.3, with persistence in 1.2.1.
 
 ## Local application foundation
 
