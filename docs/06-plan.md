@@ -76,7 +76,9 @@ No public app or application entity schema yet.
 
 #### 1.1.1 — Backend identity
 
-- [ ] Configure Supabase Auth and normal PostgreSQL connections with Design's provider access restrictions; add AppUser/Flyway migration uniquely linked to validated JWT `sub`; implement Spring Security and `GET /me`. **Verify:** valid/invalid/expired tokens, identity persistence and concurrent first access without duplicate users; client-supplied ownership is ignored/rejected. Confirm anonymous and two users' Auth credentials cannot read/write application data through Supabase REST/GraphQL; inspect application-object grants and confirm database credentials are absent from browser configuration. Auth and authorized Spring access must work. Document the actual settings and checks.
+- [x] Configure Supabase Auth and normal PostgreSQL connections with Design's provider access restrictions; add AppUser/Flyway migration uniquely linked to validated JWT `sub`; implement Spring Security and `GET /me`. **Verify:** valid/invalid/expired tokens, identity persistence and concurrent first access without duplicate users; client-supplied ownership is ignored/rejected. Confirm anonymous and two users' Auth credentials cannot read/write application data through Supabase REST/GraphQL; inspect application-object grants and confirm database credentials are absent from browser configuration. Auth and authorized Spring access must work. Document the actual settings and checks.
+  - [x] Implement and locally verify asymmetric JWT validation, AppUser migration, conflict-safe identity resolution, authenticated `GET /me`, generated client contract and current/default Data API role revocations using disposable keys and PostgreSQL.
+  - [x] Configure an authenticated hosted Supabase project, disable its Data API, run the real grant/browser-secret/two-user alternate-access checks, and verify a real issued token through Spring before completing the unit.
 
 #### 1.1.2 — Session and navigation
 
