@@ -49,6 +49,35 @@ class OpenApiGenerationIT {
     assertThat(schema.path("servers").get(0).path("url").asString()).isEqualTo("/");
     assertThat(schema.path("paths").isObject()).isTrue();
     assertThat(schema.path("paths").has("/actuator/health")).isFalse();
+    var me = schema.path("paths").path("/api/v1/me").path("get");
+    assertThat(me.path("operationId").asString()).isEqualTo("getCurrentUser");
+    assertThat(me.path("security").get(0).has("bearerAuth")).isTrue();
+    assertThat(
+            me.path("responses")
+                .path("200")
+                .path("content")
+                .path("application/json")
+                .path("schema")
+                .path("$ref")
+                .asString())
+        .isEqualTo("#/components/schemas/MeResponse");
+    assertThat(
+            me.path("responses")
+                .path("401")
+                .path("content")
+                .path("application/problem+json")
+                .path("schema")
+                .path("$ref")
+                .asString())
+        .isEqualTo("#/components/schemas/ApiProblemResponse");
+    assertThat(
+            schema
+                .path("components")
+                .path("securitySchemes")
+                .path("bearerAuth")
+                .path("scheme")
+                .asString())
+        .isEqualTo("bearer");
 
     var output = Path.of("target/openapi/openapi.json");
     Files.createDirectories(output.getParent());

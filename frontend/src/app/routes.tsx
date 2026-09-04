@@ -1,20 +1,7 @@
 import type { RouteObject } from 'react-router-dom';
 import { AppLayout } from '@/app/layout';
-import {
-  BarPage,
-  DrinksPage,
-  HomePage,
-  MorePage,
-  NotFoundPage,
-} from '@/app/pages';
 import { RequireGuest, RequireSession } from '@/features/auth/auth-guards';
 import { AuthLayout } from '@/features/auth/auth-layout';
-import {
-  ForgotPasswordPage,
-  LoginPage,
-  ResetPasswordPage,
-  SignupPage,
-} from '@/features/auth/auth-pages';
 
 export const appRoutes: RouteObject[] = [
   {
@@ -23,10 +10,32 @@ export const appRoutes: RouteObject[] = [
       {
         element: <AppLayout />,
         children: [
-          { path: '/', element: <HomePage /> },
-          { path: '/bar', element: <BarPage /> },
-          { path: '/drinks', element: <DrinksPage /> },
-          { path: '/more', element: <MorePage /> },
+          {
+            path: '/',
+            lazy: async () => ({
+              Component: (await import('@/features/home/home-page')).HomePage,
+            }),
+          },
+          {
+            path: '/bar',
+            lazy: async () => ({
+              Component: (await import('@/features/bar/bar-page')).BarPage,
+            }),
+          },
+          {
+            path: '/drinks',
+            lazy: async () => ({
+              Component: (await import('@/features/drinks/drinks-page'))
+                .DrinksPage,
+            }),
+          },
+          {
+            path: '/more',
+            lazy: async () => ({
+              Component: (await import('@/features/profile/more-page'))
+                .MorePage,
+            }),
+          },
         ],
       },
     ],
@@ -37,16 +46,46 @@ export const appRoutes: RouteObject[] = [
       {
         element: <AuthLayout />,
         children: [
-          { path: '/login', element: <LoginPage /> },
-          { path: '/signup', element: <SignupPage /> },
-          { path: '/forgot-password', element: <ForgotPasswordPage /> },
+          {
+            path: '/login',
+            lazy: async () => ({
+              Component: (await import('@/features/auth/auth-pages')).LoginPage,
+            }),
+          },
+          {
+            path: '/signup',
+            lazy: async () => ({
+              Component: (await import('@/features/auth/auth-pages'))
+                .SignupPage,
+            }),
+          },
+          {
+            path: '/forgot-password',
+            lazy: async () => ({
+              Component: (await import('@/features/auth/auth-pages'))
+                .ForgotPasswordPage,
+            }),
+          },
         ],
       },
     ],
   },
   {
     element: <AuthLayout />,
-    children: [{ path: '/reset-password', element: <ResetPasswordPage /> }],
+    children: [
+      {
+        path: '/reset-password',
+        lazy: async () => ({
+          Component: (await import('@/features/auth/auth-pages'))
+            .ResetPasswordPage,
+        }),
+      },
+    ],
   },
-  { path: '*', element: <NotFoundPage /> },
+  {
+    path: '*',
+    lazy: async () => ({
+      Component: (await import('@/app/not-found-page')).NotFoundPage,
+    }),
+  },
 ];

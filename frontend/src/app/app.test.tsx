@@ -28,7 +28,7 @@ afterEach(() => vi.unstubAllGlobals());
 describe('session and navigation', () => {
   it('returns signed-out visitors to their requested page after login', async () => {
     const user = userEvent.setup();
-    renderApp('/bar');
+    const { router } = renderApp('/bar?view=out#bottles');
 
     expect(
       await screen.findByRole('heading', { name: 'Sign in to your bar' }),
@@ -45,6 +45,11 @@ describe('session and navigation', () => {
     for (const link of screen.getAllByRole('link', { name: 'Bar' })) {
       expect(link).toHaveAttribute('aria-current', 'page');
     }
+    expect(router.state.location).toMatchObject({
+      pathname: '/bar',
+      search: '?view=out',
+      hash: '#bottles',
+    });
   });
 
   it('attaches the access token and replaces cached identity on account change', async () => {
@@ -79,7 +84,7 @@ describe('session and navigation', () => {
     );
 
     act(() => {
-      gateway.emit('SIGNED_IN', {
+      gateway.emit('session-changed', {
         accessToken: 'user-b-token',
         userId: 'user-b',
         email: 'blake@example.com',
@@ -157,7 +162,7 @@ describe('account creation and recovery', () => {
     });
 
     first.router.navigate('/reset-password');
-    act(() => gateway.emit('PASSWORD_RECOVERY', userA));
+    act(() => gateway.emit('password-recovery', userA));
     await user.type(
       await screen.findByLabelText('New password'),
       'newpassword123',

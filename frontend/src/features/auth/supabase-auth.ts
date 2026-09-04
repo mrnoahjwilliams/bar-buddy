@@ -1,5 +1,6 @@
 import {
   createClient,
+  type AuthChangeEvent,
   type Session,
   type SupabaseClient,
 } from '@supabase/supabase-js';
@@ -18,8 +19,38 @@ function toAppSession(session: Session | null): AppSession | null {
   };
 }
 
-function throwIfError(error: { message: string } | null) {
-  if (error) throw new Error(error.message);
+function toAuthEvent(event: AuthChangeEvent): AuthEvent {
+  switch (event) {
+    case 'PASSWORD_RECOVERY':
+      return 'password-recovery';
+    case 'INITIAL_SESSION':
+    case 'MFA_CHALLENGE_VERIFIED':
+    case 'SIGNED_IN':
+    case 'SIGNED_OUT':
+    case 'TOKEN_REFRESHED':
+    case 'USER_UPDATED':
+      return 'session-changed';
+  }
+}
+
+function userMessage(error: { code?: string; message: string }) {
+  switch (error.code) {
+    case 'invalid_credentials':
+      return 'Email or password is incorrect.';
+    case 'email_not_confirmed':
+      return 'Confirm your email before signing in.';
+    case 'weak_password':
+      return 'Choose a stronger password and try again.';
+    case 'over_email_send_rate_limit':
+    case 'over_request_rate_limit':
+      return 'Too many authentication attempts. Please wait and try again.';
+    default:
+      return 'Authentication could not be completed. Please try again.';
+  }
+}
+
+function throwIfError(error: { code?: string; message: string } | null) {
+  if (error) throw new Error(userMessage(error), { cause: error });
 }
 
 export class SupabaseAuthGateway implements AuthGateway {
@@ -35,7 +66,7 @@ export class SupabaseAuthGateway implements AuthGateway {
     listener: (event: AuthEvent, session: AppSession | null) => void,
   ) {
     const { data } = this.client.auth.onAuthStateChange((event, session) => {
-      listener(event as AuthEvent, toAppSession(session));
+      listener(toAuthEvent(event), toAppSession(session));
     });
     return () => data.subscription.unsubscribe();
   }
@@ -80,8 +111,9 @@ export class SupabaseAuthGateway implements AuthGateway {
 }
 
 class UnavailableAuthGateway implements AuthGateway {
-  readonly configurationError =
-    'Authentication is not configured. Add the Supabase browser settings and restart the frontend.';
+  constructor(
+    readonly configurationError = 'Authentication is not configured. Add the Supabase browser settings and restart the frontend.',
+  ) {}
 
   async getSession() {
     return null;
@@ -122,21 +154,58 @@ class UnavailableAuthGateway implements AuthGateway {
 
 let defaultGateway: AuthGateway | undefined;
 
+function isLoopback(hostname: string) {
+  return (
+    hostname === '127.0.0.1' || hostname === 'localhost' || hostname === '[::1]'
+  );
+}
+
+export function createAuthGateway(
+  url: string | undefined,
+  publishableKey: string | undefined,
+): AuthGateway {
+  if (
+    !url ||
+    !publishableKey ||
+    url.includes('YOUR_PROJECT_REF') ||
+    publishableKey === 'YOUR_SUPABASE_PUBLISHABLE_KEY'
+  ) {
+    return new UnavailableAuthGateway();
+  }
+
+  let parsedUrl: URL;
+  try {
+    parsedUrl = new URL(url);
+  } catch {
+    return new UnavailableAuthGateway(
+      'Authentication is misconfigured. VITE_SUPABASE_URL must be a valid URL.',
+    );
+  }
+  if (
+    parsedUrl.protocol !== 'https:' &&
+    !(parsedUrl.protocol === 'http:' && isLoopback(parsedUrl.hostname))
+  ) {
+    return new UnavailableAuthGateway(
+      'Authentication is misconfigured. Supabase must use HTTPS outside local development.',
+    );
+  }
+
+  return new SupabaseAuthGateway(
+    createClient(url, publishableKey, {
+      auth: {
+        autoRefreshToken: true,
+        detectSessionInUrl: true,
+        persistSession: true,
+      },
+    }),
+  );
+}
+
 export function getDefaultAuthGateway(): AuthGateway {
   if (defaultGateway) return defaultGateway;
-  const url = import.meta.env.VITE_SUPABASE_URL;
-  const publishableKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-  defaultGateway =
-    url && publishableKey
-      ? new SupabaseAuthGateway(
-          createClient(url, publishableKey, {
-            auth: {
-              autoRefreshToken: true,
-              detectSessionInUrl: true,
-              persistSession: true,
-            },
-          }),
-        )
-      : new UnavailableAuthGateway();
+  defaultGateway = createAuthGateway(
+    import.meta.env.VITE_SUPABASE_URL,
+    import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+  );
   return defaultGateway;
 }

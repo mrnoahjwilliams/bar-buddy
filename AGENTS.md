@@ -11,14 +11,14 @@ Build Bar Buddy from repository context. These standing instructions apply in fr
 | “What's next?” / progress | [Documentation](docs/05-documentation.md), the first incomplete work unit in [Plan](docs/06-plan.md), and Git/PR state |
 | Implement / fix / start / continue | Plan units included in the selected scope; relevant Requirements and [Design](docs/03-design.md) sections; [Guidelines](docs/04-development-guidelines.md); [Workflow](docs/07-development-workflow.md); affected code/tests |
 | Review | Changed code/docs, applicable requirements/design, Guidelines, and the review rules below |
-| Setup, commands, Git, CI, or permissions | [README](README.md), Workflow, and relevant foundation Plan units |
+| Setup, commands, Git, CI, or permissions | [README](README.md), [Local development](docs/08-local-development.md), Workflow, and relevant foundation Plan units |
 | Edit a document | That document and its affected references; use the ownership map below |
 
 Use headings/search to load relevant sections, expanding for dependencies or conflicts. For unfamiliar implementation work, also read Definition and Requirements sections Domain rules, Security and integration, and Quality and platform. Within a session, reuse context and reread changed or relevant sections. Inspect applicable nested instructions before editing. The intended application roots are `backend/` and `frontend/`; do not assume they exist.
 
 ## Document ownership
 
-Definition owns purpose, terminology, and scope boundaries. Requirements owns product obligations, business rules, and release assignments. Design owns architecture, stack, domain relationships, and API shape. Guidelines owns engineering conventions. Documentation records implemented behavior. Plan owns work order, decision gates, and completion. Workflow owns execution, Git/CI, and agent authority. README owns verified setup commands.
+Definition owns purpose, terminology, and scope boundaries. Requirements owns product obligations, business rules, and release assignments. Design owns architecture, stack, domain relationships, and API shape. Guidelines owns engineering conventions. Documentation records implemented behavior. Plan owns work order, decision gates, and completion. Workflow owns execution, Git/CI, and agent authority. README owns the project overview, quick start, and development status. Local development owns detailed environment, service, authentication, generation, and verification instructions.
 
 Link to the owning document instead of copying its content. Resolve contradictions explicitly. Current user instructions take precedence over repository guidance, subject to higher-priority agent instructions.
 

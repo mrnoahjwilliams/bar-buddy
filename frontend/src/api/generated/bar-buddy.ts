@@ -17,9 +17,10 @@ import type {
   UseQueryResult,
 } from '@tanstack/react-query';
 
-import type { MeResponse } from './models';
+import type { ApiProblemResponse, MeResponse } from './models';
 
 import { apiFetch } from '../http.ts';
+import type { ErrorType } from '../http.ts';
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
@@ -63,7 +64,7 @@ export const getGetCurrentUserQueryKey = () => {
 
 export const getGetCurrentUserQueryOptions = <
   TData = Awaited<ReturnType<typeof getCurrentUser>>,
-  TError = unknown,
+  TError = ErrorType<ApiProblemResponse>,
 >(options?: {
   query?: Partial<
     UseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>
@@ -88,11 +89,11 @@ export const getGetCurrentUserQueryOptions = <
 export type GetCurrentUserQueryResult = NonNullable<
   Awaited<ReturnType<typeof getCurrentUser>>
 >;
-export type GetCurrentUserQueryError = unknown;
+export type GetCurrentUserQueryError = ErrorType<ApiProblemResponse>;
 
 export function useGetCurrentUser<
   TData = Awaited<ReturnType<typeof getCurrentUser>>,
-  TError = unknown,
+  TError = ErrorType<ApiProblemResponse>,
 >(
   options: {
     query: Partial<
@@ -114,7 +115,7 @@ export function useGetCurrentUser<
 };
 export function useGetCurrentUser<
   TData = Awaited<ReturnType<typeof getCurrentUser>>,
-  TError = unknown,
+  TError = ErrorType<ApiProblemResponse>,
 >(
   options?: {
     query?: Partial<
@@ -136,7 +137,7 @@ export function useGetCurrentUser<
 };
 export function useGetCurrentUser<
   TData = Awaited<ReturnType<typeof getCurrentUser>>,
-  TError = unknown,
+  TError = ErrorType<ApiProblemResponse>,
 >(
   options?: {
     query?: Partial<
@@ -154,7 +155,7 @@ export function useGetCurrentUser<
 
 export function useGetCurrentUser<
   TData = Awaited<ReturnType<typeof getCurrentUser>>,
-  TError = unknown,
+  TError = ErrorType<ApiProblemResponse>,
 >(
   options?: {
     query?: Partial<

@@ -20,7 +20,17 @@
                 }
               }
             },
-            "description" : "OK"
+            "description" : "The current Bar Buddy user"
+          },
+          "401" : {
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiProblemResponse"
+                }
+              }
+            },
+            "description" : "Authentication is required"
           }
         },
         "security" : [ {
@@ -33,6 +43,30 @@
   },
   "components" : {
     "schemas" : {
+      "ApiProblemResponse" : {
+        "type" : "object",
+        "properties" : {
+          "detail" : {
+            "type" : "string"
+          },
+          "instance" : {
+            "type" : "string",
+            "format" : "uri"
+          },
+          "status" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "type" : {
+            "type" : "string",
+            "format" : "uri"
+          }
+        },
+        "required" : [ "detail", "instance", "status", "title", "type" ]
+      },
       "MeResponse" : {
         "type" : "object",
         "properties" : {

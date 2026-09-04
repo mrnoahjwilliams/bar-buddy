@@ -110,4 +110,65 @@ describe('generated-client transport', () => {
     );
     expect(handleUnauthorized).not.toHaveBeenCalled();
   });
+
+  it('shares one refresh across concurrent unauthorized requests', async () => {
+    let token = 'expired-token';
+    let finishRefresh: (() => void) | undefined;
+    const refreshGate = new Promise<void>((resolve) => {
+      finishRefresh = resolve;
+    });
+    const getAccessToken = vi.fn(async (forceRefresh: boolean) => {
+      if (forceRefresh) {
+        await refreshGate;
+        token = 'fresh-token';
+      }
+      return token;
+    });
+    setApiAuthBridge({ getAccessToken, handleUnauthorized: vi.fn() });
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockImplementation((_url: string, options: RequestInit) => {
+        const authorization = new Headers(options.headers).get('Authorization');
+        return Promise.resolve(
+          authorization === 'Bearer fresh-token'
+            ? Response.json({ ok: true })
+            : new Response(null, { status: 401 }),
+        );
+      }),
+    );
+
+    const requests = Promise.all([
+      apiFetch('/api/v1/first'),
+      apiFetch('/api/v1/second'),
+    ]);
+    await vi.waitFor(() => {
+      expect(getAccessToken).toHaveBeenCalledWith(true);
+    });
+    finishRefresh?.();
+
+    await expect(requests).resolves.toEqual([{ ok: true }, { ok: true }]);
+    expect(
+      getAccessToken.mock.calls.filter(([forceRefresh]) => forceRefresh),
+    ).toHaveLength(1);
+  });
+
+  it('shares the unauthorized transition after a failed refresh', async () => {
+    const handleUnauthorized = vi.fn(async () => undefined);
+    const getAccessToken = vi.fn(async (forceRefresh: boolean) =>
+      forceRefresh ? undefined : 'expired-token',
+    );
+    setApiAuthBridge({ getAccessToken, handleUnauthorized });
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(new Response(null, { status: 401 })),
+    );
+
+    const results = await Promise.allSettled([
+      apiFetch('/api/v1/first'),
+      apiFetch('/api/v1/second'),
+    ]);
+
+    expect(results.every((result) => result.status === 'rejected')).toBe(true);
+    expect(handleUnauthorized).toHaveBeenCalledOnce();
+  });
 });

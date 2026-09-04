@@ -13,15 +13,15 @@ Disable the unused Supabase Data API and remove application-object access for `a
 | Area | Accepted technology |
 |---|---|
 | Frontend | React 19, TypeScript, Vite, React Router, TanStack Query, Tailwind CSS, shadcn/ui, Orval; Vitest and React Testing Library |
-| Backend | Java 25 LTS, Spring Boot 4.1, Spring MVC, Spring Security, Spring Data JPA/Hibernate, Jakarta Validation, MapStruct, Flyway, springdoc-openapi; JUnit, Mockito, Spring Boot Test and Testcontainers |
+| Backend | Java 25 LTS, Spring Boot 4.1, Spring MVC, Spring Security, Spring Data JPA/Hibernate, Jakarta Validation, Flyway, springdoc-openapi; JUnit, Spring Boot Test and Testcontainers |
 | Identity/data | Supabase Auth JWT issuance; Spring token validation and application authorization; PostgreSQL initially hosted by Supabase |
 | Delivery | Responsive PWA first; optional later Capacitor packaging. GitHub/GitHub Actions and execution policy are specified in Workflow. Hosting/deployment provider decisions remain in the publication milestone. |
 
 Foundation verifies compatible patch/library versions, chooses the remaining toolchain details, and commits wrappers/lockfiles. Do not substitute a different accepted stack without a decision.
 
-The initial local toolchain uses Maven with separate Surefire (`*Test`) and Failsafe (`*IT`) runners, Spotless with Google Java Format, and selected Checkstyle rules. Frontend tooling uses Node 24 LTS/npm, Prettier, ESLint, and jsdom for Vitest. TypeScript 6 is selected because the verified typescript-eslint version supports versions below 6.1; the latest TypeScript major is not yet compatible. Exact library versions live in [the Maven build](../backend/pom.xml) and [the npm manifest/lockfile](../frontend/package.json). PostgreSQL 17 is pinned to the same patch image in local Compose and Testcontainers; hosted database configuration remains in 1.1.1. [README](../README.md#setup) owns prerequisites and commands.
+The initial local toolchain uses Maven with separate Surefire (`*Test`) and Failsafe (`*IT`) runners, Spotless with Google Java Format, and selected Checkstyle rules. Frontend tooling uses Node 24 LTS/npm, Prettier, ESLint, and jsdom for Vitest. TypeScript 6 is selected because the verified typescript-eslint version supports versions below 6.1; the latest TypeScript major is not yet compatible. Exact library versions live in [the Maven build](../backend/pom.xml) and [the npm manifest/lockfile](../frontend/package.json). PostgreSQL 17 is pinned to the same patch image in local Compose and Testcontainers. [Local development](08-local-development.md) owns prerequisites and commands.
 
-Request flow: Spring Security → Jackson → validated request DTO → controller → service → repository/JPA → PostgreSQL. Response flow: entity/service result → MapStruct response DTO → JSON → generated TanStack Query hook → React. Services own transaction boundaries; neither mappers nor repositories decide business policy.
+Request flow: Spring Security → Jackson → validated request DTO → controller → service → repository/JPA → PostgreSQL. Response flow: entity/service result → response DTO → JSON → generated TanStack Query hook → React. Services own transaction boundaries; neither DTO mapping nor repositories decide business policy. Keep simple mapping explicit; introduce a mapping library only when repeated structural mapping makes it a net improvement.
 
 ## Repository structure
 
@@ -29,7 +29,7 @@ The product name is **Bar Buddy**, repository slug `bar-buddy`, and Java base pa
 
 ```text
 AGENTS.md, README.md, .gitignore
-docs/01-definition.md … 07-development-workflow.md
+docs/01-definition.md … 08-local-development.md
 .github/pull_request_template.md
 .github/workflows/                         # Foundation CI
 backend/
@@ -53,7 +53,7 @@ frontend/
 
 Features stay relatively flat; add `dto/` where useful. Braces denote sibling directories; create them only as needed. Shopping is a module even though its UI is a Drinks mode.
 
-The tracked API contract is `contracts/openapi.json`; Orval owns `frontend/src/api/generated/`, including its separate models and TanStack Query client. Both directories contain generated artifacts only. Generation exports application paths under `/api/v1` in a full Spring test context with disposable PostgreSQL, with stable metadata, relative server URLs and deterministic key ordering. Runtime documentation remains disabled. Orval uses Fetch with body-only success results and the narrow `frontend/src/api/http.ts` adapter for HTTP errors and response decoding; it preserves request options and cancellation. Origin routing and JWT attachment arrive in 1.1.2. [README](../README.md#api-generation-and-drift) owns generation/drift commands. See [springdoc properties](https://springdoc.org/properties.html) and [Orval Fetch integration](https://orval.dev/docs/guides/fetch-client/) for the underlying configuration.
+The tracked API contract is `contracts/openapi.json`; Orval owns `frontend/src/api/generated/`, including its separate models and TanStack Query client. Both directories contain generated artifacts only. Generation exports application paths under `/api/v1` in a full Spring test context with disposable PostgreSQL, with stable metadata, relative server URLs and deterministic key ordering. Runtime documentation remains disabled. Orval uses Fetch with body-only success results and the narrow `frontend/src/api/http.ts` adapter for HTTP errors, token attachment, one shared refresh attempt for concurrent unauthorized requests, and response decoding; it preserves request options and cancellation. [Local development](08-local-development.md#catalog-and-api-generation) owns generation/drift commands. See [springdoc properties](https://springdoc.org/properties.html) and [Orval Fetch integration](https://orval.dev/docs/guides/fetch-client/) for the underlying configuration.
 
 ## Domain model
 

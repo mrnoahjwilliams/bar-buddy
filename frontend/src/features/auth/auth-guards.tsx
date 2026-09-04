@@ -15,7 +15,8 @@ export function RequireSession() {
   if (status === 'loading') return <SessionLoading />;
   if (status === 'recovery') return <Navigate to="/reset-password" replace />;
   if (status === 'anonymous') {
-    return <Navigate to="/login" replace state={{ from: location.pathname }} />;
+    const requested = `${location.pathname}${location.search}${location.hash}`;
+    return <Navigate to="/login" replace state={{ from: requested }} />;
   }
   return <Outlet />;
 }

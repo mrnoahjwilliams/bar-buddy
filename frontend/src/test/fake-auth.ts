@@ -48,13 +48,13 @@ export class FakeAuthGateway implements AuthGateway {
       userId: email,
       email,
     };
-    this.emit('SIGNED_IN', session);
+    this.emit('session-changed', session);
     return session;
   }
 
   async signUp(email: string) {
     if (this.signupResult !== undefined) {
-      if (this.signupResult) this.emit('SIGNED_IN', this.signupResult);
+      if (this.signupResult) this.emit('session-changed', this.signupResult);
       return this.signupResult;
     }
     const session = {
@@ -62,7 +62,7 @@ export class FakeAuthGateway implements AuthGateway {
       userId: email,
       email,
     };
-    this.emit('SIGNED_IN', session);
+    this.emit('session-changed', session);
     return session;
   }
 
@@ -80,6 +80,6 @@ export class FakeAuthGateway implements AuthGateway {
 
   async signOut() {
     this.signOutCalls += 1;
-    this.emit('SIGNED_OUT', null);
+    this.emit('session-changed', null);
   }
 }
