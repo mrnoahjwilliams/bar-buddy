@@ -2,6 +2,7 @@ package com.barbuddy.shared.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +13,12 @@ public class OpenApiConfiguration {
   OpenAPI barBuddyOpenApi() {
     return new OpenAPI()
         .info(new Info().title("Bar Buddy API").version("v1"))
+        .schemaRequirement(
+            "bearerAuth",
+            new SecurityScheme()
+                .type(SecurityScheme.Type.HTTP)
+                .scheme("bearer")
+                .bearerFormat("JWT"))
         .addServersItem(new Server().url("/"));
   }
 }

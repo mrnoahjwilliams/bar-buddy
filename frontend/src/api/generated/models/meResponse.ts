@@ -5,4 +5,7 @@
  * OpenAPI spec version: v1
  */
 
-export * from './meResponse.ts';
+export interface MeResponse {
+  createdAt: string;
+  id: string;
+}

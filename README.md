@@ -8,7 +8,7 @@ Start with [AGENTS.md](AGENTS.md) for the document map and task-specific reading
 
 ## Setup
 
-The local foundation includes a Spring backend, PostgreSQL, a React development shell, generated API contracts/clients, and GitHub Actions checks. Authentication and application features begin in Release 1.
+The local foundation includes a Spring backend, PostgreSQL, a React development shell, generated API contracts/clients, and GitHub Actions checks. The backend identity flow and `AppUser` schema are implemented; hosted Supabase configuration and verification remain before unit 1.1.1 is complete.
 
 ### Prerequisites
 
@@ -68,7 +68,7 @@ After that one-time setup, start the backend from `backend/` with:
 ./mvnw spring-boot:run
 ```
 
-Spring reads `backend/.env` automatically when started from that directory; no shell export or sourcing step is needed. Use unquoted `KEY=value` lines, as in the example, without `export`. Existing environment variables take precedence over the file. The file remains ignored by Git and is optional when runtime environment variables provide the settings instead.
+Spring reads `backend/.env` automatically when started from that directory; no shell export or sourcing step is needed. Use unquoted `KEY=value` lines, as in the example, without `export`. Existing environment variables take precedence over the file. The file remains ignored by Git and is optional when runtime environment variables provide the settings instead. Authentication is disabled in the local example until the Supabase settings below are configured; application API requests return HTTP 401 while it is disabled.
 
 Check `http://127.0.0.1:8080/actuator/health` with a browser or:
 
@@ -85,7 +85,40 @@ From `backend/`:
 ./mvnw spotless:apply
 ```
 
-`verify` checks Java/POM formatting (Spotless), selected static rules (Checkstyle), compiles and packages the app, runs security tests, and runs PostgreSQL Testcontainers integration checks for startup and OpenAPI export. Docker is required; database tests fail if Docker is unavailable. They use disposable containers and require neither Compose nor a loaded `.env`. `./mvnw test` runs only the tests without containers and is not the full verification command. The executable package is `backend/target/bar-buddy-0.0.1-SNAPSHOT.jar`.
+`verify` checks Java/POM formatting (Spotless), selected static rules (Checkstyle), compiles and packages the app, runs security tests, and runs PostgreSQL Testcontainers integration checks for migrations, identity, provider-role access, startup and OpenAPI export. Docker is required; database tests fail if Docker is unavailable. They use disposable signing keys and containers and require neither Compose, a Supabase project nor a loaded `.env`. `./mvnw test` runs only the tests without containers and is not the full verification command. The executable package is `backend/target/bar-buddy-0.0.1-SNAPSHOT.jar`.
+
+### Supabase backend identity
+
+Use a Supabase project with an asymmetric JWT signing key. Existing projects still using the legacy shared JWT secret must [rotate to an asymmetric key](https://supabase.com/docs/guides/auth/signing-keys) before enabling Bar Buddy authentication; the signing secret is neither needed nor accepted by the backend. In the project dashboard:
+
+1. Keep Supabase Auth enabled and record the project URL. The issuer is `<project-url>/auth/v1` and the public key set is `<issuer>/.well-known/jwks.json`.
+2. Because every application request goes through Spring, [disable the Data API](https://supabase.com/docs/guides/api/securing-your-api#disable-the-data-api). Do not expose `public` or another application schema through REST or GraphQL.
+3. Use the dashboard's Connect instructions to set `DB_URL`, `DB_USERNAME` and `DB_PASSWORD` for a normal PostgreSQL connection with TLS. These are server-only values; never use them, a database password or a Supabase secret/service-role key in `frontend/` or browser configuration.
+4. Set `AUTH_ENABLED=true`, `AUTH_ISSUER`, `AUTH_JWK_SET_URI` and `AUTH_AUDIENCE=authenticated`. Run the backend so Flyway applies the `app_user` migration and its current/default privilege revocations.
+
+With a real access token issued by that project, verify the Spring boundary:
+
+```sh
+curl --fail \
+  --header "Authorization: Bearer $BAR_BUDDY_ACCESS_TOKEN" \
+  http://127.0.0.1:8080/api/v1/me
+```
+
+The first request creates one local identity linked to the token's `sub`; later requests return the same `id` and `createdAt`. Tokens with an invalid signature, issuer, audience, expiry or subject return HTTP 401. Query parameters and other client input cannot select another user.
+
+Then inspect the hosted database as an administrator. The following must return `false` for every listed role and privilege before the provider check is accepted:
+
+```sql
+select
+    role_name,
+    has_table_privilege(role_name, 'public.app_user', 'select') as can_select,
+    has_table_privilege(role_name, 'public.app_user', 'insert') as can_insert,
+    has_table_privilege(role_name, 'public.app_user', 'update') as can_update,
+    has_table_privilege(role_name, 'public.app_user', 'delete') as can_delete
+from unnest(array['anon', 'authenticated', 'service_role']) as role_name;
+```
+
+Finally, call both Supabase REST and GraphQL with no token and with access tokens for two test users. The disabled Data API must not permit either user to read or modify `app_user`. Confirm that both users can call Spring's `/api/v1/me`, receive distinct local IDs, and still cannot select one another through client input. Record these actual results in [Documentation](docs/05-documentation.md); local simulations do not substitute for the hosted checks.
 
 ### Frontend
 
@@ -121,7 +154,7 @@ npm run api:generate
 npm run check
 ```
 
-Generation starts with a clean backend build and `OpenApiGenerationIT`, using a disposable PostgreSQL container and no listening application server. The test disables the local `.env` import, enables springdoc only in its test context, and reads the schema in-process without changing runtime security. Normal application startup still disables `/v3/api-docs`.
+Generation starts with a clean backend build and `OpenApiGenerationIT`, using a disposable PostgreSQL container and no listening application server. The test disables the local `.env` import, enables springdoc only in its test context, and reads the schema in-process without changing runtime security. Normal application startup still disables `/v3/api-docs`. The generated contract includes bearer authentication and `GET /api/v1/me`; JWT attachment to the shared request adapter remains in unit 1.1.2.
 
 The pipeline copies the exported schema to [contracts/openapi.json](contracts/openapi.json) and uses [Orval configuration](frontend/orval.config.ts) to generate `frontend/src/api/generated/`. These two locations contain generated output only and are replaced by `api:generate`; review and commit them with the backend changes. Never edit generated files by hand. The current contract intentionally has no product paths; types and query hooks appear when real controllers/DTOs arrive in Release 1.
 
@@ -158,4 +191,4 @@ gh workflow run ci.yml --ref main
 
 ### Development status
 
-[Documentation](docs/05-documentation.md#catalog-validation-and-import-readiness) records catalog readiness. [Plan](docs/06-plan.md#111--backend-identity) owns the next work.
+[Documentation](docs/05-documentation.md#backend-identity) records implemented identity behavior and the outstanding hosted-provider verification. [Plan](docs/06-plan.md#111--backend-identity) remains incomplete until those checks pass.

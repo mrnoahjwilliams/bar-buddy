@@ -8,7 +8,7 @@ React SPA → REST/JSON with Supabase JWT → Spring Boot API → JPA/Hibernate 
 
 Use a feature-oriented modular monolith. Automate plumbing while keeping business decisions visible in application services. Supabase provides Auth and PostgreSQL infrastructure, not application authorization, domain logic or Data API access. Keep application components portable across commodity hosting providers.
 
-Disable the unused Supabase Data API and remove application-object access for `anon`/`authenticated`, including inherited/public and default grants that could expose new tables or functions. Keep database credentials on trusted servers; retain Supabase Auth for authentication. Verify the configured boundary using [Supabase's access controls](https://supabase.com/docs/guides/api/securing-your-api), rather than relying on provider defaults.
+Disable the unused Supabase Data API and remove application-object access for `anon`/`authenticated`, including inherited/public and default grants that could expose new tables or functions. Keep database credentials on trusted servers; retain Supabase Auth for authentication. Spring accepts only asymmetric ES256/RS256 access tokens verified through the project's public JWKS, with issuer, `authenticated` audience, lifetime and nonblank `sub` validation; it never receives the JWT signing secret. Verify the configured boundary using [Supabase's access controls](https://supabase.com/docs/guides/api/securing-your-api), rather than relying on provider defaults.
 
 | Area | Accepted technology |
 |---|---|
