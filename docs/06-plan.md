@@ -134,7 +134,7 @@ No public app or application entity schema yet.
 
 #### 1.6.1 — Hosting and deployment setup
 
-- [ ] **Decide:** frontend/backend hosting, production deployment approach and Bar Buddy public URLs/branding assets within the near-$0 constraint. Implement deploy/build configuration (backend container where used), runtime settings, Flyway execution, secure transport, database access, browser/API origins and Auth redirect/recovery settings. **Verify:** build/configuration checks and documented deployment/recovery steps; reuse established CI. Actual public verification occurs in 1.6.3.
+- [ ] **Decide:** frontend/backend hosting, production deployment approach and Bar Buddy public URLs/branding assets within the near-$0 constraint. Implement deploy/build configuration (backend container where used), runtime settings, Flyway execution, secure transport, database access, browser/API origins and Auth redirect/recovery settings. Replace Supabase's development-only default email delivery with custom SMTP; configure editable Bar Buddy Auth templates, sender-domain authentication and suitable provider/Supabase rate limits. **Verify:** build/configuration checks and documented deployment, email-delivery and recovery steps; reuse established CI. Actual public verification occurs in 1.6.3.
 
 #### 1.6.2 — PWA and deployed navigation readiness
 
@@ -142,7 +142,7 @@ No public app or application entity schema yet.
 
 #### 1.6.3 — Release 1 acceptance and publication
 
-- [ ] Complete the release gate, including catalog loading and the public two-account signup → inventory → availability/missing detail → favorite/random → reload/logout journey, recovery, PWA installation and deep-link refresh. Record actual published status; later scheduled releases remain incomplete.
+- [ ] Complete the release gate, including catalog loading and the public two-account signup → email confirmation → inventory → availability/missing detail → favorite/random → reload/logout journey, recovery through custom SMTP to public recipient addresses, PWA installation and deep-link refresh. Confirm branded Auth email links and delivery limits work for the public flow. Record actual published status; later scheduled releases remain incomplete.
 
 ## Release 2 — Bar Explorer
 
