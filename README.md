@@ -28,6 +28,22 @@ cd bar-buddy
 
 Select the prerequisite Node version in this checkout before installing dependencies, then confirm `node --version` and `npm --version`. A new terminal or checkout may otherwise use your version manager's default. Follow Database, Backend, Frontend, and API generation below in order, using separate terminals for the running apps. The default local ports are `54329`, `8080`, and `5173`; ensure they are available before starting another copy.
 
+### Catalog
+
+Validate the maintained catalog and its known-result fixtures without installing any
+additional dependencies:
+
+```sh
+cd catalog
+npm run check
+cd ..
+```
+
+The check reports all invalid JSON paths together and prints the verified catalog
+counts on success. [`catalog/README.md`](catalog/README.md#validation) owns the format,
+validation coverage, and repeatable import/correction contract. Database import is
+implemented later in unit 1.2.1.
+
 ### Database
 
 ```sh
@@ -127,7 +143,7 @@ The [request adapter](frontend/src/api/http.ts) preserves Orval request options/
 | Check | Commands and environment |
 |---|---|
 | `backend-checks` | In `backend/`: `./mvnw --batch-mode --no-transfer-progress verify`; Java 25.0.2 and disposable PostgreSQL Testcontainers |
-| `frontend-checks` | In `frontend/`: `npm ci` then `npm run check`; Node from `.node-version` |
+| `frontend-checks` | In `catalog/`: `npm run check`; then in `frontend/`: `npm ci` and `npm run check`; Node from `.node-version` |
 | `api-contract` | In `frontend/`: `npm ci` then `npm run api:check`; the same Java, Node and Docker environment |
 
 Jobs use Ubuntu 24.04, immutable GitHub Action revisions, dependency caches, read-only repository permissions, and timeouts. Superseded runs for the same PR or branch are canceled. CI requires no repository secrets, Compose database, or production services.
@@ -142,4 +158,4 @@ gh workflow run ci.yml --ref main
 
 ### Development status
 
-[Documentation](docs/05-documentation.md#foundation-acceptance) records clean-checkout acceptance. [Plan](docs/06-plan.md#021--catalog-decisions-and-format) owns the next catalog decisions and work.
+[Documentation](docs/05-documentation.md#catalog-validation-and-import-readiness) records catalog readiness. [Plan](docs/06-plan.md#111--backend-identity) owns the next work.

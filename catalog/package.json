@@ -1,0 +1,16 @@
+{
+  "name": "bar-buddy-catalog",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "npm@11.19.0",
+  "engines": {
+    "node": "24.x",
+    "npm": "11.x"
+  },
+  "scripts": {
+    "check": "npm test && npm run validate",
+    "test": "node --test test/*.test.mjs",
+    "validate": "node scripts/validate-catalog.mjs cocktails.json"
+  }
+}
