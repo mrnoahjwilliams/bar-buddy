@@ -1,5 +1,11 @@
 # Documentation
 
+## Curated cocktail catalog
+
+Milestone 0.2 produced an approved, source-neutral Bar Buddy JSON catalog with 102 cocktails, one default recipe per cocktail, 416 ordered recipe lines and 113 practical canonical ingredients. Each line retains recipe-specific wording and reviewed US/metric measurements; US is the declared default. Cocktail styles are optional and non-exclusive across an 18-value controlled vocabulary: 12 cocktails remain deliberately unclassified instead of using an `other` fallback. [`catalog/README.md`](../catalog/README.md) owns the format and measurement, matching, style, and curation rules.
+
+The dated source snapshot, scraper, and final one-time builder are retained only under `catalog/archive/` for provenance; upstream list changes do not update the Bar Buddy dataset. The product owner approved the catalog on September 3, 2026. It is not yet a database seed and no application runtime uses it. Automated validation and import readiness remain separately scheduled in 0.3, with persistence in 1.2.1.
+
 ## Local application foundation
 
 The application roots now exist under `backend/` and `frontend/`. [README](../README.md#setup) records verified setup, database lifecycle, startup and check commands; [Design](03-design.md#architecture-and-stack) owns toolchain choices.

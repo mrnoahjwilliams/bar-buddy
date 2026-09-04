@@ -73,7 +73,7 @@ The target is locked to these eleven persistent entities; do not introduce separ
 | MenuCocktail | 6 | Menu membership and cocktail order |
 | CocktailFlavorProfile | 7 | Cocktail flavor/intensity metadata |
 
-Releases 2, 3 and 5 introduce no persistent entities. Release 2 stores photo references, aliases, tags, alcohol-free classification and preparation/visual metadata in existing catalog entities/value types. Recently viewed and appearance settings use agreed client storage or existing user/state fields; no new tracking entity. Recipe conversion/scaling/batch outputs are non-persistent calculations. Frequency and rating sorts derive from the current user's existing logs/preferences. Release 6 adds nullable `ownerUserId` to Ingredient, Cocktail and Recipe: null means shared system content; an AppUser reference means private custom content. Keep new fields within the existing entities, including any retry data chosen for DrinkLog. The retry policy itself remains undecided.
+Releases 2, 3 and 5 introduce no persistent entities. Release 2 uses the catalog's optional, non-exclusive cocktail styles and stores photo references, aliases, later tags, alcohol-free classification and preparation/visual metadata in existing catalog entities/value types. Recently viewed and appearance settings use agreed client storage or existing user/state fields; no new tracking entity. Recipe conversion/scaling/batch outputs are non-persistent calculations. Frequency and rating sorts derive from the current user's existing logs/preferences. Release 6 adds nullable `ownerUserId` to Ingredient, Cocktail and Recipe: null means shared system content; an AppUser reference means private custom content. Keep new fields within the existing entities, including any retry data chosen for DrinkLog. The retry policy itself remains undecided.
 
 ```mermaid
 erDiagram
@@ -100,6 +100,12 @@ erDiagram
 
 Non-persistent results/value objects include AvailabilityResult, MissingIngredient, UnlockImpact, ShoppingPlan, DrinkStatistics, recommendations, Measurement and enums. Requirements owns their calculation rules. Initially use the curated recipe chosen in catalog preparation; quantity-aware behavior is decided in Release 5 and multiple-recipe/default behavior in Release 6.
 
+## Offline catalog format
+
+Release 0 catalog preparation uses the versioned Bar Buddy JSON dataset under [`catalog/`](../catalog/README.md). It contains stable namespaced ingredient, cocktail and default-recipe identifiers, canonical ingredient references/categories, recipe-specific display wording, optional non-exclusive cocktail styles, ordered requirement lines, reviewed US/metric measurement pairs, instructions, glassware and garnish. Recipe wording may be more specific than its canonical inventory match so availability stays practical without losing recipe detail. The application never scrapes a source website at runtime.
+
+Each initial cocktail has one default recipe. Every ingredient line has US and metric measurements with quantity, optional maximum, unit and optional scant/heavy modifier; US is the catalog default. Keeping both reviewed representations preserves exact metric recipes and practical US bar measures without requiring a reversible conversion. Acquisition tools, the dated source snapshot and detailed curation records are isolated in the unmaintained provenance archive. Import mapping into the locked domain entities is decided in 0.3 and implemented with persistence in 1.2.1. Product-owner review is required before the dataset becomes an import source.
+
 ## API action surface
 
 All paths below are relative to `/api/v1`. Preserve the user actions; path wording may be refined with contracts and generated clients updated together. Lists support the search/filter/sort/availability parameters scheduled for their release; pagination is introduced when warranted.
@@ -107,7 +113,7 @@ All paths below are relative to `/api/v1`. Preserve the user actions; path wordi
 | Release | Operations |
 |---|---|
 | 1 | `GET /me`; `GET /ingredients`, `/ingredients/{id}`; `GET`, `POST /inventory`; `PATCH`, `DELETE /inventory/{id}`; `GET /cocktails`, `/cocktails/{id}`, `/cocktails/random`; `PUT /cocktails/{id}/preference` |
-| 2 | Enrich discovery/list/detail operations for metadata, aliases, new sorts and recently viewed behavior; settle any required state operation under the existing user/preference surface. Print/mixing/share behavior reuses the selected catalog recipe; sharing creates no public custom-content API. |
+| 2 | Enrich discovery/list/detail operations for optional style filtering, metadata, aliases, new sorts and recently viewed behavior; settle any required state operation under the existing user/preference surface. Print/mixing/share behavior reuses the selected catalog recipe; sharing creates no public custom-content API. |
 | 3 | `GET /ingredients/{id}/unlock-impact`; `GET /shopping/recommendations`; `POST /shopping/plan` |
 | 4 | `GET`, `POST /drink-logs`; `GET /drink-logs/statistics`. POST is Made This Drink, not generic row insertion; include the agreed safe-retry contract. |
 | 5 | Extend inventory/cocktail responses and Made This Drink with quantities/atomic deductions; reuse the same measurement rules for display conversion, scaling and batch previews, with any calculation contract documented before integration. |

@@ -13,7 +13,7 @@ The initial product is a mobile-friendly web app/PWA with Home, Bar, Drinks, and
 | Ingredient | Curated canonical ingredient such as Bourbon, Lime Juice, Campari, or Angostura bitters; not a commercial bottle/SKU catalog. Brands can be canonical when they function as standard recipe ingredients. |
 | Inventory item | A user's physical or conceptual bar item mapped to an ingredient, optionally labeled “Buffalo Trace”; multiple bottles may satisfy Bourbon. |
 | Cocktail / recipe | The conceptual drink / one specific way to make it. Keep them separate so a cocktail can have variations. |
-| Recipe ingredient | An ingredient's quantity, unit, requirement type, and display position in a recipe. |
+| Recipe ingredient | An ingredient's reviewed US/metric measurements, requirement type, and display position in a recipe. |
 | Availability | A calculated result from the selected recipe and current inventory. |
 | Out / Wishlist | A deliberately tracked depleted item / a desired acquisition. Neither counts as available; unowned catalog items are not automatically Out. |
 | One Ingredient Away | Exactly one distinct required ingredient is unavailable; optional garnishes do not count. |
