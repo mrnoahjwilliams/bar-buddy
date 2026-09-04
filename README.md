@@ -8,7 +8,7 @@ Start with [AGENTS.md](AGENTS.md) for the document map and task-specific reading
 
 ## Setup
 
-The local foundation includes a Spring backend, PostgreSQL, a React development shell, generated API contracts/clients, and GitHub Actions checks. The backend identity flow, `AppUser` schema and hosted Supabase boundary are implemented and verified; browser signup, login and session handling follow in unit 1.1.2.
+The local foundation includes a Spring backend, PostgreSQL, a React application shell, generated API contracts/clients, and GitHub Actions checks. Backend identity, the `AppUser` schema, hosted Supabase authentication, browser sessions and responsive authenticated navigation are implemented and verified.
 
 ### Prerequisites
 
@@ -159,7 +159,7 @@ npm run api:generate
 npm run check
 ```
 
-Generation starts with a clean backend build and `OpenApiGenerationIT`, using a disposable PostgreSQL container and no listening application server. The test disables the local `.env` import, enables springdoc only in its test context, and reads the schema in-process without changing runtime security. Normal application startup still disables `/v3/api-docs`. The generated contract includes bearer authentication and `GET /api/v1/me`; JWT attachment to the shared request adapter remains in unit 1.1.2.
+Generation starts with a clean backend build and `OpenApiGenerationIT`, using a disposable PostgreSQL container and no listening application server. The test disables the local `.env` import, enables springdoc only in its test context, and reads the schema in-process without changing runtime security. Normal application startup still disables `/v3/api-docs`. The generated contract includes bearer authentication and `GET /api/v1/me`; the shared request adapter attaches the current Supabase access token.
 
 The pipeline copies the exported schema to [contracts/openapi.json](contracts/openapi.json) and uses [Orval configuration](frontend/orval.config.ts) to generate `frontend/src/api/generated/`. These two locations contain generated output only and are replaced by `api:generate`; review and commit them with the backend changes. Never edit generated files by hand. The current contract intentionally has no product paths; types and query hooks appear when real controllers/DTOs arrive in Release 1.
 
@@ -195,4 +195,4 @@ gh workflow run ci.yml --ref main
 
 ### Development status
 
-[Documentation](docs/05-documentation.md#backend-identity) records the implemented and hosted-verified identity behavior. [Plan](docs/06-plan.md#112--frontend-authentication) identifies frontend signup, login and session handling as the next development unit.
+[Documentation](docs/05-documentation.md#frontend-session-and-navigation) records the implemented and hosted-verified identity journey. [Plan](docs/06-plan.md#121--persist-and-import-catalog) identifies catalog persistence and import as the next development unit.
