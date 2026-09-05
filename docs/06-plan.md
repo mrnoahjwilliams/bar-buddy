@@ -90,10 +90,10 @@ No public app or application entity schema yet.
 
 #### 1.2.1 — Persist and import catalog
 
-- [ ] Add Ingredient, Cocktail, Recipe and RecipeIngredient with separate cocktail/recipe models, constraints and migrations. Import reviewed data with stable matching/correction rules. **Verify:** empty-database setup, repeat import without duplication, relationships and preserved references; normal users cannot edit system records.
+- [x] Add Ingredient, Cocktail, Recipe and RecipeIngredient with separate cocktail/recipe models, constraints and migrations. Import reviewed data with stable matching/correction rules. **Verify:** empty-database setup, repeat import without duplication, relationships and preserved references; normal users cannot edit system records.
 
   - [x] Add and locally verify the four catalog entity mappings and schema, fresh/identity-upgrade migrations, relationship/measurement constraints and provider-role access restrictions.
-  - [ ] Implement validated transactional import, repeat/correction/missing-identity behavior and reference-preservation verification before completing this unit.
+  - [x] Implement validated transactional import, repeat/correction/missing-identity behavior and reference-preservation verification before completing this unit.
 
 #### 1.2.2 — Browse and inspect
 

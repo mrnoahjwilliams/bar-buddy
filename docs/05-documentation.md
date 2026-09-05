@@ -28,13 +28,17 @@ Hosted backend acceptance completed September 3, 2026 using Supabase's East US (
 
 ## Curated catalog
 
-The approved source-neutral catalog contains 113 canonical ingredients, 102 cocktails, 102 default recipes, and 416 ordered recipe lines. It preserves recipe wording, reviewed US/metric measurements, optional non-exclusive styles, and stable namespaced identifiers. The runtime does not load it yet; repeatable import remains in plan unit 1.2.1.
+The approved source-neutral catalog contains 113 canonical ingredients, 102 cocktails, 102 default recipes, and 416 ordered recipe lines. It preserves recipe wording, reviewed US/metric measurements, optional non-exclusive styles, and stable namespaced identifiers. An explicit operator command loads it into PostgreSQL; normal web-server startup does not import.
 
 Dependency-free validation covers the exact versioned structure, required fields, duplicate identity/name checks, references, controlled values, compatible measurement pairs, and array/display order. Known-result fixtures verify valid optional and qualitative data plus precise failures. [`catalog/README.md`](../catalog/README.md) owns the format, curation decisions, provenance archive, and future import/correction contract.
 
-Migration V2 adds empty Ingredient, Cocktail, Recipe and RecipeIngredient tables with UUID database identities and unique catalog IDs on the first three. JPA maps lazy relationships and independent US/metric decimal measurements. Constraints protect references, positive unique recipe positions, controlled categories/requirements/units, compatible measurement pairs and valid quantities. Repeated ingredients at different positions are supported. There are no catalog API operations or import command yet; optional styles remain in the reviewed source for Release 2.
+Migration V2 adds empty Ingredient, Cocktail, Recipe and RecipeIngredient tables with UUID database identities and unique catalog IDs on the first three. JPA maps lazy relationships and independent US/metric decimal measurements. Constraints protect references, positive unique recipe positions, controlled categories/requirements/units, compatible measurement pairs and valid quantities. Repeated ingredients at different positions are supported. There are no catalog API operations yet; optional styles remain in the reviewed source for Release 2.
 
 PostgreSQL integration tests verify fresh schema validation, upgrading V1 while preserving an existing user, migration reruns, relationship/measurement reads, invalid-data rejection and denied table privileges for all three provider Data API roles. These checks use disposable PostgreSQL; V2 has not been applied to the hosted database.
+
+The packaged import command validates a file snapshot with the bundled existing Node validator before opening Spring/database connections. A transactional service serializes imports, rejects missing stable entities or incompatible identity changes, and performs bulk upserts preserving Ingredient/Cocktail/Recipe IDs. Recipe lines match by recipe and position; obsolete positions are removed. Reviewed US/metric quantities are copied independently. The command starts no web listener and has no browser-accessible import operation.
+
+Integration tests load all 113 ingredients, 102 cocktails, 102 recipes and 416 lines; verify identical and concurrent repeats without identity/data drift; preserve external reference probes during corrections; synchronize repeated and removed recipe lines; reject missing identities and invalid snapshots; and prove rollback after a late database failure. The packaged command succeeds with disposable database credentials and rejects an invalid catalog before connecting to an unreachable database. No hosted catalog import has been performed. [Local development](08-local-development.md#catalog-and-api-generation) owns the exact command and Node requirement.
 
 ## Application foundation and API generation
 

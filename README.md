@@ -6,7 +6,7 @@ The application is a React frontend backed by a Spring Boot API and PostgreSQL. 
 
 ## Development status
 
-The application foundation, curated cocktail catalog, backend identity boundary, and browser authentication flow are complete. Users can sign up, sign in, recover a password, sign out, and reach protected application routes. The catalog schema is implemented; validated catalog import remains next in plan unit 1.2.1.
+The application foundation, curated cocktail catalog, backend identity boundary, and browser authentication flow are complete. Users can sign up, sign in, recover a password, sign out, and reach protected application routes. The catalog schema and validated operator import are implemented. Catalog browsing APIs and screens are next in plan unit 1.2.2.
 
 Bar Buddy is under active development and has not been deployed for public use. See the [development plan](docs/06-plan.md) for release progress and [implementation documentation](docs/05-documentation.md) for verified behavior.
 

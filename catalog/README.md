@@ -2,8 +2,7 @@
 
 [`cocktails.json`](cocktails.json) is the approved permanent Bar Buddy dataset. It
 contains 102 cocktails, one default recipe for each cocktail, and 113 canonical
-ingredients. It is validated and ready to become the database import source in unit
-1.2.1; it is not a database seed yet.
+ingredients. It is the validated database import source for unit 1.2.1.
 
 ## Dataset shape
 
@@ -57,7 +56,7 @@ silently accepting drift.
 
 ## Import and correction contract
 
-Unit 1.2.1 will implement persistence using this repeatable contract:
+The operator import command implements this repeatable contract:
 
 1. Parse and validate the complete file before opening a write transaction. Any
    error rejects the whole import.
@@ -77,9 +76,12 @@ Unit 1.2.1 will implement persistence using this repeatable contract:
    replacement or retirement requires an explicit migration/mapping reviewed with its
    references; otherwise the import fails rather than orphaning future user data.
 
-The persistence implementation must test empty-database import, an identical repeat,
-and a correction run that retains referenced database identities. This contract does
-not create application tables or runtime import behavior in Release 0.
+PostgreSQL integration tests cover empty-database import, identical and concurrent
+repeats, corrections retaining referenced identities, line synchronization, missing
+identities and rollback after a late database failure. The packaged command is
+verified independently of the web server. [Local development](../docs/08-local-development.md#catalog-and-api-generation)
+owns the command and configuration. Normal application startup does not import;
+styles stay in this source for Release 2.
 
 ## Optional cocktail styles
 

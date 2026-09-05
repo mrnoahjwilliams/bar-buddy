@@ -78,7 +78,20 @@ After both apps are running, authenticated `GET /api/v1/me` requests create or r
 
 ## Catalog and API generation
 
-Spring startup applies Flyway V2 to create the empty catalog tables. No catalog is loaded automatically and no import command exists yet; the remaining import work is tracked in [Plan 1.2.1](06-plan.md#121--persist-and-import-catalog).
+Spring startup applies Flyway V2 to create the catalog tables. Import is an explicit operator action; normal application startup does not load or overwrite catalog data.
+
+With Node 24 available on `PATH`, build the backend, then run this command from `backend/` using the intended server-only database settings in `.env` or the process environment:
+
+```sh
+./mvnw --batch-mode --no-transfer-progress verify
+java -Dloader.main=com.barbuddy.catalog.CatalogImportApplication \
+  -cp target/bar-buddy-0.0.1-SNAPSHOT.jar \
+  org.springframework.boot.loader.launch.PropertiesLauncher ../catalog/cocktails.json
+```
+
+The command validates a snapshot of the complete input using the bundled catalog validator before opening the database. It then applies pending Flyway migrations and imports in one transaction, prints a completion message and exits. It starts no web listener and needs no Auth configuration. Invalid input or import failure produces a nonzero exit; failed catalog writes roll back together. Flyway migrations are a separate preceding operation and remain applied if a later import fails.
+
+Re-running the same file preserves database identities and does not duplicate records. Corrections update display data and synchronize ordered recipe lines. Missing stable entities, changed cocktail slugs or recipe membership require a reviewed migration; they are not automatic retirements or renames. See the [catalog correction contract](../catalog/README.md#import-and-correction-contract). Only run against the intended database; hosted deployment/import remains a separately authorized release operation. Node is required for this operator command and its backend integration tests, but not for normal backend startup.
 
 Validate the maintained catalog without installing extra dependencies:
 
