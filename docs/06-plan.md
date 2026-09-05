@@ -92,6 +92,9 @@ No public app or application entity schema yet.
 
 - [ ] Add Ingredient, Cocktail, Recipe and RecipeIngredient with separate cocktail/recipe models, constraints and migrations. Import reviewed data with stable matching/correction rules. **Verify:** empty-database setup, repeat import without duplication, relationships and preserved references; normal users cannot edit system records.
 
+  - [x] Add and locally verify the four catalog entity mappings and schema, fresh/identity-upgrade migrations, relationship/measurement constraints and provider-role access restrictions.
+  - [ ] Implement validated transactional import, repeat/correction/missing-identity behavior and reference-preservation verification before completing this unit.
+
 #### 1.2.2 — Browse and inspect
 
 - [ ] Implement ingredient/cocktail list, text search and detail contracts/screens, with ingredient category and cocktail primary-spirit filters. Show recipe quantities/units/order, instructions, glassware/garnish, and ingredient detail's **related cocktail list plus distinct usage count** in this release. **Verify:** filter/search combinations, reset/empty/invalid inputs, repeated recipe lines do not inflate counts, and selecting a related cocktail opens its detail through generated-client flows. Availability/favorites filters arrive in 1.4/1.5; filtering cocktails by any recipe ingredient waits for 2.1, and photos/visuals for Release 2.
