@@ -28,9 +28,13 @@ Hosted backend acceptance completed September 3, 2026 using Supabase's East US (
 
 ## Curated catalog
 
-The approved source-neutral catalog contains 113 canonical ingredients, 102 cocktails, 102 default recipes, and 416 ordered recipe lines. It preserves recipe wording, reviewed US/metric measurements, optional non-exclusive styles, and stable namespaced identifiers. The runtime does not use it yet; persistence and repeatable import remain plan unit 1.2.1.
+The approved source-neutral catalog contains 113 canonical ingredients, 102 cocktails, 102 default recipes, and 416 ordered recipe lines. It preserves recipe wording, reviewed US/metric measurements, optional non-exclusive styles, and stable namespaced identifiers. The runtime does not load it yet; repeatable import remains in plan unit 1.2.1.
 
 Dependency-free validation covers the exact versioned structure, required fields, duplicate identity/name checks, references, controlled values, compatible measurement pairs, and array/display order. Known-result fixtures verify valid optional and qualitative data plus precise failures. [`catalog/README.md`](../catalog/README.md) owns the format, curation decisions, provenance archive, and future import/correction contract.
+
+Migration V2 adds empty Ingredient, Cocktail, Recipe and RecipeIngredient tables with UUID database identities and unique catalog IDs on the first three. JPA maps lazy relationships and independent US/metric decimal measurements. Constraints protect references, positive unique recipe positions, controlled categories/requirements/units, compatible measurement pairs and valid quantities. Repeated ingredients at different positions are supported. There are no catalog API operations or import command yet; optional styles remain in the reviewed source for Release 2.
+
+PostgreSQL integration tests verify fresh schema validation, upgrading V1 while preserving an existing user, migration reruns, relationship/measurement reads, invalid-data rejection and denied table privileges for all three provider Data API roles. These checks use disposable PostgreSQL; V2 has not been applied to the hosted database.
 
 ## Application foundation and API generation
 

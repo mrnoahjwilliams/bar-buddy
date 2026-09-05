@@ -78,6 +78,8 @@ After both apps are running, authenticated `GET /api/v1/me` requests create or r
 
 ## Catalog and API generation
 
+Spring startup applies Flyway V2 to create the empty catalog tables. No catalog is loaded automatically and no import command exists yet; the remaining import work is tracked in [Plan 1.2.1](06-plan.md#121--persist-and-import-catalog).
+
 Validate the maintained catalog without installing extra dependencies:
 
 ```sh
