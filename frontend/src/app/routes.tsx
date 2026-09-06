@@ -29,6 +29,21 @@ export const appRoutes: RouteObject[] = [
                 .DrinksPage,
             }),
           },
+          ...[
+            { path: '/bar/ingredients', component: 'IngredientCatalogPage' },
+            { path: '/bar/ingredients/:id', component: 'IngredientDetailPage' },
+            { path: '/drinks/:id', component: 'CocktailDetailPage' },
+          ].map(({ path, component }) => ({
+            path,
+            lazy: async () => ({
+              Component: (await import('@/features/catalog/catalog-pages'))[
+                component as
+                  | 'IngredientCatalogPage'
+                  | 'IngredientDetailPage'
+                  | 'CocktailDetailPage'
+              ],
+            }),
+          })),
           {
             path: '/more',
             lazy: async () => ({

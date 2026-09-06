@@ -46,7 +46,15 @@ Authenticated `GET /api/v1/ingredients` and `/cocktails` return compact, alphabe
 
 `GET /ingredients/{id}` includes the related cocktail summaries and their distinct usage count, including optional recipe lines. Repeated ingredient lines do not duplicate cocktails or inflate the count. `GET /cocktails/{id}` returns the single imported default recipe with ordered canonical ingredient references, recipe display names, requirement/preparation fields, reviewed US/metric measurements, instructions, glassware and garnish. Missing detail IDs return HTTP 404. These read-only operations share the existing authentication boundary and expose no inventory or user state.
 
-PostgreSQL integration tests verify full-catalog search/filter/reset behavior, literal wildcard characters, invalid inputs, authentication, identical shared results for two users, unavailable writes, related-detail navigation contracts, repeated-line counts and recipe ordering. Hibernate statement counts confirm one query for the unfiltered cocktail list, three for cocktail detail and two for ingredient detail, without per-row relationship loads. OpenAPI and Orval provide the four operations and query hooks; browsing screens remain incomplete in Plan 1.2.2.
+PostgreSQL integration tests verify full-catalog search/filter/reset behavior, literal wildcard characters, invalid inputs, authentication, identical shared results for two users, unavailable writes, related-detail navigation contracts, repeated-line counts and recipe ordering. Hibernate statement counts confirm one query for the unfiltered cocktail list, three for cocktail detail and two for ingredient detail, without per-row relationship loads. OpenAPI and Orval provide the four operations and query hooks.
+
+## Catalog browsing screens
+
+Drinks now lists the cocktail catalog with submitted text search and a canonical primary-spirit filter. Bar links to the ingredient catalog with text search and category filtering. Search/filter values live in the URL, survive reload and browser history, and are preserved through detail-return links, including ingredient → related cocktail → ingredient navigation. Reset removes both filters. Both catalogs use the generated query hooks and authenticated transport; no separate fetch client or catalog DTOs were added.
+
+Ingredient detail shows the API's distinct usage count and related cocktail links. Cocktail detail presents the default recipe's ordered US measurements, ranges/modifiers, canonical ingredient links, preparation text, optional lines, instructions, glassware and garnish. These screens have labeled controls, responsive layouts and loading, retryable error, invalid-input, missing-detail and empty states. Inventory actions and availability/favorites filtering remain in their scheduled units.
+
+Frontend behavior tests cover combined filters, URL restoration, reset, empty results, authenticated generated requests, related navigation, recipe order/measurements and failure recovery. Browser layout review used disposable fixture responses at desktop, phone and tablet widths; no hosted catalog import or hosted browsing acceptance has been performed.
 
 ## Application foundation and API generation
 
