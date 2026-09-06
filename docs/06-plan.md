@@ -97,10 +97,10 @@ No public app or application entity schema yet.
 
 #### 1.2.2 — Browse and inspect
 
-- [ ] Implement ingredient/cocktail list, text search and detail contracts/screens, with ingredient category and cocktail primary-spirit filters. Show recipe quantities/units/order, instructions, glassware/garnish, and ingredient detail's **related cocktail list plus distinct usage count** in this release. **Verify:** filter/search combinations, reset/empty/invalid inputs, repeated recipe lines do not inflate counts, and selecting a related cocktail opens its detail through generated-client flows. Availability/favorites filters arrive in 1.4/1.5; filtering cocktails by any recipe ingredient waits for 2.1, and photos/visuals for Release 2.
+- [x] Implement ingredient/cocktail list, text search and detail contracts/screens, with ingredient category and cocktail primary-spirit filters. Show recipe quantities/units/order, instructions, glassware/garnish, and ingredient detail's **related cocktail list plus distinct usage count** in this release. **Verify:** filter/search combinations, reset/empty/invalid inputs, repeated recipe lines do not inflate counts, and selecting a related cocktail opens its detail through generated-client flows. Availability/favorites filters arrive in 1.4/1.5; filtering cocktails by any recipe ingredient waits for 2.1, and photos/visuals for Release 2.
 
   - [x] Implement and verify the authenticated list/search/filter/detail APIs, distinct related-cocktail usage, bounded PostgreSQL queries, problem responses and regenerated frontend client.
-  - [ ] Build and verify ingredient/cocktail browsing screens and related-cocktail navigation through the generated client before completing this unit.
+  - [x] Build and verify ingredient/cocktail browsing screens and related-cocktail navigation through the generated client before completing this unit.
 
 ### 1.3 — Have/Out inventory
 
