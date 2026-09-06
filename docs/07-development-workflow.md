@@ -4,9 +4,11 @@ Execution and Git/CI policy live here. Use [AGENTS.md](../AGENTS.md) to load onl
 
 ## PR scope
 
-Choose one coherent, verifiable outcome with a clear stopping point. A PR may cover part of a Plan unit, one unit, or several related units; a whole milestone fits only when the combined change remains practical to review and test. Group work by its outcome and dependencies, not a fixed number of units or commits. For example, an inventory API and its Bar controls may share a PR; foundation can be split into several useful outcomes.
+Default to a complete usable feature per PR, including its database changes, API, generated client, UI, tests and required setup where applicable. Plan units define implementation order and verification checkpoints, not PR boundaries. Group related units and, when practical, adjacent milestones around one user-visible outcome. For example, Have/Out inventory and the resulting drink availability can cover 1.3 and 1.4 in one PR. Do not split a feature into schema, service, API and UI PRs merely because those are separate technical layers or checkboxes.
 
-Select routine grouping autonomously and state the included units, outcome, checks and stopping point before editing. Complete them in order on one branch with as many focused commits as useful. If work grows, explain a narrower coherent boundary and leave remaining items incomplete. Present the result for review at that boundary; do not keep adding work just to finish a milestone. Review fixes stay in the same PR.
+Select routine grouping autonomously and announce the outcome, included units, checks and stopping point before editing. Complete the included work in order on one branch with as many focused commits as useful. A completed child unit or commit is not a reason to stop while the selected outcome remains unfinished. Review fixes stay in the same PR.
+
+Split only for a concrete unresolved dependency/decision, an independently needed release, or substantial review or verification risk. Explain the specific reason and the usable outcome of each resulting scope; task duration or checkbox count alone does not justify a split. Preserve partial work when genuinely blocked, without marking the feature complete. Explicit user scope takes precedence, and unrelated features or later-release work remain outside the selected outcome.
 
 ## Before
 
@@ -20,7 +22,8 @@ Select routine grouping autonomously and state the included units, outcome, chec
 
 1. Implement the selected PR scope under Guidelines and the accepted release order. Make routine choices autonomously; never silently resolve a business decision or expand scope.
 2. Apply Guidelines' API/client compatibility rule across the included units; keep their tests and affected docs in the PR. Make focused commits along the way. Verify risky behavior as it changes and fix introduced failures. Never weaken checks or disguise missing verification.
-3. Give concise progress/blocker updates. Preserve useful partial work if blocked; leave incomplete Plan items unchecked and record implementation limitations in Documentation or the PR, without creating a handoff file.
+3. Run focused checks as behavior changes, then the applicable full checks at the PR boundary. Reuse valid verification evidence; repeat checks only after relevant changes, failures or unresolved concerns. Never omit required checks to reduce usage.
+4. Give concise progress/blocker updates. Preserve useful partial work if blocked; leave incomplete Plan items unchecked and record implementation limitations in Documentation or the PR, without creating a handoff file.
 
 ## Finish and review
 
@@ -59,6 +62,10 @@ GitHub is the source/PR host; `main` is the base. Use short-lived `<type>/<start
 Avoid force pushes/shared-history rewrites; resolve conflicts carefully and keep branch-sync merge commits separate from product changes. Use squash merges and safe merged-branch cleanup. Keep `main` usable. The initial Bar Buddy repository starts with one reviewed documentation commit on `main`; subsequent work uses task branches/PRs. This one-time bootstrap does not authorize later history rewrites. Never overwrite existing remote history.
 
 GitHub permits squash merges only; always squash-merge development branches. Foundation configures, where supported, protected `main`: required PRs, resolved conversations, current passing checks, an up-to-date branch, and no force pushes/deletion. Enable required check names only after real jobs run. For this solo-owner workflow, the user reviews/authorizes merging; do not require a second GitHub account's approval until a separate reviewer is available. Authors cannot approve their own PRs. Verify account-specific [protection availability](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches) and [review restrictions](https://docs.github.com/en/pull-requests/how-tos/review-pull-requests/approving-a-pull-request-with-required-reviews). If enforcement is unavailable, record it and follow the policy manually; do not change visibility or buy an upgrade without approval.
+
+## Dependency PR triage
+
+Inspect open automated dependency PRs when starting development. Give each a disposition: compatible and ready for review, a fix included in a coherent maintenance scope, or deferred/closed with a concrete compatibility reason. Keep runtime type definitions aligned with the supported runtime major; evaluate major toolchain upgrades as coordinated changes. Do not leave known incompatible updates pending indefinitely or merge updates solely because CI passes. Merge approval remains required under standing authority. Routine triage should not fragment feature work into additional implementation PRs.
 
 ## CI contract
 

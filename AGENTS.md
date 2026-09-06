@@ -26,7 +26,7 @@ Link to the owning document instead of copying its content. Resolve contradictio
 
 - Inspect the relevant files and Git state; preserve unrelated changes. Planned behavior is not implementation evidence.
 - “What's next?” requests guidance, not edits. Identify the first incomplete executable Plan unit, its outcome, and any blocking decision.
-- “Start development” and “Continue development” authorize one coherent PR scope under Workflow, starting from the earliest incomplete work. Choose and announce its outcome, included units and stopping point; related units and multiple commits may share a PR. Follow an explicitly requested scope instead when provided.
+- “Start development” and “Continue development” authorize one coherent PR scope under Workflow, starting from the earliest incomplete work. Default to a complete usable feature spanning related units under [Workflow’s PR scope rules](docs/07-development-workflow.md#pr-scope). Announce its outcome, included units and stopping point; plan checkboxes and technical layers are not PR boundaries. Follow an explicitly requested scope instead when provided.
 - Verify prerequisites outside the selected PR scope are merged into the base. Included units may depend on verified earlier work on the same branch. If a separate prerequisite PR is pending, report that state instead of rebuilding or skipping it.
 - Make routine choices within accepted design. Ask only for unresolved decisions affecting the current task, complete independent authorized work, and record answers before dependent implementation.
 - Follow Workflow's standing authority: commits, feature-branch pushes, and PRs are allowed for requested work; merges and deployments need user approval.
