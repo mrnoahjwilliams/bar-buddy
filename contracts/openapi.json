@@ -8,6 +8,265 @@
     "url" : "/"
   } ],
   "paths" : {
+    "/api/v1/cocktails" : {
+      "get" : {
+        "operationId" : "listCocktails",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "search",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "primarySpiritId",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/CocktailSummary"
+                  }
+                }
+              }
+            },
+            "description" : "Catalog result"
+          },
+          "400" : {
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiProblemResponse"
+                }
+              }
+            },
+            "description" : "Invalid catalog input"
+          },
+          "401" : {
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiProblemResponse"
+                }
+              }
+            },
+            "description" : "Authentication is required"
+          },
+          "404" : {
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiProblemResponse"
+                }
+              }
+            },
+            "description" : "Catalog item not found"
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "tags" : [ "catalog-browse-controller" ]
+      }
+    },
+    "/api/v1/cocktails/{id}" : {
+      "get" : {
+        "operationId" : "getCocktail",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CocktailDetail"
+                }
+              }
+            },
+            "description" : "Catalog result"
+          },
+          "400" : {
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiProblemResponse"
+                }
+              }
+            },
+            "description" : "Invalid catalog input"
+          },
+          "401" : {
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiProblemResponse"
+                }
+              }
+            },
+            "description" : "Authentication is required"
+          },
+          "404" : {
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiProblemResponse"
+                }
+              }
+            },
+            "description" : "Catalog item not found"
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "tags" : [ "catalog-browse-controller" ]
+      }
+    },
+    "/api/v1/ingredients" : {
+      "get" : {
+        "operationId" : "listIngredients",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "search",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "category",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/IngredientSummary"
+                  }
+                }
+              }
+            },
+            "description" : "Catalog result"
+          },
+          "400" : {
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiProblemResponse"
+                }
+              }
+            },
+            "description" : "Invalid catalog input"
+          },
+          "401" : {
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiProblemResponse"
+                }
+              }
+            },
+            "description" : "Authentication is required"
+          },
+          "404" : {
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiProblemResponse"
+                }
+              }
+            },
+            "description" : "Catalog item not found"
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "tags" : [ "catalog-browse-controller" ]
+      }
+    },
+    "/api/v1/ingredients/{id}" : {
+      "get" : {
+        "operationId" : "getIngredient",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/IngredientDetail"
+                }
+              }
+            },
+            "description" : "Catalog result"
+          },
+          "400" : {
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiProblemResponse"
+                }
+              }
+            },
+            "description" : "Invalid catalog input"
+          },
+          "401" : {
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiProblemResponse"
+                }
+              }
+            },
+            "description" : "Authentication is required"
+          },
+          "404" : {
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiProblemResponse"
+                }
+              }
+            },
+            "description" : "Catalog item not found"
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "tags" : [ "catalog-browse-controller" ]
+      }
+    },
     "/api/v1/me" : {
       "get" : {
         "operationId" : "getCurrentUser",
@@ -67,6 +326,102 @@
         },
         "required" : [ "detail", "instance", "status", "title", "type" ]
       },
+      "CocktailDetail" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "primarySpirit" : {
+            "$ref" : "#/components/schemas/IngredientSummary"
+          },
+          "recipe" : {
+            "$ref" : "#/components/schemas/RecipeDetail"
+          },
+          "slug" : {
+            "type" : "string"
+          }
+        }
+      },
+      "CocktailSummary" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "primarySpirit" : {
+            "$ref" : "#/components/schemas/IngredientSummary"
+          },
+          "slug" : {
+            "type" : "string"
+          }
+        }
+      },
+      "DisplayMeasurement" : {
+        "type" : "object",
+        "properties" : {
+          "maximumQuantity" : {
+            "type" : "number"
+          },
+          "modifier" : {
+            "type" : "string"
+          },
+          "quantity" : {
+            "type" : "number"
+          },
+          "unit" : {
+            "type" : "string"
+          }
+        }
+      },
+      "IngredientDetail" : {
+        "type" : "object",
+        "properties" : {
+          "category" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "relatedCocktails" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/CocktailSummary"
+            }
+          },
+          "usageCount" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      },
+      "IngredientSummary" : {
+        "type" : "object",
+        "properties" : {
+          "category" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "name" : {
+            "type" : "string"
+          }
+        }
+      },
       "MeResponse" : {
         "type" : "object",
         "properties" : {
@@ -80,6 +435,60 @@
           }
         },
         "required" : [ "createdAt", "id" ]
+      },
+      "RecipeDetail" : {
+        "type" : "object",
+        "properties" : {
+          "garnish" : {
+            "type" : "string"
+          },
+          "glassware" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "ingredients" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/RecipeLine"
+            }
+          },
+          "instructions" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          }
+        }
+      },
+      "RecipeLine" : {
+        "type" : "object",
+        "properties" : {
+          "displayName" : {
+            "type" : "string"
+          },
+          "ingredient" : {
+            "$ref" : "#/components/schemas/IngredientSummary"
+          },
+          "metric" : {
+            "$ref" : "#/components/schemas/DisplayMeasurement"
+          },
+          "position" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "preparation" : {
+            "type" : "string"
+          },
+          "requirement" : {
+            "type" : "string"
+          },
+          "us" : {
+            "$ref" : "#/components/schemas/DisplayMeasurement"
+          }
+        }
       }
     },
     "securitySchemes" : {
