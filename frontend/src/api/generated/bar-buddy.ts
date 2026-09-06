@@ -17,7 +17,16 @@ import type {
   UseQueryResult,
 } from '@tanstack/react-query';
 
-import type { ApiProblemResponse, MeResponse } from './models';
+import type {
+  ApiProblemResponse,
+  CocktailDetail,
+  CocktailSummary,
+  IngredientDetail,
+  IngredientSummary,
+  ListCocktailsParams,
+  ListIngredientsParams,
+  MeResponse,
+} from './models';
 
 import { apiFetch } from '../http.ts';
 import type { ErrorType } from '../http.ts';
@@ -41,6 +50,608 @@ const withQueryKey = <T extends object, K>(
   }
   return result;
 };
+
+export const getListCocktailsUrl = (params?: ListCocktailsParams) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value));
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `/api/v1/cocktails?${stringifiedParams}`
+    : `/api/v1/cocktails`;
+};
+
+export const listCocktails = async (
+  params?: ListCocktailsParams,
+  options?: Parameters<typeof apiFetch>[1],
+): Promise<CocktailSummary[]> => {
+  return apiFetch<CocktailSummary[]>(getListCocktailsUrl(params), {
+    ...options,
+    method: 'GET',
+  });
+};
+
+export const getListCocktailsQueryKey = (params?: ListCocktailsParams) => {
+  return [`/api/v1/cocktails`, ...(params ? [params] : [])] as const;
+};
+
+export const getListCocktailsQueryOptions = <
+  TData = Awaited<ReturnType<typeof listCocktails>>,
+  TError = ErrorType<ApiProblemResponse>,
+>(
+  params?: ListCocktailsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof listCocktails>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getListCocktailsQueryKey(params);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof listCocktails>>> = ({
+    signal,
+  }) => listCocktails(params, { signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof listCocktails>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type ListCocktailsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof listCocktails>>
+>;
+export type ListCocktailsQueryError = ErrorType<ApiProblemResponse>;
+
+export function useListCocktails<
+  TData = Awaited<ReturnType<typeof listCocktails>>,
+  TError = ErrorType<ApiProblemResponse>,
+>(
+  params: undefined | ListCocktailsParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof listCocktails>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listCocktails>>,
+          TError,
+          Awaited<ReturnType<typeof listCocktails>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useListCocktails<
+  TData = Awaited<ReturnType<typeof listCocktails>>,
+  TError = ErrorType<ApiProblemResponse>,
+>(
+  params?: ListCocktailsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof listCocktails>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listCocktails>>,
+          TError,
+          Awaited<ReturnType<typeof listCocktails>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useListCocktails<
+  TData = Awaited<ReturnType<typeof listCocktails>>,
+  TError = ErrorType<ApiProblemResponse>,
+>(
+  params?: ListCocktailsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof listCocktails>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+
+export function useListCocktails<
+  TData = Awaited<ReturnType<typeof listCocktails>>,
+  TError = ErrorType<ApiProblemResponse>,
+>(
+  params?: ListCocktailsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof listCocktails>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getListCocktailsQueryOptions(params, options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+export const getGetCocktailUrl = (id: string) => {
+  return `/api/v1/cocktails/${id}`;
+};
+
+export const getCocktail = async (
+  id: string,
+  options?: Parameters<typeof apiFetch>[1],
+): Promise<CocktailDetail> => {
+  return apiFetch<CocktailDetail>(getGetCocktailUrl(id), {
+    ...options,
+    method: 'GET',
+  });
+};
+
+export const getGetCocktailQueryKey = (id: string) => {
+  return [`/api/v1/cocktails/${id}`] as const;
+};
+
+export const getGetCocktailQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCocktail>>,
+  TError = ErrorType<ApiProblemResponse>,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getCocktail>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetCocktailQueryKey(id);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCocktail>>> = ({
+    signal,
+  }) => getCocktail(id, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: id !== null && id !== undefined,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getCocktail>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetCocktailQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCocktail>>
+>;
+export type GetCocktailQueryError = ErrorType<ApiProblemResponse>;
+
+export function useGetCocktail<
+  TData = Awaited<ReturnType<typeof getCocktail>>,
+  TError = ErrorType<ApiProblemResponse>,
+>(
+  id: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getCocktail>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getCocktail>>,
+          TError,
+          Awaited<ReturnType<typeof getCocktail>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetCocktail<
+  TData = Awaited<ReturnType<typeof getCocktail>>,
+  TError = ErrorType<ApiProblemResponse>,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getCocktail>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getCocktail>>,
+          TError,
+          Awaited<ReturnType<typeof getCocktail>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetCocktail<
+  TData = Awaited<ReturnType<typeof getCocktail>>,
+  TError = ErrorType<ApiProblemResponse>,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getCocktail>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+
+export function useGetCocktail<
+  TData = Awaited<ReturnType<typeof getCocktail>>,
+  TError = ErrorType<ApiProblemResponse>,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getCocktail>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetCocktailQueryOptions(id, options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+export const getListIngredientsUrl = (params?: ListIngredientsParams) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value));
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `/api/v1/ingredients?${stringifiedParams}`
+    : `/api/v1/ingredients`;
+};
+
+export const listIngredients = async (
+  params?: ListIngredientsParams,
+  options?: Parameters<typeof apiFetch>[1],
+): Promise<IngredientSummary[]> => {
+  return apiFetch<IngredientSummary[]>(getListIngredientsUrl(params), {
+    ...options,
+    method: 'GET',
+  });
+};
+
+export const getListIngredientsQueryKey = (params?: ListIngredientsParams) => {
+  return [`/api/v1/ingredients`, ...(params ? [params] : [])] as const;
+};
+
+export const getListIngredientsQueryOptions = <
+  TData = Awaited<ReturnType<typeof listIngredients>>,
+  TError = ErrorType<ApiProblemResponse>,
+>(
+  params?: ListIngredientsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof listIngredients>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getListIngredientsQueryKey(params);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof listIngredients>>> = ({
+    signal,
+  }) => listIngredients(params, { signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof listIngredients>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type ListIngredientsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof listIngredients>>
+>;
+export type ListIngredientsQueryError = ErrorType<ApiProblemResponse>;
+
+export function useListIngredients<
+  TData = Awaited<ReturnType<typeof listIngredients>>,
+  TError = ErrorType<ApiProblemResponse>,
+>(
+  params: undefined | ListIngredientsParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof listIngredients>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listIngredients>>,
+          TError,
+          Awaited<ReturnType<typeof listIngredients>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useListIngredients<
+  TData = Awaited<ReturnType<typeof listIngredients>>,
+  TError = ErrorType<ApiProblemResponse>,
+>(
+  params?: ListIngredientsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof listIngredients>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listIngredients>>,
+          TError,
+          Awaited<ReturnType<typeof listIngredients>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useListIngredients<
+  TData = Awaited<ReturnType<typeof listIngredients>>,
+  TError = ErrorType<ApiProblemResponse>,
+>(
+  params?: ListIngredientsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof listIngredients>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+
+export function useListIngredients<
+  TData = Awaited<ReturnType<typeof listIngredients>>,
+  TError = ErrorType<ApiProblemResponse>,
+>(
+  params?: ListIngredientsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof listIngredients>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getListIngredientsQueryOptions(params, options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+export const getGetIngredientUrl = (id: string) => {
+  return `/api/v1/ingredients/${id}`;
+};
+
+export const getIngredient = async (
+  id: string,
+  options?: Parameters<typeof apiFetch>[1],
+): Promise<IngredientDetail> => {
+  return apiFetch<IngredientDetail>(getGetIngredientUrl(id), {
+    ...options,
+    method: 'GET',
+  });
+};
+
+export const getGetIngredientQueryKey = (id: string) => {
+  return [`/api/v1/ingredients/${id}`] as const;
+};
+
+export const getGetIngredientQueryOptions = <
+  TData = Awaited<ReturnType<typeof getIngredient>>,
+  TError = ErrorType<ApiProblemResponse>,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getIngredient>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetIngredientQueryKey(id);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getIngredient>>> = ({
+    signal,
+  }) => getIngredient(id, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: id !== null && id !== undefined,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getIngredient>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetIngredientQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getIngredient>>
+>;
+export type GetIngredientQueryError = ErrorType<ApiProblemResponse>;
+
+export function useGetIngredient<
+  TData = Awaited<ReturnType<typeof getIngredient>>,
+  TError = ErrorType<ApiProblemResponse>,
+>(
+  id: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getIngredient>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getIngredient>>,
+          TError,
+          Awaited<ReturnType<typeof getIngredient>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetIngredient<
+  TData = Awaited<ReturnType<typeof getIngredient>>,
+  TError = ErrorType<ApiProblemResponse>,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getIngredient>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getIngredient>>,
+          TError,
+          Awaited<ReturnType<typeof getIngredient>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetIngredient<
+  TData = Awaited<ReturnType<typeof getIngredient>>,
+  TError = ErrorType<ApiProblemResponse>,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getIngredient>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+
+export function useGetIngredient<
+  TData = Awaited<ReturnType<typeof getIngredient>>,
+  TError = ErrorType<ApiProblemResponse>,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getIngredient>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetIngredientQueryOptions(id, options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
 
 export const getGetCurrentUserUrl = () => {
   return `/api/v1/me`;

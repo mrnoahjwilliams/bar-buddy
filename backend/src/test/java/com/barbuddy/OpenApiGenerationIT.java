@@ -79,6 +79,21 @@ class OpenApiGenerationIT {
                 .asString())
         .isEqualTo("bearer");
 
+    for (String path :
+        new String[] {"/ingredients", "/ingredients/{id}", "/cocktails", "/cocktails/{id}"}) {
+      var operation = schema.path("paths").path("/api/v1" + path).path("get");
+      assertThat(operation.path("security").get(0).has("bearerAuth")).isTrue();
+      assertThat(operation.path("responses").path("200").path("content").has("application/json"))
+          .isTrue();
+      assertThat(
+              operation
+                  .path("responses")
+                  .path("400")
+                  .path("content")
+                  .has("application/problem+json"))
+          .isTrue();
+    }
+
     var output = Path.of("target/openapi/openapi.json");
     Files.createDirectories(output.getParent());
     Files.writeString(output, response.stripTrailing() + "\n");
