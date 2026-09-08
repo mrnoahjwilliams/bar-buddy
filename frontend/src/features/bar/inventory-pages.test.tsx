@@ -83,7 +83,22 @@ function fixture() {
           recipe: {
             name: 'Classic',
             instructions: 'Shake and strain.',
-            ingredients: [],
+            ingredients: [
+              {
+                position: 1,
+                ingredient: gin,
+                displayName: 'Dry gin',
+                requirement: 'required',
+                us: { quantity: 2, unit: 'ounce' },
+              },
+              {
+                position: 2,
+                ingredient: lime,
+                displayName: 'Lime Juice',
+                requirement: 'required',
+                us: { quantity: 1, unit: 'ounce' },
+              },
+            ],
           },
         });
       if (url.pathname === '/api/v1/cocktails') {
@@ -183,20 +198,29 @@ it('refreshes detail and filtered availability after adding a missing ingredient
   expect(
     await screen.findByRole('heading', { name: 'Other Drinks' }),
   ).toBeVisible();
+  expect(
+    await screen.findByRole('complementary', { name: 'Check your mixers' }),
+  ).toBeVisible();
+  expect(
+    screen.getByRole('link', { name: 'Check juices and mixers' }),
+  ).toHaveAttribute('href', '/bar/ingredients');
   await user.click(screen.getByRole('link', { name: /Gimlet/ }));
-  expect(await screen.findByText('Missing from your bar:')).toBeVisible();
+  expect(await screen.findByText('Missing')).toBeVisible();
   await user.click(screen.getByRole('link', { name: 'Lime Juice' }));
   await user.click(await screen.findByRole('button', { name: 'Add to Bar' }));
   expect(await screen.findByText('Added to your bar.')).toBeVisible();
   expect(
     screen.getByRole('link', { name: /Gimlet.*You can make this/ }),
   ).toBeVisible();
-  await user.click(screen.getByRole('link', { name: 'Back to drinks' }));
+  await user.click(screen.getByRole('button', { name: 'Close details' }));
   expect(
     await screen.findByRole('heading', { name: 'You can make this' }),
   ).toBeVisible();
-  await user.click(screen.getByRole('link', { name: 'Back to drinks' }));
+  await user.click(screen.getByRole('button', { name: 'Close details' }));
   expect(await screen.findByText(/No cocktails match/)).toBeVisible();
+  expect(
+    screen.queryByRole('complementary', { name: 'Check your mixers' }),
+  ).not.toBeInTheDocument();
   expect(screen.getByLabelText('Availability')).toHaveValue('one_away');
   expect(router.state.location.search).toBe(
     '?search=Gim&primarySpiritId=gin&availability=one_away',
@@ -214,7 +238,7 @@ it('retries failed loads and changes while clearing private inventory and drafts
   const data = fixture();
   data.failures.read = true;
   const user = userEvent.setup();
-  const { gateway } = open('/bar/ingredients/gin');
+  const { gateway } = open('/bar/ingredients?detail=ingredient%3Agin');
   expect(
     await screen.findByText('Your bar could not be loaded.'),
   ).toBeVisible();

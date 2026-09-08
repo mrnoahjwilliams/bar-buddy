@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "catalog": {
     "id": "catalog:bar-buddy",
     "name": "Bar Buddy cocktail catalog",
@@ -9,567 +9,726 @@
     {
       "id": "ingredient:absinthe",
       "name": "Absinthe",
-      "category": "spirit"
+      "category": "spirit",
+      "aliases": []
     },
     {
       "id": "ingredient:agave-syrup",
       "name": "Agave syrup",
-      "category": "syrup"
+      "category": "syrup",
+      "aliases": [
+        "Agave nectar"
+      ]
     },
     {
       "id": "ingredient:aged-rum",
       "name": "Aged rum",
-      "category": "spirit"
+      "category": "spirit",
+      "aliases": []
     },
     {
       "id": "ingredient:aguardiente",
       "name": "Aguardiente",
-      "category": "spirit"
+      "category": "spirit",
+      "aliases": []
     },
     {
       "id": "ingredient:allspice-dram",
       "name": "Allspice dram",
-      "category": "liqueur"
+      "category": "liqueur",
+      "aliases": []
     },
     {
       "id": "ingredient:amaretto",
       "name": "Amaretto",
-      "category": "liqueur"
+      "category": "liqueur",
+      "aliases": []
     },
     {
       "id": "ingredient:amaro-nonino",
       "name": "Amaro Nonino",
-      "category": "liqueur"
+      "category": "liqueur",
+      "aliases": []
     },
     {
       "id": "ingredient:aperol",
       "name": "Aperol",
-      "category": "liqueur"
+      "category": "liqueur",
+      "aliases": []
     },
     {
       "id": "ingredient:apricot-liqueur",
       "name": "Apricot liqueur",
-      "category": "liqueur"
+      "category": "liqueur",
+      "aliases": []
     },
     {
       "id": "ingredient:aromatic-bitters",
       "name": "Aromatic bitters",
-      "category": "bitters"
+      "category": "bitters",
+      "aliases": [
+        "Angostura bitters",
+        "Angostura"
+      ]
     },
     {
       "id": "ingredient:basil",
       "name": "Basil",
-      "category": "herb"
+      "category": "herb",
+      "aliases": []
     },
     {
       "id": "ingredient:black-pepper",
       "name": "Black pepper",
-      "category": "other"
+      "category": "other",
+      "aliases": []
     },
     {
       "id": "ingredient:bourbon",
       "name": "Bourbon",
-      "category": "spirit"
+      "category": "spirit",
+      "aliases": []
     },
     {
       "id": "ingredient:brandy",
       "name": "Brandy",
-      "category": "spirit"
+      "category": "spirit",
+      "aliases": []
     },
     {
       "id": "ingredient:benedictine",
       "name": "Bénédictine",
-      "category": "liqueur"
+      "category": "liqueur",
+      "aliases": []
     },
     {
       "id": "ingredient:cachaca",
       "name": "Cachaça",
-      "category": "spirit"
+      "category": "spirit",
+      "aliases": []
     },
     {
       "id": "ingredient:calvados",
       "name": "Calvados",
-      "category": "spirit"
+      "category": "spirit",
+      "aliases": []
     },
     {
       "id": "ingredient:campari",
       "name": "Campari",
-      "category": "liqueur"
+      "category": "liqueur",
+      "aliases": []
     },
     {
       "id": "ingredient:celery-salt",
       "name": "Celery salt",
-      "category": "other"
+      "category": "other",
+      "aliases": []
     },
     {
       "id": "ingredient:chamomile-cordial",
       "name": "Chamomile cordial",
-      "category": "syrup"
+      "category": "syrup",
+      "aliases": []
     },
     {
       "id": "ingredient:cherry-liqueur",
       "name": "Cherry liqueur",
-      "category": "liqueur"
+      "category": "liqueur",
+      "aliases": []
     },
     {
       "id": "ingredient:citrus-vodka",
       "name": "Citrus vodka",
-      "category": "spirit"
+      "category": "spirit",
+      "aliases": []
     },
     {
       "id": "ingredient:cloves",
       "name": "Cloves",
-      "category": "other"
+      "category": "other",
+      "aliases": []
     },
     {
       "id": "ingredient:coconut-cream",
       "name": "Coconut cream",
-      "category": "other"
+      "category": "other",
+      "aliases": []
+    },
+    {
+      "id": "ingredient:coconut-rum",
+      "name": "Coconut rum",
+      "category": "spirit",
+      "aliases": []
+    },
+    {
+      "id": "ingredient:coconut-rum-liqueur",
+      "name": "Coconut rum liqueur",
+      "category": "liqueur",
+      "aliases": [
+        "Malibu Original",
+        "Malibu"
+      ]
     },
     {
       "id": "ingredient:coffee",
       "name": "Coffee",
-      "category": "other"
+      "category": "other",
+      "aliases": []
     },
     {
       "id": "ingredient:coffee-liqueur",
       "name": "Coffee liqueur",
-      "category": "liqueur"
+      "category": "liqueur",
+      "aliases": []
     },
     {
       "id": "ingredient:cognac",
       "name": "Cognac",
-      "category": "spirit"
+      "category": "spirit",
+      "aliases": []
     },
     {
       "id": "ingredient:cola",
       "name": "Cola",
-      "category": "mixer"
+      "category": "mixer",
+      "aliases": []
     },
     {
       "id": "ingredient:cranberry-juice",
       "name": "Cranberry juice",
-      "category": "juice"
+      "category": "juice",
+      "aliases": []
     },
     {
       "id": "ingredient:cream",
       "name": "Cream",
-      "category": "other"
+      "category": "other",
+      "aliases": []
     },
     {
       "id": "ingredient:creme-de-cacao",
       "name": "Crème de cacao",
-      "category": "liqueur"
+      "category": "liqueur",
+      "aliases": []
     },
     {
       "id": "ingredient:creme-de-cassis",
       "name": "Crème de cassis",
-      "category": "liqueur"
+      "category": "liqueur",
+      "aliases": []
     },
     {
       "id": "ingredient:creme-de-menthe",
       "name": "Crème de menthe",
-      "category": "liqueur"
+      "category": "liqueur",
+      "aliases": []
     },
     {
       "id": "ingredient:creme-de-mure",
       "name": "Crème de mûre",
-      "category": "liqueur"
+      "category": "liqueur",
+      "aliases": []
     },
     {
       "id": "ingredient:creme-de-violette",
       "name": "Crème de violette",
-      "category": "liqueur"
+      "category": "liqueur",
+      "aliases": []
     },
     {
       "id": "ingredient:cynar",
       "name": "Cynar",
-      "category": "liqueur"
+      "category": "liqueur",
+      "aliases": []
     },
     {
       "id": "ingredient:dark-rum",
       "name": "Dark rum",
-      "category": "spirit"
+      "category": "spirit",
+      "aliases": []
     },
     {
       "id": "ingredient:donns-mix",
       "name": "Donn’s mix",
-      "category": "syrup"
+      "category": "syrup",
+      "aliases": []
     },
     {
       "id": "ingredient:drambuie",
       "name": "Drambuie",
-      "category": "liqueur"
+      "category": "liqueur",
+      "aliases": []
     },
     {
       "id": "ingredient:dry-vermouth",
       "name": "Dry vermouth",
-      "category": "fortified_wine"
+      "category": "fortified_wine",
+      "aliases": []
     },
     {
       "id": "ingredient:dry-white-wine",
       "name": "Dry white wine",
-      "category": "mixer"
+      "category": "mixer",
+      "aliases": []
     },
     {
       "id": "ingredient:egg-white",
       "name": "Egg white",
-      "category": "other"
+      "category": "other",
+      "aliases": []
     },
     {
       "id": "ingredient:egg-yolk",
       "name": "Egg yolk",
-      "category": "other"
+      "category": "other",
+      "aliases": []
     },
     {
       "id": "ingredient:elderflower-cordial",
       "name": "Elderflower cordial",
-      "category": "syrup"
+      "category": "syrup",
+      "aliases": []
     },
     {
       "id": "ingredient:espresso",
       "name": "Espresso",
-      "category": "other"
+      "category": "other",
+      "aliases": []
     },
     {
       "id": "ingredient:falernum",
       "name": "Falernum",
-      "category": "liqueur"
+      "category": "liqueur",
+      "aliases": []
     },
     {
       "id": "ingredient:fernet",
       "name": "Fernet",
-      "category": "liqueur"
+      "category": "liqueur",
+      "aliases": []
     },
     {
       "id": "ingredient:gin",
       "name": "Gin",
-      "category": "spirit"
+      "category": "spirit",
+      "aliases": []
     },
     {
       "id": "ingredient:ginger",
       "name": "Ginger",
-      "category": "herb"
+      "category": "herb",
+      "aliases": []
     },
     {
       "id": "ingredient:ginger-ale",
       "name": "Ginger ale",
-      "category": "mixer"
+      "category": "mixer",
+      "aliases": []
     },
     {
       "id": "ingredient:ginger-beer",
       "name": "Ginger beer",
-      "category": "mixer"
+      "category": "mixer",
+      "aliases": []
     },
     {
       "id": "ingredient:grapefruit-juice",
       "name": "Grapefruit juice",
-      "category": "juice"
+      "category": "juice",
+      "aliases": []
     },
     {
       "id": "ingredient:grapefruit-soda",
       "name": "Grapefruit soda",
-      "category": "mixer"
+      "category": "mixer",
+      "aliases": []
     },
     {
       "id": "ingredient:grappa",
       "name": "Grappa",
-      "category": "spirit"
+      "category": "spirit",
+      "aliases": []
     },
     {
       "id": "ingredient:green-chartreuse",
       "name": "Green Chartreuse",
-      "category": "liqueur"
+      "category": "liqueur",
+      "aliases": []
     },
     {
       "id": "ingredient:grenadine",
       "name": "Grenadine",
-      "category": "syrup"
+      "category": "syrup",
+      "aliases": []
     },
     {
       "id": "ingredient:hazelnut-liqueur",
       "name": "Hazelnut liqueur",
-      "category": "liqueur"
+      "category": "liqueur",
+      "aliases": []
     },
     {
       "id": "ingredient:honey",
       "name": "Honey",
-      "category": "syrup"
+      "category": "syrup",
+      "aliases": []
     },
     {
       "id": "ingredient:honey-syrup",
       "name": "Honey syrup",
-      "category": "syrup"
+      "category": "syrup",
+      "aliases": [
+        "Honey mix"
+      ]
     },
     {
       "id": "ingredient:irish-whiskey",
       "name": "Irish whiskey",
-      "category": "spirit"
+      "category": "spirit",
+      "aliases": []
     },
     {
       "id": "ingredient:lemon",
       "name": "Lemon",
-      "category": "fruit"
+      "category": "fruit",
+      "aliases": []
     },
     {
       "id": "ingredient:lemon-juice",
       "name": "Lemon juice",
-      "category": "juice"
+      "category": "juice",
+      "aliases": []
     },
     {
       "id": "ingredient:lillet-blanc",
       "name": "Lillet Blanc",
-      "category": "fortified_wine"
+      "category": "fortified_wine",
+      "aliases": []
     },
     {
       "id": "ingredient:lime",
       "name": "Lime",
-      "category": "fruit"
+      "category": "fruit",
+      "aliases": []
     },
     {
       "id": "ingredient:lime-juice",
       "name": "Lime juice",
-      "category": "juice"
+      "category": "juice",
+      "aliases": []
     },
     {
       "id": "ingredient:maraschino-liqueur",
       "name": "Maraschino liqueur",
-      "category": "liqueur"
+      "category": "liqueur",
+      "aliases": []
     },
     {
       "id": "ingredient:mezcal",
       "name": "Mezcal",
-      "category": "spirit"
+      "category": "spirit",
+      "aliases": []
     },
     {
       "id": "ingredient:mint",
       "name": "Mint",
-      "category": "herb"
+      "category": "herb",
+      "aliases": []
     },
     {
       "id": "ingredient:old-tom-gin",
       "name": "Old Tom gin",
-      "category": "spirit"
+      "category": "spirit",
+      "aliases": []
     },
     {
       "id": "ingredient:orange",
       "name": "Orange",
-      "category": "fruit"
+      "category": "fruit",
+      "aliases": []
     },
     {
       "id": "ingredient:orange-bitters",
       "name": "Orange bitters",
-      "category": "bitters"
+      "category": "bitters",
+      "aliases": []
     },
     {
       "id": "ingredient:orange-flower-water",
       "name": "Orange flower water",
-      "category": "other"
+      "category": "other",
+      "aliases": []
     },
     {
       "id": "ingredient:orange-juice",
       "name": "Orange juice",
-      "category": "juice"
+      "category": "juice",
+      "aliases": [
+        "OJ"
+      ]
     },
     {
       "id": "ingredient:orange-liqueur",
       "name": "Orange liqueur",
-      "category": "liqueur"
+      "category": "liqueur",
+      "aliases": [
+        "Triple sec",
+        "Cointreau",
+        "Grand Marnier",
+        "Curaçao"
+      ]
     },
     {
       "id": "ingredient:orgeat-syrup",
       "name": "Orgeat syrup",
-      "category": "syrup"
+      "category": "syrup",
+      "aliases": []
     },
     {
       "id": "ingredient:overproof-white-rum",
       "name": "Overproof white rum",
-      "category": "spirit"
+      "category": "spirit",
+      "aliases": []
     },
     {
       "id": "ingredient:passion-fruit-liqueur",
       "name": "Passion fruit liqueur",
-      "category": "liqueur"
+      "category": "liqueur",
+      "aliases": []
     },
     {
       "id": "ingredient:passion-fruit-puree",
       "name": "Passion fruit purée",
-      "category": "fruit"
+      "category": "fruit",
+      "aliases": []
     },
     {
       "id": "ingredient:passion-fruit-syrup",
       "name": "Passion fruit syrup",
-      "category": "syrup"
+      "category": "syrup",
+      "aliases": []
     },
     {
       "id": "ingredient:peach-liqueur",
       "name": "Peach liqueur",
-      "category": "liqueur"
+      "category": "liqueur",
+      "aliases": []
     },
     {
       "id": "ingredient:pernod",
       "name": "Pernod",
-      "category": "liqueur"
+      "category": "liqueur",
+      "aliases": []
     },
     {
       "id": "ingredient:peychauds-bitters",
       "name": "Peychaud’s bitters",
-      "category": "bitters"
+      "category": "bitters",
+      "aliases": []
     },
     {
       "id": "ingredient:pineapple",
       "name": "Pineapple",
-      "category": "fruit"
+      "category": "fruit",
+      "aliases": []
     },
     {
       "id": "ingredient:pineapple-juice",
       "name": "Pineapple juice",
-      "category": "juice"
+      "category": "juice",
+      "aliases": []
     },
     {
       "id": "ingredient:pisco",
       "name": "Pisco",
-      "category": "spirit"
+      "category": "spirit",
+      "aliases": []
     },
     {
       "id": "ingredient:raspberry-liqueur",
       "name": "Raspberry liqueur",
-      "category": "liqueur"
+      "category": "liqueur",
+      "aliases": []
     },
     {
       "id": "ingredient:raspberry-syrup",
       "name": "Raspberry syrup",
-      "category": "syrup"
+      "category": "syrup",
+      "aliases": []
     },
     {
       "id": "ingredient:red-chili-pepper",
       "name": "Red chili pepper",
-      "category": "fruit"
+      "category": "fruit",
+      "aliases": []
     },
     {
       "id": "ingredient:red-wine",
       "name": "Red wine",
-      "category": "mixer"
+      "category": "mixer",
+      "aliases": []
     },
     {
       "id": "ingredient:rhum-agricole",
       "name": "Rhum agricole",
-      "category": "spirit"
+      "category": "spirit",
+      "aliases": []
     },
     {
       "id": "ingredient:rum",
       "name": "Rum",
-      "category": "spirit"
+      "category": "spirit",
+      "aliases": []
     },
     {
       "id": "ingredient:rye-whiskey",
       "name": "Rye whiskey",
-      "category": "spirit"
+      "category": "spirit",
+      "aliases": []
     },
     {
       "id": "ingredient:salt",
       "name": "Salt",
-      "category": "other"
+      "category": "other",
+      "aliases": []
     },
     {
       "id": "ingredient:scotch-whisky",
       "name": "Scotch whisky",
-      "category": "spirit"
+      "category": "spirit",
+      "aliases": []
     },
     {
       "id": "ingredient:sherry",
       "name": "Sherry",
-      "category": "fortified_wine"
+      "category": "fortified_wine",
+      "aliases": [
+        "Amontillado",
+        "Palo Cortado"
+      ]
     },
     {
       "id": "ingredient:simple-syrup",
       "name": "Simple syrup",
-      "category": "syrup"
+      "category": "syrup",
+      "aliases": [
+        "Sugar syrup"
+      ]
     },
     {
       "id": "ingredient:soda-water",
       "name": "Soda water",
-      "category": "mixer"
+      "category": "mixer",
+      "aliases": [
+        "Club soda",
+        "Sparkling water"
+      ]
     },
     {
       "id": "ingredient:sparkling-wine",
       "name": "Sparkling wine",
-      "category": "mixer"
+      "category": "mixer",
+      "aliases": [
+        "Champagne",
+        "Prosecco"
+      ]
+    },
+    {
+      "id": "ingredient:spiced-rum",
+      "name": "Spiced rum",
+      "category": "spirit",
+      "aliases": []
     },
     {
       "id": "ingredient:sugar",
       "name": "Sugar",
-      "category": "other"
+      "category": "other",
+      "aliases": []
     },
     {
       "id": "ingredient:sugar-cane-juice",
       "name": "Sugar cane juice",
-      "category": "juice"
+      "category": "juice",
+      "aliases": []
     },
     {
       "id": "ingredient:sweet-vermouth",
       "name": "Sweet vermouth",
-      "category": "fortified_wine"
+      "category": "fortified_wine",
+      "aliases": []
     },
     {
       "id": "ingredient:tabasco-sauce",
       "name": "Tabasco sauce",
-      "category": "other"
+      "category": "other",
+      "aliases": []
     },
     {
       "id": "ingredient:tawny-port",
       "name": "Tawny port",
-      "category": "fortified_wine"
+      "category": "fortified_wine",
+      "aliases": []
     },
     {
       "id": "ingredient:tequila",
       "name": "Tequila",
-      "category": "spirit"
+      "category": "spirit",
+      "aliases": []
     },
     {
       "id": "ingredient:tomato-juice",
       "name": "Tomato juice",
-      "category": "juice"
+      "category": "juice",
+      "aliases": []
     },
     {
       "id": "ingredient:vanilla-extract",
       "name": "Vanilla extract",
-      "category": "other"
+      "category": "other",
+      "aliases": []
     },
     {
       "id": "ingredient:vanilla-vodka",
       "name": "Vanilla vodka",
-      "category": "spirit"
+      "category": "spirit",
+      "aliases": []
     },
     {
       "id": "ingredient:vodka",
       "name": "Vodka",
-      "category": "spirit"
+      "category": "spirit",
+      "aliases": []
     },
     {
       "id": "ingredient:water",
       "name": "Water",
-      "category": "other"
+      "category": "other",
+      "aliases": []
     },
     {
       "id": "ingredient:white-peach-puree",
       "name": "White peach purée",
-      "category": "fruit"
+      "category": "fruit",
+      "aliases": []
     },
     {
       "id": "ingredient:white-rum",
       "name": "White rum",
-      "category": "spirit"
+      "category": "spirit",
+      "aliases": []
     },
     {
       "id": "ingredient:worcestershire-sauce",
       "name": "Worcestershire sauce",
-      "category": "other"
+      "category": "other",
+      "aliases": []
     },
     {
       "id": "ingredient:yellow-chartreuse",
       "name": "Yellow Chartreuse",
-      "category": "liqueur"
+      "category": "liqueur",
+      "aliases": []
     }
   ],
   "cocktails": [

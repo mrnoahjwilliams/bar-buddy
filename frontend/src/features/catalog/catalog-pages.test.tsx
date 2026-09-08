@@ -146,9 +146,9 @@ it('opens related cocktail detail through authenticated generated requests and r
       ),
     ).toBe('Bearer catalog-token');
   }
-  await user.click(screen.getByRole('link', { name: 'Back to ingredients' }));
+  await user.click(screen.getByRole('button', { name: 'Close details' }));
   expect(await screen.findByRole('heading', { name: 'Gin' })).toBeVisible();
-  await user.click(screen.getByRole('link', { name: 'Back to ingredients' }));
+  await user.click(screen.getByRole('button', { name: 'Close details' }));
   expect(await screen.findByLabelText('Search ingredients')).toHaveValue('gin');
   expect(screen.getByLabelText('Category')).toHaveValue('spirit');
 });
@@ -159,7 +159,7 @@ it('preserves cocktail filter/search on detail return and supports reset after e
   const router = open('/drinks?search=Gim&primarySpiritId=gin');
   await user.click(await screen.findByRole('link', { name: /Gimlet/ }));
   await screen.findByRole('heading', { name: 'Gimlet' });
-  await user.click(screen.getByRole('link', { name: 'Back to drinks' }));
+  await user.click(screen.getByRole('button', { name: 'Close details' }));
   expect(await screen.findByLabelText('Search cocktails')).toHaveValue('Gim');
   expect(screen.getByLabelText('Primary spirit')).toHaveValue('gin');
   await user.clear(screen.getByLabelText('Search cocktails'));
@@ -230,4 +230,157 @@ it('keeps qualitative and ranged reviewed measurements without invented conversi
       unit: 'dash',
     }),
   ).toBe('heavy 1–2 dash');
+});
+
+it('keeps the catalog mounted and restores focus through nested Escape, Back and Forward navigation', async () => {
+  mockCatalog();
+  const user = userEvent.setup();
+  const router = open('/bar/ingredients?search=gin&category=spirit');
+  const card = await screen.findByRole('link', { name: /^Gin/ });
+  card.focus();
+  await user.keyboard('{Enter}');
+  expect(
+    await screen.findByRole('dialog', { name: 'Ingredient details' }),
+  ).toBeVisible();
+  expect(router.state.location.pathname).toBe('/bar/ingredients');
+  expect(card).toBeInTheDocument();
+  const related = await screen.findByRole('link', { name: /Gimlet/ });
+  await user.click(related);
+  expect(
+    await screen.findByRole('dialog', { name: 'Cocktail details' }),
+  ).toBeVisible();
+  await user.keyboard('{Escape}');
+  expect(
+    await screen.findByRole('dialog', { name: 'Ingredient details' }),
+  ).toBeVisible();
+  await waitFor(() => expect(related).toHaveFocus());
+  await act(() => router.navigate(-1));
+  await waitFor(() =>
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument(),
+  );
+  await waitFor(() => expect(card).toHaveFocus());
+  expect(screen.getByLabelText('Search ingredients')).toHaveValue('gin');
+  await act(() => router.navigate(1));
+  expect(
+    await screen.findByRole('dialog', { name: 'Ingredient details' }),
+  ).toBeVisible();
+  await user.click(screen.getByRole('button', { name: 'Close details' }));
+  expect(router.state.location.search).toBe('?search=gin&category=spirit');
+});
+
+it('opens a direct overlay URL and closes without leaving the app or discarding filters', async () => {
+  mockCatalog();
+  const user = userEvent.setup();
+  const router = open('/drinks?search=Gim&detail=cocktail%3Agimlet');
+  expect(await screen.findByRole('heading', { name: 'Gimlet' })).toBeVisible();
+  await user.click(screen.getByRole('button', { name: 'Close details' }));
+  await waitFor(() =>
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument(),
+  );
+  expect(router.state.location.pathname).toBe('/drinks');
+  expect(router.state.location.search).toBe('?search=Gim');
+  expect(screen.getByLabelText('Search cocktails')).toHaveValue('Gim');
+  expect(screen.getByRole('main')).toHaveFocus();
+});
+
+it('explains alias matches on the canonical ingredient card', async () => {
+  vi.stubGlobal(
+    'fetch',
+    vi.fn(async () =>
+      Response.json([
+        {
+          id: 'orange',
+          name: 'Orange liqueur',
+          category: 'liqueur',
+          matchedAlias: 'Triple sec',
+        },
+      ]),
+    ),
+  );
+  open('/bar/ingredients?search=triple+sec');
+  expect(
+    await screen.findByRole('link', {
+      name: /Orange liqueur.*Matched “Triple sec”/,
+    }),
+  ).toBeVisible();
+});
+
+it('shows short missing lists on cards and Have/Missing/Optional in the recipe without a duplicate missing section', async () => {
+  const base = mockCatalog();
+  const missing = [
+    lime,
+    { id: 'syrup', name: 'Simple syrup' },
+    { id: 'lemon', name: 'Lemon juice' },
+  ];
+  vi.stubGlobal(
+    'fetch',
+    vi.fn(async (input: string, options: RequestInit) => {
+      const path = new URL(input, 'http://localhost').pathname;
+      const availability = {
+        canMake: false,
+        missingCount: 3,
+        missingIngredients: missing,
+      };
+      if (path === '/api/v1/cocktails')
+        return Response.json([{ ...gimlet, availability }]);
+      if (path === '/api/v1/cocktails/gimlet')
+        return Response.json({ ...detail, availability });
+      return (base as typeof fetch)(input, options);
+    }),
+  );
+  const user = userEvent.setup();
+  open('/drinks');
+  expect(
+    await screen.findByText('Missing: Lime Juice, Simple syrup +1 more'),
+  ).toBeVisible();
+  await user.click(screen.getByRole('link', { name: /Gimlet/ }));
+  expect(await screen.findByText('Have')).toBeVisible();
+  expect(screen.getByText('Missing')).toBeVisible();
+  expect(screen.getByText('Optional')).toBeVisible();
+  expect(screen.queryByText('Missing from your bar:')).not.toBeInTheDocument();
+});
+
+it('does not claim nothing is makeable just because the active search has no matches', async () => {
+  vi.stubGlobal(
+    'fetch',
+    vi.fn(async (input: string) => {
+      const url = new URL(input, 'http://localhost');
+      return Response.json(
+        url.searchParams.get('availability') === 'can_make'
+          ? [
+              {
+                ...gimlet,
+                availability: {
+                  canMake: true,
+                  missingCount: 0,
+                  missingIngredients: [],
+                },
+              },
+            ]
+          : [],
+      );
+    }),
+  );
+  open('/drinks?search=missing');
+  expect(await screen.findByText(/No cocktails match/)).toBeVisible();
+  expect(
+    screen.queryByRole('complementary', { name: 'Check your mixers' }),
+  ).not.toBeInTheDocument();
+});
+
+it('keeps focus inside the remaining dialog when closing a directly loaded nested detail', async () => {
+  mockCatalog();
+  const user = userEvent.setup();
+  open('/drinks?detail=cocktail%3Agimlet&detail=ingredient%3Agin');
+  expect(await screen.findByRole('heading', { name: 'Gin' })).toBeVisible();
+  await user.keyboard('{Escape}');
+  const parent = await screen.findByRole('dialog', {
+    name: 'Cocktail details',
+  });
+  await waitFor(() =>
+    expect(parent).toContainElement(document.activeElement as HTMLElement),
+  );
+  expect(screen.queryByRole('main')).not.toBeInTheDocument();
+  await user.keyboard('{Tab}');
+  expect(parent).toContainElement(document.activeElement as HTMLElement);
 });

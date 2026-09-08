@@ -11,9 +11,9 @@ import java.util.UUID;
 public final class CatalogResponses {
   private CatalogResponses() {}
 
-  public record IngredientSummary(UUID id, String name, String category) {
+  public record IngredientSummary(UUID id, String name, String category, String matchedAlias) {
     static IngredientSummary from(Ingredient i) {
-      return new IngredientSummary(i.getId(), i.getName(), i.getCategory());
+      return new IngredientSummary(i.getId(), i.getName(), i.getCategory(), null);
     }
   }
 

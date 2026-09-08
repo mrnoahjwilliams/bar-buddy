@@ -31,8 +31,8 @@ public class CatalogBrowseRepository {
   }
 
   public List<Ingredient> ingredients(String search, String category) {
-    return em.createQuery(
-            "select i from Ingredient i where locate(:search, lower(i.name)) > 0 and (:category is null or i.category = :category) order by lower(i.name), i.id",
+    return em.createNativeQuery(
+            "select i.* from ingredient i where (position(:search in catalog_search_key(i.name)) > 0 or exists (select 1 from unnest(i.aliases) a where position(:search in catalog_search_key(a)) > 0)) and (cast(:category as text) is null or i.category = :category) order by lower(i.name), i.id",
             Ingredient.class)
         .setParameter("search", search)
         .setParameter("category", category)
@@ -41,7 +41,7 @@ public class CatalogBrowseRepository {
 
   public List<Cocktail> cocktails(String search, UUID spirit) {
     return em.createQuery(
-            "select c from Cocktail c left join fetch c.primarySpirit where locate(:search, lower(c.name)) > 0 and (:spirit is null or c.primarySpirit.id = :spirit) order by lower(c.name), c.id",
+            "select c from Cocktail c left join fetch c.primarySpirit where locate(:search, function('catalog_search_key', c.name)) > 0 and (:spirit is null or c.primarySpirit.id = :spirit) order by lower(c.name), c.id",
             Cocktail.class)
         .setParameter("search", search)
         .setParameter("spirit", spirit)

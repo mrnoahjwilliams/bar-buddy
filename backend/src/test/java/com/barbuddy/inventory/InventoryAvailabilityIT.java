@@ -250,6 +250,7 @@ class InventoryAvailabilityIT {
             .dataSource(source)
             .schemas("inventory_upgrade")
             .defaultSchema("inventory_upgrade")
+            .target("3")
             .load();
     assertThat(upgrade.migrate().migrationsExecuted).isEqualTo(1);
     assertThat(upgrade.migrate().migrationsExecuted).isZero();

@@ -8,7 +8,9 @@ import com.barbuddy.catalog.CatalogResponses.IngredientSummary;
 import com.barbuddy.catalog.CatalogResponses.RecipeDetail;
 import com.barbuddy.catalog.CatalogResponses.RecipeLine;
 import com.barbuddy.cocktails.Cocktail;
+import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -46,8 +48,20 @@ public class CatalogBrowseService {
     String normalizedCategory = category == null || category.isBlank() ? null : category.strip();
     if (normalizedCategory != null && !CATEGORIES.contains(normalizedCategory))
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown ingredient category.");
-    return repository.ingredients(search(search), normalizedCategory).stream()
-        .map(IngredientSummary::from)
+    String query = search(search);
+    return repository.ingredients(query, normalizedCategory).stream()
+        .map(
+            i ->
+                new IngredientSummary(
+                    i.getId(),
+                    i.getName(),
+                    i.getCategory(),
+                    normalize(i.getName()).contains(query)
+                        ? null
+                        : Arrays.stream(i.getAliases())
+                            .filter(a -> normalize(a).contains(query))
+                            .findFirst()
+                            .orElse(null)))
         .toList();
   }
 
@@ -115,7 +129,7 @@ public class CatalogBrowseService {
         repository.missingIngredients(cocktails.stream().map(Cocktail::getId).toList(), subject)) {
       missing
           .computeIfAbsent((UUID) row[0], key -> new ArrayList<>())
-          .add(new IngredientSummary((UUID) row[1], (String) row[2], (String) row[3]));
+          .add(new IngredientSummary((UUID) row[1], (String) row[2], (String) row[3], null));
     }
     return cocktails.stream()
         .map(
@@ -125,10 +139,15 @@ public class CatalogBrowseService {
         .toList();
   }
 
+  private static String normalize(String value) {
+    return Normalizer.normalize(value.toLowerCase(Locale.ROOT), Normalizer.Form.NFD)
+        .replaceAll("[\\u0300-\\u036f]", "");
+  }
+
   private static String search(String value) {
     if (value != null && value.length() > 200)
       throw new ResponseStatusException(
           HttpStatus.BAD_REQUEST, "Search must be at most 200 characters.");
-    return value == null ? "" : value.strip().toLowerCase(Locale.ROOT);
+    return value == null ? "" : normalize(value.strip());
   }
 }

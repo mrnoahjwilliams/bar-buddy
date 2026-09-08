@@ -701,6 +701,9 @@
             "type" : "string",
             "format" : "uuid"
           },
+          "matchedAlias" : {
+            "type" : "string"
+          },
           "name" : {
             "type" : "string"
           }

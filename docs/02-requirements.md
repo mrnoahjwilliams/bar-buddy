@@ -25,6 +25,16 @@ Product obligations live here. [Definition](01-definition.md) owns terminology/s
 - Release 2 adds photo/visual fallbacks and accessible light/dark presentation, printable recipes, a focused mixing view and screen-awake behavior where supported. Sharing covers catalog cocktails; settle mechanism and recipient access before implementation. Private custom content, inventory and personal notes must not become public through sharing.
 - Release 5 display/scaling/batch tools use the selected recipe without changing its reviewed measurement pairs. US is the initial catalog default; a later user preference selects US or metric presentation. Viewing or preparing a batch preview does not log drinks or deduct stock; explicit Made This Drink uses the agreed servings/consumption rules.
 
+## Approved MVP usability follow-up
+
+Approved September 8, 2026, before further MVP discovery work: ingredient and cocktail text search ignore accents and case while preserving display spelling. Ingredient search includes reviewed aliases and explains alias-only matches; aliases locate the existing canonical ingredient and never add substitution rules. Bring this alias subset forward from 2.2.1 without bringing tags/styles/mocktails forward.
+
+Include Spiced rum, Coconut rum (unsweetened flavored spirit), and Coconut rum liqueur (sweetened, including Malibu Original) as separate canonical ingredients even with no current recipes. These do not satisfy plain/white/dark rum requirements. General flavor customization and ingredient substitution hierarchies remain deferred.
+
+Drink cards show the missing ingredient name for one-away results and up to two missing names plus a remaining count for larger gaps. Detail availability is expressed in recipe lines as Have, Missing, or Optional, with a compact overall summary and links to add missing ingredients. When no cocktails are makeable across the whole catalog, show a static reminder to check household juices/mixers and link to ingredient selection; never assume possession or mark anything Have automatically.
+
+Selecting ingredient or cocktail cards opens a large accessible detail overlay with catalog context visible around it. Support nested ingredient/drink inspection, close/Escape/browser Back, restored focus and catalog scroll/filters, and reloadable direct detail links. On small phones the overlay may occupy nearly the whole screen while retaining a visible margin.
+
 ## Domain rules
 
 - Support the eleven-entity target and release allocation in Design. Recipes reference canonical ingredients, not commercial bottles. A user may own multiple inventory items for one ingredient; each may have a bottle label.

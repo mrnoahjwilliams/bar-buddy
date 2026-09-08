@@ -78,7 +78,9 @@ After both apps are running, authenticated `GET /api/v1/me` requests create or r
 
 ## Catalog and API generation
 
-Spring startup applies pending Flyway migrations: V2 creates the catalog tables and V3 creates user-owned Have/Out inventory. Import is an explicit operator action; normal application startup does not load or overwrite catalog data.
+Spring startup applies pending Flyway migrations: V2 creates the catalog tables and V3 creates user-owned Have/Out inventory, and V4 adds searchable ingredient aliases. Import is an explicit operator action; normal application startup does not load or overwrite catalog data.
+
+Stop a backend running from this checkout before rebuilding or generating API artifacts, or use an isolated checkout. Restart it after the build so it loads the current classes and migrations. For this usability update, import the revised catalog to populate aliases and the three new rum ingredients; restarting alone does not populate them.
 
 With Node 24 available on `PATH`, build the backend, then run this command from `backend/` using the intended server-only database settings in `.env` or the process environment:
 

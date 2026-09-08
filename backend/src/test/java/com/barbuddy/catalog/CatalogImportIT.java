@@ -44,7 +44,7 @@ class CatalogImportIT {
   void fullCatalogAndConcurrentRepeatsPreserveEveryIdentity() throws Exception {
     CatalogInput full = CatalogInput.read(Path.of("../catalog/cocktails.json"));
     importer.importCatalog(full);
-    assertThat(count("ingredient")).isEqualTo(113);
+    assertThat(count("ingredient")).isEqualTo(116);
     assertThat(count("cocktail")).isEqualTo(102);
     assertThat(count("recipe")).isEqualTo(102);
     assertThat(count("recipe_ingredient")).isEqualTo(416);
@@ -256,7 +256,8 @@ class CatalogImportIT {
   private Map<String, Object> snapshot() {
     return Map.of(
         "ingredients",
-        jdbc.queryForList("select * from ingredient order by id"),
+        jdbc.queryForList(
+            "select id, catalog_id, name, category, aliases::text from ingredient order by id"),
         "cocktails",
         jdbc.queryForList("select * from cocktail order by id"),
         "recipes",
