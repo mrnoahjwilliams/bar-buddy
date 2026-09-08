@@ -10,7 +10,7 @@ function SessionLoading() {
 }
 
 export function RequireSession() {
-  const { status } = useAuth();
+  const { status, session } = useAuth();
   const location = useLocation();
   if (status === 'loading') return <SessionLoading />;
   if (status === 'recovery') return <Navigate to="/reset-password" replace />;
@@ -18,7 +18,7 @@ export function RequireSession() {
     const requested = `${location.pathname}${location.search}${location.hash}`;
     return <Navigate to="/login" replace state={{ from: requested }} />;
   }
-  return <Outlet />;
+  return <Outlet key={session?.userId} />;
 }
 
 export function RequireGuest() {

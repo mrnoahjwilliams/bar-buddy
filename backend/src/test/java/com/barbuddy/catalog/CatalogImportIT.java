@@ -37,7 +37,7 @@ class CatalogImportIT {
   @BeforeEach
   void clearCatalog() {
     jdbc.execute("drop table if exists reference_probe");
-    jdbc.execute("truncate recipe_ingredient, recipe, cocktail, ingredient");
+    jdbc.execute("truncate inventory_item, recipe_ingredient, recipe, cocktail, ingredient");
   }
 
   @Test

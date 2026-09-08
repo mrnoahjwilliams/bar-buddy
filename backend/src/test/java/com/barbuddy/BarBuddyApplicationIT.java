@@ -36,7 +36,7 @@ class BarBuddyApplicationIT {
     var jdbc = new JdbcTemplate(dataSource);
     assertThat(jdbc.queryForObject("select version()", String.class)).startsWith("PostgreSQL 17.");
     assertThat(flyway.validateWithResult().validationSuccessful).isTrue();
-    assertThat(flyway.info().applied()).hasSize(2);
+    assertThat(flyway.info().applied()).hasSize(3);
     assertThat(
             jdbc.queryForList(
                 """
@@ -45,7 +45,7 @@ class BarBuddyApplicationIT {
         """,
                 String.class))
         .containsExactlyInAnyOrder(
-            "app_user", "ingredient", "cocktail", "recipe", "recipe_ingredient");
+            "app_user", "ingredient", "cocktail", "recipe", "recipe_ingredient", "inventory_item");
 
     for (var role : new String[] {"anon", "authenticated", "service_role"}) {
       for (var privilege : new String[] {"select", "insert", "update", "delete"}) {

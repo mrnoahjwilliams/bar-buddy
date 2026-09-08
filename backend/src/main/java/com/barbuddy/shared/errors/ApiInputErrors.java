@@ -1,27 +1,35 @@
-package com.barbuddy.catalog;
+package com.barbuddy.shared.errors;
 
-import com.barbuddy.shared.errors.ApiProblemResponse;
+import com.barbuddy.catalog.CatalogBrowseController;
+import com.barbuddy.inventory.InventoryController;
 import jakarta.servlet.http.HttpServletRequest;
 import java.net.URI;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.server.ResponseStatusException;
 
-@RestControllerAdvice(assignableTypes = CatalogBrowseController.class)
-public class CatalogBrowseErrors {
+@RestControllerAdvice(assignableTypes = {CatalogBrowseController.class, InventoryController.class})
+public class ApiInputErrors {
   @ExceptionHandler(ResponseStatusException.class)
   ResponseEntity<ApiProblemResponse> domain(
       ResponseStatusException error, HttpServletRequest request) {
     return problem(HttpStatus.valueOf(error.getStatusCode().value()), error.getReason(), request);
   }
 
-  @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+  @ExceptionHandler({
+    MethodArgumentTypeMismatchException.class,
+    MethodArgumentNotValidException.class,
+    HttpMessageNotReadableException.class
+  })
   ResponseEntity<ApiProblemResponse> invalidParameter(HttpServletRequest request) {
-    return problem(HttpStatus.BAD_REQUEST, "Invalid catalog parameter.", request);
+    return problem(
+        HttpStatus.BAD_REQUEST, "Invalid request. Check the supplied fields and values.", request);
   }
 
   private ResponseEntity<ApiProblemResponse> problem(

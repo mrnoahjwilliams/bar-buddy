@@ -139,6 +139,7 @@ class CatalogSchemaIT {
             .dataSource(source)
             .schemas("upgrade_test")
             .defaultSchema("upgrade_test")
+            .target("2")
             .load();
     assertThat(upgrade.migrate().migrationsExecuted).isEqualTo(1);
     assertThat(upgrade.migrate().migrationsExecuted).isZero();

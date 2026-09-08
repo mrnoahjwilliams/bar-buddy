@@ -18,13 +18,25 @@ public final class CatalogResponses {
   }
 
   public record CocktailSummary(
-      UUID id, String name, String slug, IngredientSummary primarySpirit) {
-    static CocktailSummary from(Cocktail c) {
+      UUID id,
+      String name,
+      String slug,
+      IngredientSummary primarySpirit,
+      AvailabilityResult availability) {
+    static CocktailSummary from(Cocktail c, AvailabilityResult availability) {
       return new CocktailSummary(
           c.getId(),
           c.getName(),
           c.getSlug(),
-          c.getPrimarySpirit() == null ? null : IngredientSummary.from(c.getPrimarySpirit()));
+          c.getPrimarySpirit() == null ? null : IngredientSummary.from(c.getPrimarySpirit()),
+          availability);
+    }
+  }
+
+  public record AvailabilityResult(
+      boolean canMake, int missingCount, List<IngredientSummary> missingIngredients) {
+    static AvailabilityResult from(List<IngredientSummary> missing) {
+      return new AvailabilityResult(missing.isEmpty(), missing.size(), List.copyOf(missing));
     }
   }
 
@@ -74,5 +86,10 @@ public final class CatalogResponses {
       List<RecipeLine> ingredients) {}
 
   public record CocktailDetail(
-      UUID id, String name, String slug, IngredientSummary primarySpirit, RecipeDetail recipe) {}
+      UUID id,
+      String name,
+      String slug,
+      IngredientSummary primarySpirit,
+      RecipeDetail recipe,
+      AvailabilityResult availability) {}
 }

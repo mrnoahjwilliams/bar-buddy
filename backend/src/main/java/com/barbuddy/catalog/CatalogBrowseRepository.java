@@ -17,6 +17,15 @@ public class CatalogBrowseRepository {
     this.em = em;
   }
 
+  public List<Object[]> missingIngredients(List<UUID> cocktails, String subject) {
+    return em.createQuery(
+            "select distinct l.recipe.cocktail.id, i.id, i.name, i.category from RecipeIngredient l join l.ingredient i where l.recipe.cocktail.id in :cocktails and l.requirement = 'required' and not exists (select b.id from InventoryItem b where b.ingredient = i and b.owner.authSubject = :subject and b.status = com.barbuddy.inventory.InventoryStatus.Have) order by i.name, i.id",
+            Object[].class)
+        .setParameter("cocktails", cocktails)
+        .setParameter("subject", subject)
+        .getResultList();
+  }
+
   public Ingredient ingredient(UUID id) {
     return em.find(Ingredient.class, id);
   }

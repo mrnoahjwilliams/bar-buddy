@@ -8,4 +8,5 @@
 export type ListCocktailsParams = {
   search?: string;
   primarySpiritId?: string;
+  availability?: string;
 };

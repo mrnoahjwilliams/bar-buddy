@@ -4,10 +4,12 @@
  * Bar Buddy API
  * OpenAPI spec version: v1
  */
+import type { AvailabilityResult } from './availabilityResult.ts';
 import type { IngredientSummary } from './ingredientSummary.ts';
 import type { RecipeDetail } from './recipeDetail.ts';
 
 export interface CocktailDetail {
+  availability?: AvailabilityResult;
   id?: string;
   name?: string;
   primarySpirit?: IngredientSummary;

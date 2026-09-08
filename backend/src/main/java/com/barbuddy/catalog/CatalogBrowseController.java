@@ -11,6 +11,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -58,21 +60,23 @@ public class CatalogBrowseController {
 
   @ApiResponse(responseCode = "200", description = "Catalog result")
   @GetMapping("/ingredients/{id}")
-  public IngredientDetail getIngredient(@PathVariable UUID id) {
-    return service.ingredient(id);
+  public IngredientDetail getIngredient(@PathVariable UUID id, @AuthenticationPrincipal Jwt jwt) {
+    return service.ingredient(id, jwt.getSubject());
   }
 
   @ApiResponse(responseCode = "200", description = "Catalog result")
   @GetMapping("/cocktails")
   public List<CocktailSummary> listCocktails(
       @RequestParam(required = false) String search,
-      @RequestParam(required = false) UUID primarySpiritId) {
-    return service.cocktails(search, primarySpiritId);
+      @RequestParam(required = false) UUID primarySpiritId,
+      @RequestParam(required = false) String availability,
+      @AuthenticationPrincipal Jwt jwt) {
+    return service.cocktails(search, primarySpiritId, availability, jwt.getSubject());
   }
 
   @ApiResponse(responseCode = "200", description = "Catalog result")
   @GetMapping("/cocktails/{id}")
-  public CocktailDetail getCocktail(@PathVariable UUID id) {
-    return service.cocktail(id);
+  public CocktailDetail getCocktail(@PathVariable UUID id, @AuthenticationPrincipal Jwt jwt) {
+    return service.cocktail(id, jwt.getSubject());
   }
 }
