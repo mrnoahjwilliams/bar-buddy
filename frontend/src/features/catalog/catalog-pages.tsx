@@ -505,17 +505,17 @@ export function CocktailDetailPage({
                     {line.displayName || line.ingredient?.name}
                   </DetailLink>
                   {line.preparation && <span> · {line.preparation}</span>}
-                  <span className="block text-sm font-medium">
-                    {line.requirement === 'optional'
-                      ? 'Optional'
-                      : query.data.availability
-                        ? query.data.availability.missingIngredients?.some(
-                            (i) => i.id === line.ingredient?.id,
-                          )
-                          ? 'Missing'
-                          : 'Have'
-                        : ''}
-                  </span>
+                  {line.requirement === 'optional' ? (
+                    <span className="ml-2 text-sm text-muted-foreground">
+                      Optional
+                    </span>
+                  ) : query.data.availability?.missingIngredients?.some(
+                      (i) => i.id === line.ingredient?.id,
+                    ) ? (
+                    <span className="ml-2 inline-flex rounded-full border border-amber-300 bg-amber-100 px-2.5 py-0.5 text-xs font-semibold text-amber-950">
+                      Missing
+                    </span>
+                  ) : null}
                 </li>
               ))}
             </ol>

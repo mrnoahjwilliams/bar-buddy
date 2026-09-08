@@ -38,7 +38,7 @@ PostgreSQL integration tests verify fresh schema validation, upgrading V1 while 
 
 The packaged import command validates a file snapshot with the bundled existing Node validator before opening Spring/database connections. A transactional service serializes imports, rejects missing stable entities or incompatible identity changes, and performs bulk upserts preserving Ingredient/Cocktail/Recipe IDs. Recipe lines match by recipe and position; obsolete positions are removed. Reviewed US/metric quantities are copied independently. The command starts no web listener and has no browser-accessible import operation.
 
-Integration tests load all 116 ingredients, 102 cocktails, 102 recipes and 416 lines; verify identical and concurrent repeats without identity/data drift; preserve external reference probes during corrections; synchronize repeated and removed recipe lines; reject missing identities and invalid snapshots; and prove rollback after a late database failure. The packaged command succeeds with disposable database credentials and rejects an invalid catalog before connecting to an unreachable database. The original 113-ingredient catalog was observed in the development database on September 8, 2026; the new catalog has not been imported there. [Local development](08-local-development.md#catalog-and-api-generation) owns the exact command and Node requirement.
+Integration tests load all 116 ingredients, 102 cocktails, 102 recipes and 416 lines; verify identical and concurrent repeats without identity/data drift; preserve external reference probes during corrections; synchronize repeated and removed recipe lines; reject missing identities and invalid snapshots; and prove rollback after a late database failure. The packaged command succeeds with disposable database credentials and rejects an invalid catalog before connecting to an unreachable database. The original 113-ingredient catalog was observed in the development database on September 8, 2026; the revised 116-ingredient catalog was explicitly imported there later that day. [Local development](08-local-development.md#catalog-and-api-generation) owns the exact command and Node requirement.
 
 ## Catalog browsing API
 
@@ -75,16 +75,21 @@ when the canonical name does not match. Triple sec finds Orange liqueur; creme d
 cacao finds Crème de cacao. Flyway V4 adds aliases and a restricted normalization
 function. Versioned imports synchronize aliases without replacing inventory IDs.
 The three distinct rum additions and curation rules are recorded in the catalog
-README. V4 and the revised catalog have only been verified in disposable databases;
-using them in the development environment requires the updated backend and explicit
-catalog import.
+README. On September 8, 2026, V4 was confirmed already applied in the development
+database, but the old 113-ingredient catalog had no aliases. An explicitly authorized
+import loaded the revised 116-ingredient catalog. Database verification confirmed
+all three new rums, the Triple sec aliases and a `trip` search matching Orange
+liqueur; the inventory count remained 11. Browser reload is needed to discard cached
+catalog responses. This is development data, not a public deployment.
 
 Catalog cards open a large modal over the retained list. Repeated `detail` query
 parameters support nested ingredient/recipe navigation, copied URLs and history.
 One accessible dialog retains the mounted detail panels and their scroll/form state;
 Close/Escape returns one level and restores focus. Standalone detail URLs still work.
-Drink cards show up to two missing names plus a remaining count. Recipes mark each
-line Have, Missing or Optional, with one compact availability summary. When no
+Drink cards show up to two missing names plus a remaining count. Recipes highlight
+missing required ingredients with an amber Missing tag; available lines have no
+status label and optional lines retain a muted Optional annotation, with one compact
+availability summary. When no
 cocktails are makeable, Drinks offers a static juice/mixer reminder and catalog link;
 adding ingredients is always explicit. The reminder checks global makeability even
 when filters are active and refreshes after inventory changes.

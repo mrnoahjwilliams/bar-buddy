@@ -126,6 +126,8 @@ No public app or application entity schema yet.
 
 - [x] Implement all six approved changes in [Requirements](02-requirements.md#approved-mvp-usability-follow-up): accent/alias search with match explanations, three distinct rum additions, missing names on cards, contextual detail overlays, recipe-line availability, and the no-makeable household-ingredient reminder. **Verify:** alias/Unicode/category combinations and duplicate-free results; versioned import and preserved inventory; no implicit rum substitutions; dialog focus/Escape/history/reload/scroll and nested navigation; account isolation and mutation refresh; full local checks, responsive browser review and API drift. This brings only the alias subset of 2.2.1 forward.
 
+- [x] Refine recipe availability after user testing: amber Missing tags only, with muted Optional annotations. Apply the approved revised catalog to the development database and confirm rum entries, alias search and unchanged inventory count. **Verified:** frontend checks and database inspection on September 8, 2026.
+
 ### 1.5 — Preferences and discovery
 
 #### 1.5.1 — Favorites
