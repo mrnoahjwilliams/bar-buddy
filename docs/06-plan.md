@@ -106,21 +106,21 @@ No public app or application entity schema yet.
 
 #### 1.3.1 — Inventory API
 
-- [ ] Add InventoryItem with owner, canonical ingredient, optional bottle label and Have/Out. Implement validated list/create/update/delete; allow multiple items per ingredient. **Verify:** ownership, duplicate-ingredient bottles, status transitions and reload persistence. Out remains different from removal or never-owned catalog content; quantities/Wishlist remain deferred.
+- [x] Add InventoryItem with owner, canonical ingredient, optional bottle label and Have/Out. Implement validated list/create/update/delete; allow multiple items per ingredient. **Verify:** ownership, duplicate-ingredient bottles, status transitions and reload persistence. Out remains different from removal or never-owned catalog content; quantities/Wishlist remain deferred.
 
 #### 1.3.2 — Bar interaction
 
-- [ ] Build Have/Out sections and add/edit/remove/status controls. Connect Add to Bar to searchable/filterable catalog and reuse owned/unowned ingredient detail with related drinks. **Verify:** complete add → label → Out → Have → remove journey, empty/error states, account isolation and refresh of affected views.
+- [x] Build Have/Out sections and add/edit/remove/status controls. Connect Add to Bar to searchable/filterable catalog and reuse owned/unowned ingredient detail with related drinks. **Verify:** complete add → label → Out → Have → remove journey, empty/error states, account isolation and refresh of affected views.
 
 ### 1.4 — Availability and Drinks
 
 #### 1.4.1 — Availability service
 
-- [ ] Calculate makeability and distinct missing required ingredients from current Have inventory; add results and the agreed MVP availability filters to cocktail APIs without storing derived state. **Verify:** empty/full bars, repeated ingredients, optional garnishes, several bottles including mixed Have/Out, different users and filter/search combinations; avoid per-cocktail queries.
+- [x] Calculate makeability and distinct missing required ingredients from current Have inventory; add results and the agreed MVP availability filters to cocktail APIs without storing derived state. **Verify:** empty/full bars, repeated ingredients, optional garnishes, several bottles including mixed Have/Out, different users and filter/search combinations; avoid per-cocktail queries.
 
 #### 1.4.2 — Availability presentation
 
-- [ ] Show You Can Make, then Other Drinks ordered by missing count with one-away first. Add the All / Can Make / Exactly One Ingredient Away selector alongside primary-spirit filtering and search. Keep unavailable details openable and missing ingredients explicit. **Verify:** grouping, combined filters/reset/empty results, details and automatic refresh after inventory changes without losing navigation context.
+- [x] Show You Can Make, then Other Drinks ordered by missing count with one-away first. Add the All / Can Make / Exactly One Ingredient Away selector alongside primary-spirit filtering and search. Keep unavailable details openable and missing ingredients explicit. **Verify:** grouping, combined filters/reset/empty results, details and automatic refresh after inventory changes without losing navigation context.
 
 ### 1.5 — Preferences and discovery
 

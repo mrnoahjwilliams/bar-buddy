@@ -78,7 +78,7 @@ After both apps are running, authenticated `GET /api/v1/me` requests create or r
 
 ## Catalog and API generation
 
-Spring startup applies Flyway V2 to create the catalog tables. Import is an explicit operator action; normal application startup does not load or overwrite catalog data.
+Spring startup applies pending Flyway migrations: V2 creates the catalog tables and V3 creates user-owned Have/Out inventory. Import is an explicit operator action; normal application startup does not load or overwrite catalog data.
 
 With Node 24 available on `PATH`, build the backend, then run this command from `backend/` using the intended server-only database settings in `.env` or the process environment:
 

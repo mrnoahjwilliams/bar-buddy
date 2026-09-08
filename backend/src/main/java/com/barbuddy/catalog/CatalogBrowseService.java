@@ -1,11 +1,16 @@
 package com.barbuddy.catalog;
 
+import com.barbuddy.catalog.CatalogResponses.AvailabilityResult;
 import com.barbuddy.catalog.CatalogResponses.CocktailDetail;
 import com.barbuddy.catalog.CatalogResponses.CocktailSummary;
 import com.barbuddy.catalog.CatalogResponses.IngredientDetail;
 import com.barbuddy.catalog.CatalogResponses.IngredientSummary;
 import com.barbuddy.catalog.CatalogResponses.RecipeDetail;
 import com.barbuddy.catalog.CatalogResponses.RecipeLine;
+import com.barbuddy.cocktails.Cocktail;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -46,28 +51,41 @@ public class CatalogBrowseService {
         .toList();
   }
 
-  public List<CocktailSummary> cocktails(String search, UUID primarySpiritId) {
+  public List<CocktailSummary> cocktails(
+      String search, UUID primarySpiritId, String availability, String subject) {
     if (primarySpiritId != null) {
       var ingredient = repository.ingredient(primarySpiritId);
       if (ingredient == null || !ingredient.getCategory().equals("spirit"))
         throw new ResponseStatusException(
             HttpStatus.BAD_REQUEST, "Primary spirit must identify a catalog spirit.");
     }
-    return repository.cocktails(search(search), primarySpiritId).stream()
-        .map(CocktailSummary::from)
+    String filter = availability == null || availability.isBlank() ? "all" : availability.strip();
+    if (!Set.of("all", "can_make", "one_away").contains(filter))
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown availability filter.");
+    return summaries(repository.cocktails(search(search), primarySpiritId), subject).stream()
+        .filter(
+            c ->
+                filter.equals("all")
+                    || (filter.equals("can_make")
+                        ? c.availability().canMake()
+                        : c.availability().missingCount() == 1))
+        .sorted(
+            Comparator.comparingInt((CocktailSummary c) -> c.availability().missingCount())
+                .thenComparing(c -> c.name().toLowerCase(Locale.ROOT))
+                .thenComparing(CocktailSummary::id))
         .toList();
   }
 
-  public IngredientDetail ingredient(UUID id) {
+  public IngredientDetail ingredient(UUID id, String subject) {
     var ingredient = repository.ingredient(id);
     if (ingredient == null)
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ingredient not found.");
-    var related = repository.related(id).stream().map(CocktailSummary::from).toList();
+    var related = summaries(repository.related(id), subject);
     return new IngredientDetail(
         id, ingredient.getName(), ingredient.getCategory(), related.size(), related);
   }
 
-  public CocktailDetail cocktail(UUID id) {
+  public CocktailDetail cocktail(UUID id, String subject) {
     var cocktail = repository.cocktail(id);
     if (cocktail == null)
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cocktail not found.");
@@ -80,8 +98,31 @@ public class CatalogBrowseService {
             recipe.getGlassware(),
             recipe.getGarnish(),
             repository.lines(recipe.getId()).stream().map(RecipeLine::from).toList());
-    var summary = CocktailSummary.from(cocktail);
-    return new CocktailDetail(id, summary.name(), summary.slug(), summary.primarySpirit(), detail);
+    var summary = summaries(List.of(cocktail), subject).getFirst();
+    return new CocktailDetail(
+        id,
+        summary.name(),
+        summary.slug(),
+        summary.primarySpirit(),
+        detail,
+        summary.availability());
+  }
+
+  private List<CocktailSummary> summaries(List<Cocktail> cocktails, String subject) {
+    if (cocktails.isEmpty()) return List.of();
+    var missing = new HashMap<UUID, List<IngredientSummary>>();
+    for (var row :
+        repository.missingIngredients(cocktails.stream().map(Cocktail::getId).toList(), subject)) {
+      missing
+          .computeIfAbsent((UUID) row[0], key -> new ArrayList<>())
+          .add(new IngredientSummary((UUID) row[1], (String) row[2], (String) row[3]));
+    }
+    return cocktails.stream()
+        .map(
+            c ->
+                CocktailSummary.from(
+                    c, AvailabilityResult.from(missing.getOrDefault(c.getId(), List.of()))))
+        .toList();
   }
 
   private static String search(String value) {

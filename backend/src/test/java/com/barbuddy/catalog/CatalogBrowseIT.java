@@ -42,7 +42,7 @@ class CatalogBrowseIT {
 
   @BeforeEach
   void load() throws Exception {
-    jdbc.execute("truncate recipe_ingredient, recipe, cocktail, ingredient");
+    jdbc.execute("truncate inventory_item, recipe_ingredient, recipe, cocktail, ingredient");
     importer.importCatalog(CatalogInput.read(Path.of("../catalog/cocktails.json")));
   }
 
@@ -56,9 +56,9 @@ class CatalogBrowseIT {
     assertThat(service.ingredients("  GIN  ", "spirit")).contains(gin);
     assertThat(service.ingredients("", "")).hasSize(113);
     assertThat(service.ingredients("%", null)).isEmpty();
-    assertThat(service.cocktails("", null)).hasSize(102);
-    assertThat(service.cocktails("negroni", gin.id())).hasSize(1);
-    assertThat(service.cocktails("zzzz", gin.id())).isEmpty();
+    assertThat(service.cocktails("", null, null, "user")).hasSize(102);
+    assertThat(service.cocktails("negroni", gin.id(), null, "user")).hasSize(1);
+    assertThat(service.cocktails("zzzz", gin.id(), null, "user")).isEmpty();
     mvc.perform(get("/api/v1/ingredients").with(jwt()).param("category", "unknown"))
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("status").value(400));
@@ -75,15 +75,15 @@ class CatalogBrowseIT {
 
   @Test
   void relatedCocktailsStayDistinctAndOpenOrderedRecipeDetails() throws Exception {
-    var drink = service.cocktails("negroni", null).getFirst();
-    var detail = service.cocktail(drink.id());
+    var drink = service.cocktails("negroni", null, null, "user").getFirst();
+    var detail = service.cocktail(drink.id(), "user");
     var first = detail.recipe().ingredients().getFirst();
     jdbc.update(
         "insert into recipe_ingredient select ?, recipe_id, ingredient_id, 99, recipe_display_name, requirement, preparation, us_quantity, us_maximum_quantity, us_unit, us_modifier, metric_quantity, metric_maximum_quantity, metric_unit, metric_modifier from recipe_ingredient where recipe_id = ? and position = ?",
         UUID.randomUUID(),
         detail.recipe().id(),
         first.position());
-    var ingredient = service.ingredient(first.ingredient().id());
+    var ingredient = service.ingredient(first.ingredient().id(), "user");
     assertThat(ingredient.relatedCocktails()).contains(drink);
     assertThat(ingredient.usageCount()).isEqualTo(ingredient.relatedCocktails().size());
     assertThat(ingredient.relatedCocktails())
@@ -94,7 +94,7 @@ class CatalogBrowseIT {
         .andExpect(jsonPath("recipe.glassware").isNotEmpty())
         .andExpect(jsonPath("recipe.instructions").isNotEmpty())
         .andExpect(jsonPath("recipe.ingredients[0].us.unit").isNotEmpty());
-    assertThat(service.cocktail(drink.id()).recipe().ingredients())
+    assertThat(service.cocktail(drink.id(), "user").recipe().ingredients())
         .extracting(CatalogResponses.RecipeLine::position)
         .isSorted();
     mvc.perform(get("/api/v1/ingredients/" + ingredient.id()).with(jwt()))
@@ -138,14 +138,14 @@ class CatalogBrowseIT {
   void fullCatalogUsesBoundedQueriesWithoutPerRowLoads() {
     var stats = emf.unwrap(SessionFactory.class).getStatistics();
     stats.clear();
-    var cocktails = service.cocktails("", null);
-    assertThat(stats.getPrepareStatementCount()).isEqualTo(1);
+    var cocktails = service.cocktails("", null, null, "user");
+    assertThat(stats.getPrepareStatementCount()).isEqualTo(2);
     stats.clear();
-    service.cocktail(cocktails.getFirst().id());
-    assertThat(stats.getPrepareStatementCount()).isEqualTo(3);
+    service.cocktail(cocktails.getFirst().id(), "user");
+    assertThat(stats.getPrepareStatementCount()).isEqualTo(4);
     var ingredient = service.ingredients("gin", "spirit").getFirst();
     stats.clear();
-    service.ingredient(ingredient.id());
-    assertThat(stats.getPrepareStatementCount()).isEqualTo(2);
+    service.ingredient(ingredient.id(), "user");
+    assertThat(stats.getPrepareStatementCount()).isEqualTo(3);
   }
 }

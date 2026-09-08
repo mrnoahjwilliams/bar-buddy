@@ -26,6 +26,13 @@
             "type" : "string",
             "format" : "uuid"
           }
+        }, {
+          "in" : "query",
+          "name" : "availability",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
         } ],
         "responses" : {
           "200" : {
@@ -267,6 +274,240 @@
         "tags" : [ "catalog-browse-controller" ]
       }
     },
+    "/api/v1/inventory" : {
+      "get" : {
+        "operationId" : "listInventory",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/InventoryResponse"
+                  }
+                }
+              }
+            },
+            "description" : "Your inventory"
+          },
+          "400" : {
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiProblemResponse"
+                }
+              }
+            },
+            "description" : "Invalid inventory input"
+          },
+          "401" : {
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiProblemResponse"
+                }
+              }
+            },
+            "description" : "Authentication required"
+          },
+          "404" : {
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiProblemResponse"
+                }
+              }
+            },
+            "description" : "Inventory item not found"
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "tags" : [ "inventory-controller" ]
+      },
+      "post" : {
+        "operationId" : "createInventory",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateInventory"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/InventoryResponse"
+                }
+              }
+            },
+            "description" : "Inventory item created"
+          },
+          "400" : {
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiProblemResponse"
+                }
+              }
+            },
+            "description" : "Invalid inventory input"
+          },
+          "401" : {
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiProblemResponse"
+                }
+              }
+            },
+            "description" : "Authentication required"
+          },
+          "404" : {
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiProblemResponse"
+                }
+              }
+            },
+            "description" : "Inventory item not found"
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "tags" : [ "inventory-controller" ]
+      }
+    },
+    "/api/v1/inventory/{id}" : {
+      "delete" : {
+        "operationId" : "deleteInventory",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Inventory item removed"
+          },
+          "400" : {
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiProblemResponse"
+                }
+              }
+            },
+            "description" : "Invalid inventory input"
+          },
+          "401" : {
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiProblemResponse"
+                }
+              }
+            },
+            "description" : "Authentication required"
+          },
+          "404" : {
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiProblemResponse"
+                }
+              }
+            },
+            "description" : "Inventory item not found"
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "tags" : [ "inventory-controller" ]
+      },
+      "patch" : {
+        "operationId" : "updateInventory",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateInventory"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/InventoryResponse"
+                }
+              }
+            },
+            "description" : "Inventory item updated"
+          },
+          "400" : {
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiProblemResponse"
+                }
+              }
+            },
+            "description" : "Invalid inventory input"
+          },
+          "401" : {
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiProblemResponse"
+                }
+              }
+            },
+            "description" : "Authentication required"
+          },
+          "404" : {
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiProblemResponse"
+                }
+              }
+            },
+            "description" : "Inventory item not found"
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "tags" : [ "inventory-controller" ]
+      }
+    },
     "/api/v1/me" : {
       "get" : {
         "operationId" : "getCurrentUser",
@@ -326,9 +567,30 @@
         },
         "required" : [ "detail", "instance", "status", "title", "type" ]
       },
+      "AvailabilityResult" : {
+        "type" : "object",
+        "properties" : {
+          "canMake" : {
+            "type" : "boolean"
+          },
+          "missingCount" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "missingIngredients" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/IngredientSummary"
+            }
+          }
+        }
+      },
       "CocktailDetail" : {
         "type" : "object",
         "properties" : {
+          "availability" : {
+            "$ref" : "#/components/schemas/AvailabilityResult"
+          },
           "id" : {
             "type" : "string",
             "format" : "uuid"
@@ -350,6 +612,9 @@
       "CocktailSummary" : {
         "type" : "object",
         "properties" : {
+          "availability" : {
+            "$ref" : "#/components/schemas/AvailabilityResult"
+          },
           "id" : {
             "type" : "string",
             "format" : "uuid"
@@ -364,6 +629,25 @@
             "type" : "string"
           }
         }
+      },
+      "CreateInventory" : {
+        "type" : "object",
+        "properties" : {
+          "bottleLabel" : {
+            "type" : "string",
+            "maxLength" : 200,
+            "minLength" : 0
+          },
+          "ingredientId" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "Have", "Out" ]
+          }
+        },
+        "required" : [ "ingredientId", "status" ]
       },
       "DisplayMeasurement" : {
         "type" : "object",
@@ -419,6 +703,25 @@
           },
           "name" : {
             "type" : "string"
+          }
+        }
+      },
+      "InventoryResponse" : {
+        "type" : "object",
+        "properties" : {
+          "bottleLabel" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "ingredient" : {
+            "$ref" : "#/components/schemas/IngredientSummary"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "Have", "Out" ]
           }
         }
       },
@@ -489,6 +792,21 @@
             "$ref" : "#/components/schemas/DisplayMeasurement"
           }
         }
+      },
+      "UpdateInventory" : {
+        "type" : "object",
+        "properties" : {
+          "bottleLabel" : {
+            "type" : "string",
+            "maxLength" : 200,
+            "minLength" : 0
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "Have", "Out" ]
+          }
+        },
+        "required" : [ "status" ]
       }
     },
     "securitySchemes" : {

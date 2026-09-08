@@ -1,3 +1,4 @@
+import { IngredientInventory } from '@/features/bar/inventory-controls';
 import { measurement } from './measurement';
 import { useState, type FormEvent } from 'react';
 import {
@@ -78,18 +79,23 @@ function Filters({
   const [params, setParams] = useSearchParams();
   const filterKey = kind === 'ingredients' ? 'category' : 'primarySpiritId';
   const [search, setSearch] = useState(params.get('search') ?? '');
+  const [availability, setAvailability] = useState(
+    params.get('availability') ?? '',
+  );
   const [filter, setFilter] = useState(params.get(filterKey) ?? '');
   function apply(event: FormEvent) {
     event.preventDefault();
     const next = new URLSearchParams();
     if (search.trim()) next.set('search', search.trim());
     if (filter) next.set(filterKey, filter);
+    if (kind === 'cocktails' && availability)
+      next.set('availability', availability);
     setParams(next);
   }
   return (
     <form
       onSubmit={apply}
-      className="grid items-end gap-4 rounded-xl bg-secondary p-4 sm:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto_auto]"
+      className="grid items-end gap-4 rounded-xl bg-secondary p-4 sm:grid-cols-2 lg:grid-cols-3"
     >
       <label className="grid gap-2">
         Search {kind}
@@ -121,6 +127,26 @@ function Filters({
           ))}
         </select>
       </label>
+      {kind === 'cocktails' && (
+        <label className="grid gap-2">
+          Availability
+          <select
+            className={control}
+            value={availability}
+            onChange={(event) => setAvailability(event.target.value)}
+          >
+            <option value="">All</option>
+            <option value="can_make">Can Make</option>
+            <option value="one_away">Exactly One Ingredient Away</option>
+            {availability &&
+              !['can_make', 'one_away'].includes(availability) && (
+                <option value={availability}>
+                  {availability === 'all' ? 'All' : 'Unknown availability'}
+                </option>
+              )}
+          </select>
+        </label>
+      )}
       <Button className="min-h-11" type="submit">
         Search
       </Button>
@@ -131,6 +157,7 @@ function Filters({
         onClick={() => {
           setSearch('');
           setFilter('');
+          setAvailability('');
           setParams({});
         }}
       >
@@ -147,7 +174,7 @@ function CocktailLinks({ cocktails }: { cocktails: CocktailSummary[] }) {
       {cocktails.map((cocktail) => (
         <li key={cocktail.id}>
           <Link
-            className={card}
+            className={`${card} ${cocktail.availability?.canMake ? 'border-primary bg-secondary' : ''}`}
             to={`/drinks/${cocktail.id}`}
             state={{
               returnTo: location.pathname + location.search,
@@ -158,6 +185,13 @@ function CocktailLinks({ cocktails }: { cocktails: CocktailSummary[] }) {
             <span className="text-sm text-muted-foreground">
               {cocktail.primarySpirit?.name}
             </span>
+            {cocktail.availability && (
+              <span className="mt-3 block text-sm font-medium">
+                {cocktail.availability.canMake
+                  ? 'You can make this'
+                  : `${cocktail.availability.missingCount} ingredient${cocktail.availability.missingCount === 1 ? '' : 's'} away`}
+              </span>
+            )}
           </Link>
         </li>
       ))}
@@ -233,6 +267,7 @@ export function CocktailCatalogPage() {
     {
       search: params.get('search') ?? undefined,
       primarySpiritId: params.get('primarySpiritId') || undefined,
+      availability: params.get('availability') || undefined,
     },
     queryOptions,
   );
@@ -270,7 +305,22 @@ export function CocktailCatalogPage() {
               filters.
             </p>
           )}
-          <CocktailLinks cocktails={query.data} />
+          {query.data.some((c) => c.availability?.canMake) && (
+            <section className="space-y-3" aria-label="You Can Make">
+              <h2 className="text-xl font-semibold">You Can Make</h2>
+              <CocktailLinks
+                cocktails={query.data.filter((c) => c.availability?.canMake)}
+              />
+            </section>
+          )}
+          {query.data.some((c) => !c.availability?.canMake) && (
+            <section className="space-y-3" aria-label="Other Drinks">
+              <h2 className="text-xl font-semibold">Other Drinks</h2>
+              <CocktailLinks
+                cocktails={query.data.filter((c) => !c.availability?.canMake)}
+              />
+            </section>
+          )}
         </>
       )}
     </section>
@@ -282,7 +332,7 @@ function BackLink({ fallback }: { fallback: string }) {
   const requested: unknown = state?.returnTo;
   const returnTo =
     typeof requested === 'string' &&
-    /^\/(bar\/ingredients|drinks)(\/[^/?#]+)?(\?[^#]*)?$/.test(requested)
+    /^\/(bar|bar\/ingredients|drinks)(\/[^/?#]+)?(\?[^#]*)?$/.test(requested)
       ? requested
       : fallback;
   return (
@@ -291,7 +341,12 @@ function BackLink({ fallback }: { fallback: string }) {
       to={returnTo}
       state={state?.returnState}
     >
-      Back to {returnTo.startsWith('/bar') ? 'ingredients' : 'drinks'}
+      Back to{' '}
+      {returnTo === '/bar'
+        ? 'Bar'
+        : returnTo.startsWith('/bar')
+          ? 'ingredients'
+          : 'drinks'}
     </Link>
   );
 }
@@ -313,6 +368,7 @@ export function IngredientDetailPage() {
             {label(query.data.category)}
           </p>
           <h1 className="text-3xl font-semibold">{query.data.name}</h1>
+          <IngredientInventory key={id} ingredientId={id} />
           <h2 className="text-xl font-semibold">
             Used in {query.data.usageCount} cocktails
           </h2>
@@ -347,6 +403,41 @@ export function CocktailDetailPage() {
           </p>
           <h1 className="text-3xl font-semibold">{query.data.name}</h1>
           <p>{recipe?.name}</p>
+          {query.data.availability && (
+            <section
+              aria-label="Drink availability"
+              className="space-y-3 rounded-xl bg-secondary p-5"
+            >
+              <h2 className="text-xl font-semibold">
+                {query.data.availability.canMake
+                  ? 'You can make this'
+                  : `${query.data.availability.missingCount} ingredient${query.data.availability.missingCount === 1 ? '' : 's'} away`}
+              </h2>
+              {!query.data.availability.canMake && (
+                <>
+                  <p>Missing from your bar:</p>
+                  <ul className="space-y-2">
+                    {query.data.availability.missingIngredients?.map(
+                      (ingredient) => (
+                        <li key={ingredient.id}>
+                          <Link
+                            className="underline"
+                            to={`/bar/ingredients/${ingredient.id}`}
+                            state={{
+                              returnTo: location.pathname,
+                              returnState: location.state,
+                            }}
+                          >
+                            {ingredient.name}
+                          </Link>
+                        </li>
+                      ),
+                    )}
+                  </ul>
+                </>
+              )}
+            </section>
+          )}
           <div className="rounded-xl border border-border bg-card p-5 sm:p-7">
             <h2 className="mb-4 text-xl font-semibold">Ingredients</h2>
             <p className="mb-4 text-sm text-muted-foreground">
