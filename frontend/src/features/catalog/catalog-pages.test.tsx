@@ -305,7 +305,7 @@ it('explains alias matches on the canonical ingredient card', async () => {
   ).toBeVisible();
 });
 
-it('shows short missing lists on cards and Have/Missing/Optional in the recipe without a duplicate missing section', async () => {
+it('shows short missing lists on cards and only missing availability tags in the recipe without a duplicate missing section', async () => {
   const base = mockCatalog();
   const missing = [
     lime,
@@ -334,8 +334,8 @@ it('shows short missing lists on cards and Have/Missing/Optional in the recipe w
     await screen.findByText('Missing: Lime Juice, Simple syrup +1 more'),
   ).toBeVisible();
   await user.click(screen.getByRole('link', { name: /Gimlet/ }));
-  expect(await screen.findByText('Have')).toBeVisible();
-  expect(screen.getByText('Missing')).toBeVisible();
+  expect(await screen.findByText('Missing')).toBeVisible();
+  expect(screen.queryByText('Have')).not.toBeInTheDocument();
   expect(screen.getByText('Optional')).toBeVisible();
   expect(screen.queryByText('Missing from your bar:')).not.toBeInTheDocument();
 });
