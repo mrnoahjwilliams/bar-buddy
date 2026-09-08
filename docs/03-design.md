@@ -100,6 +100,12 @@ erDiagram
 
 Non-persistent results/value objects include AvailabilityResult, MissingIngredient, UnlockImpact, ShoppingPlan, DrinkStatistics, recommendations, Measurement and enums. Requirements owns their calculation rules. Initially use the curated recipe chosen in catalog preparation; quantity-aware behavior is decided in Release 5 and multiple-recipe/default behavior in Release 6.
 
+### MVP usability mechanics
+
+Catalog schema version 2 adds a required aliases array to each ingredient; version 1 remains importable with empty aliases. Store aliases as a PostgreSQL text array on Ingredient (no additional entity). Normalize search using lowercase Unicode NFD plus removal of combining accents in both PostgreSQL and Java. Aliases are search-only, validated against normalized names/aliases to prevent ambiguous exact labels. No provider extension is required. Ingredient summaries may expose a matchedAlias explanation.
+
+Detail overlays use repeated `detail=ingredient:<uuid>` / `detail=cocktail:<uuid>` query parameters on the current catalog route. The catalog stays mounted beneath one accessible modal dialog; nested details retain their own scroll and drafts. Browser history tracks each opening, with safe close fallback for a direct link. Existing path-based detail URLs remain supported.
+
 ## Offline catalog format
 
 Release 0 catalog preparation uses the versioned Bar Buddy JSON dataset under [`catalog/`](../catalog/README.md). It contains stable namespaced ingredient, cocktail and default-recipe identifiers, canonical ingredient references/categories, recipe-specific display wording, optional non-exclusive cocktail styles, ordered requirement lines, reviewed US/metric measurement pairs, instructions, glassware and garnish. Recipe wording may be more specific than its canonical inventory match so availability stays practical without losing recipe detail. The application never scrapes a source website at runtime.

@@ -44,10 +44,10 @@ class CatalogImportRepository {
   void synchronize(String json) {
     jdbc.update(
         """
-        insert into ingredient (id, catalog_id, name, category)
-        select gen_random_uuid(), i->>'id', i->>'name', i->>'category'
+        insert into ingredient (id, catalog_id, name, category, aliases)
+        select gen_random_uuid(), i->>'id', i->>'name', i->>'category', array(select jsonb_array_elements_text(coalesce(i->'aliases', '[]'::jsonb)))
         from jsonb_array_elements(?::jsonb->'ingredients') i
-        on conflict (catalog_id) do update set name = excluded.name, category = excluded.category
+        on conflict (catalog_id) do update set name = excluded.name, category = excluded.category, aliases = excluded.aliases
         """,
         json);
     jdbc.update(

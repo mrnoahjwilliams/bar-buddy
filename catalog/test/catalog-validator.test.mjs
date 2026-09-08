@@ -62,3 +62,24 @@ test("rejects missing required and unexpected fields", async () => {
     ),
   );
 });
+
+test("version 2 accepts aliases and unused ingredients while rejecting ambiguous or malformed aliases", async () => {
+  const catalog = await readFixture("valid/minimal-catalog.json");
+  catalog.schemaVersion = 2;
+  catalog.ingredients.forEach(ingredient => { ingredient.aliases = []; });
+  catalog.ingredients[0].aliases = ["Triple sec", "Curaçao"];
+  catalog.ingredients.push({id: "ingredient:spiced-rum", name: "Spiced rum", category: "spirit", aliases: []});
+  assert.deepEqual(validateCatalog(catalog), []);
+  catalog.ingredients[1].aliases = ["TRIPLE SEC", "Curacao", " ", 123];
+  const errors = validateCatalog(catalog);
+  assert.ok(errors.some(error => error.includes("duplicate normalized ingredient name 'triple sec'")));
+  assert.ok(errors.some(error => error.includes("duplicate normalized ingredient name 'curacao'")));
+  assert.ok(errors.some(error => error.includes("aliases[2]")));
+  assert.ok(errors.some(error => error.includes("aliases[3]")));
+  catalog.ingredients[1].aliases = [catalog.ingredients[0].name];
+  assert.ok(validateCatalog(catalog).some(error => error.includes("duplicate normalized ingredient name")));
+  delete catalog.ingredients[1].aliases;
+  assert.ok(validateCatalog(catalog).some(error => error.includes("missing required field 'aliases'")));
+  catalog.schemaVersion = 3;
+  assert.ok(validateCatalog(catalog).includes("$.schemaVersion: must equal 1 or 2"));
+});

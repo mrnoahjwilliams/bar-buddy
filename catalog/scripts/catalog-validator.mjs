@@ -101,7 +101,7 @@ function isObject(value) {
 }
 
 function normalizedName(value) {
-  return value.normalize("NFKC").trim().toLocaleLowerCase("en-US");
+  return value.toLocaleLowerCase("en-US").normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
 }
 
 function validateExactKeys(value, path, expectedKeys, errors) {
@@ -337,7 +337,7 @@ function validateRecipe(value, path, cocktailSlug, context, errors) {
 }
 
 function validateIngredient(value, path, context, errors) {
-  if (!validateObject(value, path, INGREDIENT_KEYS, errors)) {
+  if (!validateObject(value, path, context.schemaVersion === 2 ? [...INGREDIENT_KEYS, "aliases"] : INGREDIENT_KEYS, errors)) {
     return;
   }
   if (validateId(value.id, `${path}.id`, INGREDIENT_ID_PATTERN, errors)) {
@@ -357,6 +357,15 @@ function validateIngredient(value, path, context, errors) {
       "normalized ingredient name",
       errors,
     );
+  }
+  if (context.schemaVersion === 2 && validateArray(value.aliases, `${path}.aliases`, errors, { allowEmpty: true })) {
+    value.aliases.forEach((alias, index) => {
+      const aliasPath = `${path}.aliases[${index}]`;
+      if (validateString(alias, aliasPath, errors)) {
+        if (alias.length > 200) errors.push(`${aliasPath}: must be at most 200 characters`);
+        recordUnique(context.ingredientNames, normalizedName(alias), aliasPath, "normalized ingredient name", errors);
+      }
+    });
   }
   validateEnum(
     value.category,
@@ -496,8 +505,8 @@ export function validateCatalog(catalog) {
   if (!validateObject(catalog, "$", ROOT_KEYS, errors)) {
     return errors;
   }
-  if (catalog.schemaVersion !== 1) {
-    errors.push("$.schemaVersion: must equal 1");
+  if (![1, 2].includes(catalog.schemaVersion)) {
+    errors.push("$.schemaVersion: must equal 1 or 2");
   }
   if (validateObject(catalog.catalog, "$.catalog", CATALOG_KEYS, errors)) {
     if (catalog.catalog.id !== "catalog:bar-buddy") {
@@ -510,6 +519,7 @@ export function validateCatalog(catalog) {
   }
 
   const context = {
+    schemaVersion: catalog.schemaVersion,
     ingredientIds: new Map(),
     ingredientNames: new Map(),
     ingredientCategories: new Map(),

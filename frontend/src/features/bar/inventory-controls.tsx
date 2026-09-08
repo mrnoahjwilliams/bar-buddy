@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { DetailLink } from '@/features/catalog/detail-links';
 import { useQueryClient } from '@tanstack/react-query';
 import {
   useCreateInventory,
@@ -59,13 +59,13 @@ export function InventoryItemControls({ item }: { item: InventoryResponse }) {
       className="space-y-3 rounded-xl border border-border bg-card p-4"
       aria-label={`${item.ingredient?.name}${item.bottleLabel ? ` — ${item.bottleLabel}` : ''}`}
     >
-      <Link
+      <DetailLink
         className="text-lg font-semibold underline"
-        to={`/bar/ingredients/${item.ingredient?.id}`}
-        state={{ returnTo: '/bar' }}
+        kind="ingredient"
+        id={item.ingredient?.id ?? ''}
       >
         {item.ingredient?.name}
-      </Link>
+      </DetailLink>
       <p className="break-words text-muted-foreground">
         {item.bottleLabel || 'No bottle label'} · {item.status}
       </p>

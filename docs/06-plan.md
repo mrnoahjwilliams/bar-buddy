@@ -122,6 +122,10 @@ No public app or application entity schema yet.
 
 - [x] Show You Can Make, then Other Drinks ordered by missing count with one-away first. Add the All / Can Make / Exactly One Ingredient Away selector alongside primary-spirit filtering and search. Keep unavailable details openable and missing ingredients explicit. **Verify:** grouping, combined filters/reset/empty results, details and automatic refresh after inventory changes without losing navigation context.
 
+### Approved usability follow-up — before 1.5
+
+- [x] Implement all six approved changes in [Requirements](02-requirements.md#approved-mvp-usability-follow-up): accent/alias search with match explanations, three distinct rum additions, missing names on cards, contextual detail overlays, recipe-line availability, and the no-makeable household-ingredient reminder. **Verify:** alias/Unicode/category combinations and duplicate-free results; versioned import and preserved inventory; no implicit rum substitutions; dialog focus/Escape/history/reload/scroll and nested navigation; account isolation and mutation refresh; full local checks, responsive browser review and API drift. This brings only the alias subset of 2.2.1 forward.
+
 ### 1.5 — Preferences and discovery
 
 #### 1.5.1 — Favorites
@@ -160,7 +164,7 @@ No public app or application entity schema yet.
 
 #### 2.2.1 — Tags, aliases and mocktails
 
-- [ ] Use the reviewed optional cocktail styles and **decide:** general/seasonal/occasion tag vocabulary, ingredient/search alias matching and alcohol-free/mocktail classification/coverage. Extend existing catalog fields and reviewed data; support combined search/filtering without new persistent entities. **Verify:** unclassified and multi-style cocktails, aliases such as OJ → Orange Juice, duplicate matches, later tags and mocktail results with normal availability grouping; do not infer precise strength before Release 7.
+- [ ] Use the reviewed optional cocktail styles and **decide:** general/seasonal/occasion tag vocabulary, additional ingredient/search alias coverage beyond the approved MVP subset and alcohol-free/mocktail classification/coverage. Extend existing catalog fields and reviewed data; support combined search/filtering without new persistent entities. **Verify:** unclassified and multi-style cocktails, aliases such as OJ → Orange Juice, duplicate matches, later tags and mocktail results with normal availability grouping; do not infer precise strength before Release 7.
 
 #### 2.2.2 — Filters and sorting
 

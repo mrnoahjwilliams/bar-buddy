@@ -36,7 +36,7 @@ class BarBuddyApplicationIT {
     var jdbc = new JdbcTemplate(dataSource);
     assertThat(jdbc.queryForObject("select version()", String.class)).startsWith("PostgreSQL 17.");
     assertThat(flyway.validateWithResult().validationSuccessful).isTrue();
-    assertThat(flyway.info().applied()).hasSize(3);
+    assertThat(flyway.info().applied()).hasSize(4);
     assertThat(
             jdbc.queryForList(
                 """

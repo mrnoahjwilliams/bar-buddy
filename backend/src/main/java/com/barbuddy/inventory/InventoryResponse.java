@@ -9,7 +9,8 @@ public record InventoryResponse(
     var ingredient = item.getIngredient();
     return new InventoryResponse(
         item.getId(),
-        new IngredientSummary(ingredient.getId(), ingredient.getName(), ingredient.getCategory()),
+        new IngredientSummary(
+            ingredient.getId(), ingredient.getName(), ingredient.getCategory(), null),
         item.getBottleLabel(),
         item.getStatus());
   }

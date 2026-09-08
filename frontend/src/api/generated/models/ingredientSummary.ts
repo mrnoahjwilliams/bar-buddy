@@ -8,5 +8,6 @@
 export interface IngredientSummary {
   category?: string;
   id?: string;
+  matchedAlias?: string;
   name?: string;
 }

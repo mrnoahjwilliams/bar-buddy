@@ -1,7 +1,7 @@
 # Bar Buddy cocktail catalog
 
 [`cocktails.json`](cocktails.json) is the approved permanent Bar Buddy dataset. It
-contains 102 cocktails, one default recipe for each cocktail, and 113 canonical
+contains 102 cocktails, one default recipe for each cocktail, and 116 canonical
 ingredients. It is the validated database import source for unit 1.2.1.
 
 ## Dataset shape
@@ -30,6 +30,12 @@ canonical Scotch whisky ingredient.
 Ingredient categories are `spirit`, `liqueur`, `fortified_wine`, `bitters`, `syrup`,
 `juice`, `mixer`, `fruit`, `herb`, `garnish`, and `other`.
 
+Schema version 2 adds a required `aliases` array to every ingredient. Search folds
+case and Unicode combining accents for names and reviewed aliases. Aliases are
+search terms, not separate inventory entries or automatic substitutions. Keep
+normalized names and aliases unambiguous across ingredients. Version 1 remains
+importable with empty aliases; importing it intentionally clears existing aliases.
+
 ## Validation
 
 Run the complete catalog check from this directory with the repository's pinned Node
@@ -50,7 +56,7 @@ from the product catalog. The valid fixture covers required and optional lines a
 qualitative quantities. The deliberately invalid fixture covers duplicate identity,
 broken-reference, controlled-value, measurement, and display-order failures. Tests
 also preserve the intentional rule that an ingredient may appear more than once in
-one recipe. The validator is strict for schema version 1; changing fields or
+one recipe. The validator is strict for schema versions 1 and 2; changing fields or
 controlled vocabularies requires a versioned validator and import change rather than
 silently accepting drift.
 
@@ -136,6 +142,15 @@ is one barspoon. Ten milliliters is a heavy quarter ounce, and 20 milliliters is
 scant three-quarter ounce. Fifty milliliters is 2 oz except for Bellini peach purée,
 Canchanchara water, and Irish Coffee cream, which use a heavy 1 1/2 oz. Both systems
 remain in the dataset so these presentation choices do not replace the metric recipe.
+
+The September 8, 2026 usability approval adds Spiced rum, Coconut rum (unsweetened
+flavored spirit), and Coconut rum liqueur (sweetened Malibu-type products). They
+remain separate inventory ingredients and do not satisfy plain/dark rum recipes.
+None of the current 102 recipes uses these additions; zero-use ingredients are
+intentional. Manufacturer descriptions informed the distinction: [Captain Morgan
+Original Spiced Gold](https://www.captainmorgan.com/en/spirit-drinks/captain-morgan-original-spiced-gold)
+and [Malibu product FAQ](https://www.malibudrinks.com/en-us/faq/). Generic flavor
+modifiers and a substitution hierarchy remain deferred.
 
 ## Provenance archive
 

@@ -54,7 +54,7 @@ class CatalogBrowseIT {
             .findFirst()
             .orElseThrow();
     assertThat(service.ingredients("  GIN  ", "spirit")).contains(gin);
-    assertThat(service.ingredients("", "")).hasSize(113);
+    assertThat(service.ingredients("", "")).hasSize(116);
     assertThat(service.ingredients("%", null)).isEmpty();
     assertThat(service.cocktails("", null, null, "user")).hasSize(102);
     assertThat(service.cocktails("negroni", gin.id(), null, "user")).hasSize(1);

@@ -1,3 +1,4 @@
+import { DetailLink } from './detail-links';
 import { IngredientInventory } from '@/features/bar/inventory-controls';
 import { measurement } from './measurement';
 import { useState, type FormEvent } from 'react';
@@ -168,18 +169,14 @@ function Filters({
 }
 
 function CocktailLinks({ cocktails }: { cocktails: CocktailSummary[] }) {
-  const location = useLocation();
   return (
     <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
       {cocktails.map((cocktail) => (
         <li key={cocktail.id}>
-          <Link
+          <DetailLink
             className={`${card} ${cocktail.availability?.canMake ? 'border-primary bg-secondary' : ''}`}
-            to={`/drinks/${cocktail.id}`}
-            state={{
-              returnTo: location.pathname + location.search,
-              returnState: location.state,
-            }}
+            kind="cocktail"
+            id={cocktail.id!}
           >
             <span className="block text-lg font-semibold">{cocktail.name}</span>
             <span className="text-sm text-muted-foreground">
@@ -192,7 +189,20 @@ function CocktailLinks({ cocktails }: { cocktails: CocktailSummary[] }) {
                   : `${cocktail.availability.missingCount} ingredient${cocktail.availability.missingCount === 1 ? '' : 's'} away`}
               </span>
             )}
-          </Link>
+            {!cocktail.availability?.canMake &&
+              !!cocktail.availability?.missingIngredients?.length && (
+                <span className="mt-1 block text-sm text-muted-foreground">
+                  Missing:{' '}
+                  {cocktail.availability.missingIngredients
+                    .slice(0, 2)
+                    .map((i) => i.name)
+                    .join(', ')}
+                  {cocktail.availability.missingIngredients.length > 2
+                    ? ` +${cocktail.availability.missingIngredients.length - 2} more`
+                    : ''}
+                </span>
+              )}
+          </DetailLink>
         </li>
       ))}
     </ul>
@@ -201,7 +211,6 @@ function CocktailLinks({ cocktails }: { cocktails: CocktailSummary[] }) {
 
 export function IngredientCatalogPage() {
   const [params] = useSearchParams();
-  const location = useLocation();
   const query = useListIngredients(
     {
       search: params.get('search') ?? undefined,
@@ -216,7 +225,7 @@ export function IngredientCatalogPage() {
       </Link>
       <h1 className="text-3xl font-semibold">Ingredient catalog</h1>
       <Filters
-        key={params.toString()}
+        key={`${params.get('search')}:${params.get('category')}`}
         kind="ingredients"
         options={categories.map((value) => ({ value, name: label(value) }))}
       />
@@ -237,13 +246,10 @@ export function IngredientCatalogPage() {
           <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {query.data.map((ingredient) => (
               <li key={ingredient.id}>
-                <Link
+                <DetailLink
                   className={card}
-                  to={`/bar/ingredients/${ingredient.id}`}
-                  state={{
-                    returnTo: location.pathname + location.search,
-                    returnState: location.state,
-                  }}
+                  kind="ingredient"
+                  id={ingredient.id!}
                 >
                   <span className="block text-lg font-semibold">
                     {ingredient.name}
@@ -251,7 +257,12 @@ export function IngredientCatalogPage() {
                   <span className="capitalize text-muted-foreground">
                     {label(ingredient.category)}
                   </span>
-                </Link>
+                  {ingredient.matchedAlias && (
+                    <span className="mt-2 block text-sm text-muted-foreground">
+                      Matched “{ingredient.matchedAlias}”
+                    </span>
+                  )}
+                </DetailLink>
               </li>
             ))}
           </ul>
@@ -271,6 +282,20 @@ export function CocktailCatalogPage() {
     },
     queryOptions,
   );
+  const filtered = !!(
+    params.get('search') ||
+    params.get('primarySpiritId') ||
+    params.get('availability')
+  );
+  const makeable = useListCocktails(
+    { availability: 'can_make' },
+    { query: { retry: false, enabled: filtered } },
+  );
+  const noMakeable = filtered
+    ? !!makeable.data && !makeable.isError && makeable.data.length === 0
+    : !!query.data &&
+      !query.isError &&
+      query.data.every((c) => c.availability?.canMake === false);
   const spirits = useListIngredients({ category: 'spirit' }, queryOptions);
   return (
     <section className="space-y-6">
@@ -278,8 +303,28 @@ export function CocktailCatalogPage() {
         Drinks
       </p>
       <h1 className="text-3xl font-semibold">Find the right pour.</h1>
+      {noMakeable && (
+        <aside
+          className="space-y-2 rounded-xl border border-border bg-secondary p-4"
+          aria-label="Check your mixers"
+        >
+          <h2 className="font-semibold">
+            Have a few more ingredients at home?
+          </h2>
+          <p>
+            Already have lemon juice, soda water, or other mixers? Add them to
+            your bar to see what you can make.
+          </p>
+          <Link
+            className="inline-block py-2 font-medium underline"
+            to="/bar/ingredients"
+          >
+            Check juices and mixers
+          </Link>
+        </aside>
+      )}
       <Filters
-        key={params.toString()}
+        key={`${params.get('search')}:${params.get('primarySpiritId')}:${params.get('availability')}`}
         kind="cocktails"
         options={(spirits.data ?? []).map((spirit) => ({
           value: spirit.id!,
@@ -351,12 +396,16 @@ function BackLink({ fallback }: { fallback: string }) {
   );
 }
 
-export function IngredientDetailPage() {
-  const { id = '' } = useParams();
+export function IngredientDetailPage({
+  detailId,
+  overlay = false,
+}: { detailId?: string; overlay?: boolean } = {}) {
+  const { id: routeId = '' } = useParams();
+  const id = detailId ?? routeId;
   const query = useGetIngredient(id, queryOptions);
   return (
     <section className="space-y-6">
-      <BackLink fallback="/bar/ingredients" />
+      {!overlay && <BackLink fallback="/bar/ingredients" />}
       <QueryState
         pending={query.isPending}
         error={query.error}
@@ -368,6 +417,25 @@ export function IngredientDetailPage() {
             {label(query.data.category)}
           </p>
           <h1 className="text-3xl font-semibold">{query.data.name}</h1>
+          {query.data.name === 'Coconut rum' && (
+            <p>
+              Unsweetened coconut-flavored rum. For sweetened products such as
+              Malibu Original, choose Coconut rum liqueur. This does not count
+              as plain rum.
+            </p>
+          )}
+          {query.data.name === 'Coconut rum liqueur' && (
+            <p>
+              Sweetened coconut rum liqueur, including Malibu Original. This
+              does not count as plain rum or unsweetened Coconut rum.
+            </p>
+          )}
+          {query.data.name === 'Spiced rum' && (
+            <p>
+              Rum with added spice flavors. This is a separate ingredient from
+              plain or dark rum.
+            </p>
+          )}
           <IngredientInventory key={id} ingredientId={id} />
           <h2 className="text-xl font-semibold">
             Used in {query.data.usageCount} cocktails
@@ -383,14 +451,17 @@ export function IngredientDetailPage() {
   );
 }
 
-export function CocktailDetailPage() {
-  const { id = '' } = useParams();
+export function CocktailDetailPage({
+  detailId,
+  overlay = false,
+}: { detailId?: string; overlay?: boolean } = {}) {
+  const { id: routeId = '' } = useParams();
+  const id = detailId ?? routeId;
   const query = useGetCocktail(id, queryOptions);
-  const location = useLocation();
   const recipe = query.data?.recipe;
   return (
     <section className="max-w-3xl space-y-6">
-      <BackLink fallback="/drinks" />
+      {!overlay && <BackLink fallback="/drinks" />}
       <QueryState
         pending={query.isPending}
         error={query.error}
@@ -406,36 +477,13 @@ export function CocktailDetailPage() {
           {query.data.availability && (
             <section
               aria-label="Drink availability"
-              className="space-y-3 rounded-xl bg-secondary p-5"
+              className="inline-block rounded-lg bg-secondary px-3 py-2"
             >
-              <h2 className="text-xl font-semibold">
+              <h2 className="text-sm font-semibold">
                 {query.data.availability.canMake
                   ? 'You can make this'
                   : `${query.data.availability.missingCount} ingredient${query.data.availability.missingCount === 1 ? '' : 's'} away`}
               </h2>
-              {!query.data.availability.canMake && (
-                <>
-                  <p>Missing from your bar:</p>
-                  <ul className="space-y-2">
-                    {query.data.availability.missingIngredients?.map(
-                      (ingredient) => (
-                        <li key={ingredient.id}>
-                          <Link
-                            className="underline"
-                            to={`/bar/ingredients/${ingredient.id}`}
-                            state={{
-                              returnTo: location.pathname,
-                              returnState: location.state,
-                            }}
-                          >
-                            {ingredient.name}
-                          </Link>
-                        </li>
-                      ),
-                    )}
-                  </ul>
-                </>
-              )}
             </section>
           )}
           <div className="rounded-xl border border-border bg-card p-5 sm:p-7">
@@ -449,22 +497,25 @@ export function CocktailDetailPage() {
                   <span className="mr-2 font-medium">
                     {measurement(line.us)}
                   </span>
-                  <Link
-                    className="underline"
-                    to={`/bar/ingredients/${line.ingredient?.id}`}
-                    state={{
-                      returnTo: location.pathname,
-                      returnState: location.state,
-                    }}
+                  <DetailLink
+                    className="inline-block min-h-11 py-2 underline"
+                    kind="ingredient"
+                    id={line.ingredient?.id ?? ''}
                   >
                     {line.displayName || line.ingredient?.name}
-                  </Link>
+                  </DetailLink>
                   {line.preparation && <span> · {line.preparation}</span>}
-                  {line.requirement === 'optional' && (
-                    <span className="block text-sm text-muted-foreground">
-                      Optional
-                    </span>
-                  )}
+                  <span className="block text-sm font-medium">
+                    {line.requirement === 'optional'
+                      ? 'Optional'
+                      : query.data.availability
+                        ? query.data.availability.missingIngredients?.some(
+                            (i) => i.id === line.ingredient?.id,
+                          )
+                          ? 'Missing'
+                          : 'Have'
+                        : ''}
+                  </span>
                 </li>
               ))}
             </ol>
