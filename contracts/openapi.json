@@ -93,6 +93,88 @@
         "tags" : [ "catalog-browse-controller" ]
       }
     },
+    "/api/v1/cocktails/random" : {
+      "get" : {
+        "operationId" : "getRandomCocktail",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "search",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "primarySpiritId",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }, {
+          "in" : "query",
+          "name" : "availability",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "favoritesOnly",
+          "required" : false,
+          "schema" : {
+            "type" : "boolean",
+            "default" : false
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CocktailSummary"
+                }
+              }
+            },
+            "description" : "Random eligible cocktail"
+          },
+          "400" : {
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiProblemResponse"
+                }
+              }
+            },
+            "description" : "Invalid catalog input"
+          },
+          "401" : {
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiProblemResponse"
+                }
+              }
+            },
+            "description" : "Authentication is required"
+          },
+          "404" : {
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiProblemResponse"
+                }
+              }
+            },
+            "description" : "Catalog item not found"
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "tags" : [ "catalog-browse-controller" ]
+      }
+    },
     "/api/v1/cocktails/{id}" : {
       "get" : {
         "operationId" : "getCocktail",
@@ -221,6 +303,37 @@
           "bearerAuth" : [ ]
         } ],
         "tags" : [ "catalog-browse-controller" ]
+      }
+    },
+    "/api/v1/home" : {
+      "get" : {
+        "operationId" : "getHomeSummary",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/HomeSummary"
+                }
+              }
+            },
+            "description" : "Current user's bar summary"
+          },
+          "401" : {
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiProblemResponse"
+                }
+              }
+            },
+            "description" : "Authentication is required"
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "tags" : [ "home-controller" ]
       }
     },
     "/api/v1/ingredients" : {
@@ -759,6 +872,35 @@
           },
           "unit" : {
             "type" : "string"
+          }
+        }
+      },
+      "HomeSummary" : {
+        "type" : "object",
+        "properties" : {
+          "availableIngredients" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "canMake" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "favorites" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "haveItems" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "oneAway" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "outItems" : {
+            "type" : "integer",
+            "format" : "int64"
           }
         }
       },

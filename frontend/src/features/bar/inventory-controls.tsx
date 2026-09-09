@@ -23,6 +23,7 @@ function useRefreshBar() {
           typeof path === 'string' &&
           [
             '/api/v1/inventory',
+            '/api/v1/home',
             '/api/v1/cocktails',
             '/api/v1/ingredients',
           ].some((prefix) => path.startsWith(prefix))

@@ -1,3 +1,4 @@
+import { RandomCocktail } from '@/features/drinks/random-cocktail';
 import { DetailLink } from './detail-links';
 import { FavoriteControl } from './favorite-control';
 import { IngredientInventory } from '@/features/bar/inventory-controls';
@@ -306,15 +307,13 @@ export function IngredientCatalogPage() {
 
 export function CocktailCatalogPage() {
   const [params] = useSearchParams();
-  const query = useListCocktails(
-    {
-      search: params.get('search') ?? undefined,
-      primarySpiritId: params.get('primarySpiritId') || undefined,
-      availability: params.get('availability') || undefined,
-      favoritesOnly: params.get('favoritesOnly') === 'true' || undefined,
-    },
-    queryOptions,
-  );
+  const filters = {
+    search: params.get('search') ?? undefined,
+    primarySpiritId: params.get('primarySpiritId') || undefined,
+    availability: params.get('availability') || undefined,
+    favoritesOnly: params.get('favoritesOnly') === 'true' || undefined,
+  };
+  const query = useListCocktails(filters, queryOptions);
   const filtered = !!(
     params.get('search') ||
     params.get('primarySpiritId') ||
@@ -365,6 +364,7 @@ export function CocktailCatalogPage() {
           name: spirit.name!,
         }))}
       />
+      <RandomCocktail key={JSON.stringify(filters)} filters={filters} />
       <QueryState
         pending={spirits.isPending}
         error={spirits.error}

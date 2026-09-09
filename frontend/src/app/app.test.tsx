@@ -52,16 +52,22 @@ describe('session and navigation', () => {
     });
   });
 
-  it('attaches the access token and replaces cached identity on account change', async () => {
+  it('attaches the access token and replaces the private summary on account change', async () => {
     const fetch = vi
       .fn()
       .mockImplementation((_url: string, options: RequestInit) =>
         Promise.resolve(
           Response.json({
-            id: new Headers(options.headers)
-              .get('Authorization')
-              ?.replace('Bearer ', ''),
-            createdAt: '2026-09-04T00:00:00Z',
+            haveItems:
+              new Headers(options.headers).get('Authorization') ===
+              'Bearer user-a-token'
+                ? 7
+                : 2,
+            outItems: 0,
+            availableIngredients: 1,
+            canMake: 0,
+            oneAway: 0,
+            favorites: 0,
           }),
         ),
       );
@@ -69,11 +75,9 @@ describe('session and navigation', () => {
     const gateway = new FakeAuthGateway(userA);
     renderApp('/', gateway);
 
-    expect(
-      await screen.findByText('Your account is securely connected.'),
-    ).toBeVisible();
+    expect(await screen.findByText('7')).toBeVisible();
     expect(fetch).toHaveBeenLastCalledWith(
-      '/api/v1/me',
+      '/api/v1/home',
       expect.objectContaining({
         headers: expect.any(Headers),
       }),
@@ -96,7 +100,11 @@ describe('session and navigation', () => {
       (headers: Headers) =>
         headers.get('Authorization') === 'Bearer user-b-token',
     );
-    expect(await screen.findByText(/Good to see you, blake/)).toBeVisible();
+    expect(
+      await screen.findByRole('heading', { name: /Good to see you, blake/ }),
+    ).toBeVisible();
+    expect(await screen.findByText('2')).toBeVisible();
+    expect(screen.queryByText('7')).not.toBeInTheDocument();
   });
 
   it('ends an expired session when refresh fails', async () => {

@@ -68,7 +68,7 @@ export function AppLayout() {
         <main
           id="main-content"
           tabIndex={-1}
-          className="mx-auto w-full max-w-6xl flex-1 px-5 py-8 pb-28 sm:px-8 sm:py-12"
+          className="mx-auto w-full max-w-6xl flex-1 px-5 py-8 pb-[calc(7rem+env(safe-area-inset-bottom))] sm:px-8 sm:py-12"
         >
           <Outlet />
         </main>

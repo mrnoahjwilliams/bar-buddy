@@ -26,6 +26,8 @@ import type {
   CocktailPreferenceResponse,
   CocktailSummary,
   CreateInventory,
+  GetRandomCocktailParams,
+  HomeSummary,
   IngredientDetail,
   IngredientSummary,
   InventoryResponse,
@@ -199,6 +201,178 @@ export function useListCocktails<
   queryKey: DataTag<QueryKey, TData, TError>;
 } {
   const queryOptions = getListCocktailsQueryOptions(params, options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+export const getGetRandomCocktailUrl = (params?: GetRandomCocktailParams) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value));
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `/api/v1/cocktails/random?${stringifiedParams}`
+    : `/api/v1/cocktails/random`;
+};
+
+export const getRandomCocktail = async (
+  params?: GetRandomCocktailParams,
+  options?: Parameters<typeof apiFetch>[1],
+): Promise<CocktailSummary> => {
+  return apiFetch<CocktailSummary>(getGetRandomCocktailUrl(params), {
+    ...options,
+    method: 'GET',
+  });
+};
+
+export const getGetRandomCocktailQueryKey = (
+  params?: GetRandomCocktailParams,
+) => {
+  return [`/api/v1/cocktails/random`, ...(params ? [params] : [])] as const;
+};
+
+export const getGetRandomCocktailQueryOptions = <
+  TData = Awaited<ReturnType<typeof getRandomCocktail>>,
+  TError = ErrorType<ApiProblemResponse>,
+>(
+  params?: GetRandomCocktailParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getRandomCocktail>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetRandomCocktailQueryKey(params);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getRandomCocktail>>
+  > = ({ signal }) => getRandomCocktail(params, { signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getRandomCocktail>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetRandomCocktailQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getRandomCocktail>>
+>;
+export type GetRandomCocktailQueryError = ErrorType<ApiProblemResponse>;
+
+export function useGetRandomCocktail<
+  TData = Awaited<ReturnType<typeof getRandomCocktail>>,
+  TError = ErrorType<ApiProblemResponse>,
+>(
+  params: undefined | GetRandomCocktailParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getRandomCocktail>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getRandomCocktail>>,
+          TError,
+          Awaited<ReturnType<typeof getRandomCocktail>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetRandomCocktail<
+  TData = Awaited<ReturnType<typeof getRandomCocktail>>,
+  TError = ErrorType<ApiProblemResponse>,
+>(
+  params?: GetRandomCocktailParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getRandomCocktail>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getRandomCocktail>>,
+          TError,
+          Awaited<ReturnType<typeof getRandomCocktail>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetRandomCocktail<
+  TData = Awaited<ReturnType<typeof getRandomCocktail>>,
+  TError = ErrorType<ApiProblemResponse>,
+>(
+  params?: GetRandomCocktailParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getRandomCocktail>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+
+export function useGetRandomCocktail<
+  TData = Awaited<ReturnType<typeof getRandomCocktail>>,
+  TError = ErrorType<ApiProblemResponse>,
+>(
+  params?: GetRandomCocktailParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getRandomCocktail>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetRandomCocktailQueryOptions(params, options);
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<
     TData,
@@ -458,6 +632,135 @@ export const useUpdateCocktailPreference = <
     queryClient,
   );
 };
+
+export const getGetHomeSummaryUrl = () => {
+  return `/api/v1/home`;
+};
+
+export const getHomeSummary = async (
+  options?: Parameters<typeof apiFetch>[1],
+): Promise<HomeSummary> => {
+  return apiFetch<HomeSummary>(getGetHomeSummaryUrl(), {
+    ...options,
+    method: 'GET',
+  });
+};
+
+export const getGetHomeSummaryQueryKey = () => {
+  return [`/api/v1/home`] as const;
+};
+
+export const getGetHomeSummaryQueryOptions = <
+  TData = Awaited<ReturnType<typeof getHomeSummary>>,
+  TError = ErrorType<ApiProblemResponse>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof getHomeSummary>>, TError, TData>
+  >;
+  request?: SecondParameter<typeof apiFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetHomeSummaryQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getHomeSummary>>> = ({
+    signal,
+  }) => getHomeSummary({ signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getHomeSummary>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetHomeSummaryQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getHomeSummary>>
+>;
+export type GetHomeSummaryQueryError = ErrorType<ApiProblemResponse>;
+
+export function useGetHomeSummary<
+  TData = Awaited<ReturnType<typeof getHomeSummary>>,
+  TError = ErrorType<ApiProblemResponse>,
+>(
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getHomeSummary>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getHomeSummary>>,
+          TError,
+          Awaited<ReturnType<typeof getHomeSummary>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetHomeSummary<
+  TData = Awaited<ReturnType<typeof getHomeSummary>>,
+  TError = ErrorType<ApiProblemResponse>,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getHomeSummary>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getHomeSummary>>,
+          TError,
+          Awaited<ReturnType<typeof getHomeSummary>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetHomeSummary<
+  TData = Awaited<ReturnType<typeof getHomeSummary>>,
+  TError = ErrorType<ApiProblemResponse>,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getHomeSummary>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+
+export function useGetHomeSummary<
+  TData = Awaited<ReturnType<typeof getHomeSummary>>,
+  TError = ErrorType<ApiProblemResponse>,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getHomeSummary>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetHomeSummaryQueryOptions(options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
 
 export const getListIngredientsUrl = (params?: ListIngredientsParams) => {
   const normalizedParams = new URLSearchParams();

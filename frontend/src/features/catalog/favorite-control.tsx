@@ -11,8 +11,8 @@ function useRefreshCocktails() {
         const path = queryKey[0];
         return (
           typeof path === 'string' &&
-          ['/api/v1/cocktails', '/api/v1/ingredients'].some((prefix) =>
-            path.startsWith(prefix),
+          ['/api/v1/home', '/api/v1/cocktails', '/api/v1/ingredients'].some(
+            (prefix) => path.startsWith(prefix),
           )
         );
       },

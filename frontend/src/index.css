@@ -44,6 +44,7 @@
   body {
     margin: 0;
     min-width: 320px;
+    overflow-wrap: anywhere;
   }
   a,
   button {
@@ -66,4 +67,14 @@
 
 .skip-link:focus {
   top: 1rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
