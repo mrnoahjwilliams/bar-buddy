@@ -9,6 +9,7 @@ import type { IngredientSummary } from './ingredientSummary.ts';
 
 export interface CocktailSummary {
   availability?: AvailabilityResult;
+  favorite?: boolean;
   id?: string;
   name?: string;
   primarySpirit?: IngredientSummary;

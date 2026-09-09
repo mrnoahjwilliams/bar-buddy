@@ -8,6 +8,7 @@
 export * from './apiProblemResponse.ts';
 export * from './availabilityResult.ts';
 export * from './cocktailDetail.ts';
+export * from './cocktailPreferenceResponse.ts';
 export * from './cocktailSummary.ts';
 export * from './createInventory.ts';
 export * from './createInventoryStatus.ts';
@@ -21,5 +22,6 @@ export * from './listIngredientsParams.ts';
 export * from './meResponse.ts';
 export * from './recipeDetail.ts';
 export * from './recipeLine.ts';
+export * from './updateCocktailPreference.ts';
 export * from './updateInventory.ts';
 export * from './updateInventoryStatus.ts';

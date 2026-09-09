@@ -1,4 +1,4 @@
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { afterEach, expect, it, vi } from 'vitest';
@@ -383,4 +383,119 @@ it('keeps focus inside the remaining dialog when closing a directly loaded neste
   expect(screen.queryByRole('main')).not.toBeInTheDocument();
   await user.keyboard('{Tab}');
   expect(parent).toContainElement(document.activeElement as HTMLElement);
+});
+
+it('favorites from cards and details, combines the favorites filter, and refreshes affected views', async () => {
+  let favorite = false;
+  const fetch = vi.fn(async (input: string, options?: RequestInit) => {
+    const url = new URL(input, 'http://localhost');
+    if (url.pathname === '/api/v1/ingredients') return Response.json([gin]);
+    if (
+      url.pathname === '/api/v1/cocktails/gimlet/preference' &&
+      options?.method === 'PUT'
+    ) {
+      favorite = JSON.parse(options.body as string).favorite as boolean;
+      return Response.json({ cocktailId: 'gimlet', favorite });
+    }
+    if (url.pathname === '/api/v1/cocktails/gimlet')
+      return Response.json({ ...detail, favorite });
+    if (url.pathname === '/api/v1/cocktails') {
+      const matches =
+        (!url.searchParams.has('favoritesOnly') || favorite) &&
+        (!url.searchParams.get('search') ||
+          'gimlet'.includes(url.searchParams.get('search')!.toLowerCase()));
+      return Response.json(
+        matches
+          ? [
+              {
+                ...gimlet,
+                favorite,
+                availability: {
+                  canMake: true,
+                  missingCount: 0,
+                  missingIngredients: [],
+                },
+              },
+            ]
+          : [],
+      );
+    }
+    return Response.json({}, { status: 404 });
+  });
+  vi.stubGlobal('fetch', fetch);
+  const user = userEvent.setup();
+  const router = open(
+    '/drinks?search=Gim&primarySpiritId=gin&availability=can_make',
+  );
+
+  await user.click(
+    await screen.findByRole('button', { name: 'Add to favorites: Gimlet' }),
+  );
+  expect(
+    await screen.findByRole('button', {
+      name: 'Remove from favorites: Gimlet',
+    }),
+  ).toBePressed();
+  const save = fetch.mock.calls.find(
+    ([url, options]) =>
+      url === '/api/v1/cocktails/gimlet/preference' &&
+      (options as RequestInit).method === 'PUT',
+  );
+  expect(JSON.parse((save?.[1] as RequestInit).body as string)).toEqual({
+    favorite: true,
+  });
+
+  await user.click(screen.getByRole('link', { name: /Gimlet/ }));
+  const dialog = await screen.findByRole('dialog', {
+    name: 'Cocktail details',
+  });
+  expect(
+    within(dialog).getByRole('button', { name: 'Favorited' }),
+  ).toBePressed();
+  await user.click(screen.getByRole('button', { name: 'Close details' }));
+
+  await user.click(screen.getByLabelText('Favorites only'));
+  await user.click(screen.getByRole('button', { name: 'Search' }));
+  await screen.findByRole('link', { name: /Gimlet/ });
+  expect(router.state.location.search).toBe(
+    '?search=Gim&primarySpiritId=gin&availability=can_make&favoritesOnly=true',
+  );
+  await user.click(
+    screen.getByRole('button', { name: 'Remove from favorites: Gimlet' }),
+  );
+  expect(
+    await screen.findByText(/No favorite cocktails match these filters/),
+  ).toBeVisible();
+  expect(
+    screen.queryByRole('link', { name: /Gimlet/ }),
+  ).not.toBeInTheDocument();
+
+  await user.click(screen.getByRole('button', { name: 'Reset filters' }));
+  expect(await screen.findByRole('link', { name: /Gimlet/ })).toBeVisible();
+  expect(router.state.location.search).toBe('');
+});
+
+it('keeps the current favorite state and shows feedback when saving fails', async () => {
+  vi.stubGlobal(
+    'fetch',
+    vi.fn(async (input: string, options?: RequestInit) => {
+      const url = new URL(input, 'http://localhost');
+      if (url.pathname === '/api/v1/ingredients') return Response.json([gin]);
+      if (url.pathname.endsWith('/preference') && options?.method === 'PUT')
+        return Response.json({}, { status: 503 });
+      if (url.pathname === '/api/v1/cocktails')
+        return Response.json([{ ...gimlet, favorite: false }]);
+      return Response.json({}, { status: 404 });
+    }),
+  );
+  const user = userEvent.setup();
+  open('/drinks');
+  const add = await screen.findByRole('button', {
+    name: 'Add to favorites: Gimlet',
+  });
+  await user.click(add);
+  expect(await screen.findByRole('alert')).toHaveTextContent(
+    'Your favorite could not be saved',
+  );
+  expect(add).not.toBePressed();
 });

@@ -39,12 +39,15 @@ public class CatalogBrowseRepository {
         .getResultList();
   }
 
-  public List<Cocktail> cocktails(String search, UUID spirit) {
+  public List<Cocktail> cocktails(
+      String search, UUID spirit, boolean favoritesOnly, String subject) {
     return em.createQuery(
-            "select c from Cocktail c left join fetch c.primarySpirit where locate(:search, function('catalog_search_key', c.name)) > 0 and (:spirit is null or c.primarySpirit.id = :spirit) order by lower(c.name), c.id",
+            "select c from Cocktail c left join fetch c.primarySpirit where locate(:search, function('catalog_search_key', c.name)) > 0 and (:spirit is null or c.primarySpirit.id = :spirit) and (:favoritesOnly = false or exists (select s.id from UserCocktailState s where s.cocktail = c and s.owner.authSubject = :subject and s.favorite = true)) order by lower(c.name), c.id",
             Cocktail.class)
         .setParameter("search", search)
         .setParameter("spirit", spirit)
+        .setParameter("favoritesOnly", favoritesOnly)
+        .setParameter("subject", subject)
         .getResultList();
   }
 

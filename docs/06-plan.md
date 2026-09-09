@@ -132,7 +132,7 @@ No public app or application entity schema yet.
 
 #### 1.5.1 — Favorites
 
-- [ ] Add UserCocktailState and preference API favorite/unfavorite; wire card/detail controls and a favorites-only Drinks filter that combines with search, primary spirit and availability. **Verify:** persistence, isolation, repeated updates, combined filters/empty results and affected-view refresh when favorites change. This completes the seven-entity MVP model.
+- [x] Add UserCocktailState and preference API favorite/unfavorite; wire card/detail controls and a favorites-only Drinks filter that combines with search, primary spirit and availability. **Verify:** persistence, isolation, repeated updates, combined filters/empty results and affected-view refresh when favorites change. This completes the seven-entity MVP model.
 
 #### 1.5.2 — Random cocktail
 

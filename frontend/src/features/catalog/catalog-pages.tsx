@@ -1,4 +1,5 @@
 import { DetailLink } from './detail-links';
+import { FavoriteControl } from './favorite-control';
 import { IngredientInventory } from '@/features/bar/inventory-controls';
 import { measurement } from './measurement';
 import { useState, type FormEvent } from 'react';
@@ -83,6 +84,9 @@ function Filters({
   const [availability, setAvailability] = useState(
     params.get('availability') ?? '',
   );
+  const [favoritesOnly, setFavoritesOnly] = useState(
+    params.get('favoritesOnly') === 'true',
+  );
   const [filter, setFilter] = useState(params.get(filterKey) ?? '');
   function apply(event: FormEvent) {
     event.preventDefault();
@@ -91,6 +95,8 @@ function Filters({
     if (filter) next.set(filterKey, filter);
     if (kind === 'cocktails' && availability)
       next.set('availability', availability);
+    if (kind === 'cocktails' && favoritesOnly)
+      next.set('favoritesOnly', 'true');
     setParams(next);
   }
   return (
@@ -129,24 +135,35 @@ function Filters({
         </select>
       </label>
       {kind === 'cocktails' && (
-        <label className="grid gap-2">
-          Availability
-          <select
-            className={control}
-            value={availability}
-            onChange={(event) => setAvailability(event.target.value)}
-          >
-            <option value="">All</option>
-            <option value="can_make">Can Make</option>
-            <option value="one_away">Exactly One Ingredient Away</option>
-            {availability &&
-              !['can_make', 'one_away'].includes(availability) && (
-                <option value={availability}>
-                  {availability === 'all' ? 'All' : 'Unknown availability'}
-                </option>
-              )}
-          </select>
-        </label>
+        <>
+          <label className="grid gap-2">
+            Availability
+            <select
+              className={control}
+              value={availability}
+              onChange={(event) => setAvailability(event.target.value)}
+            >
+              <option value="">All</option>
+              <option value="can_make">Can Make</option>
+              <option value="one_away">Exactly One Ingredient Away</option>
+              {availability &&
+                !['can_make', 'one_away'].includes(availability) && (
+                  <option value={availability}>
+                    {availability === 'all' ? 'All' : 'Unknown availability'}
+                  </option>
+                )}
+            </select>
+          </label>
+          <label className="flex min-h-11 items-center gap-3 rounded-lg border border-border bg-card px-3 py-2">
+            <input
+              type="checkbox"
+              className="size-5 accent-primary"
+              checked={favoritesOnly}
+              onChange={(event) => setFavoritesOnly(event.target.checked)}
+            />
+            Favorites only
+          </label>
+        </>
       )}
       <Button className="min-h-11" type="submit">
         Search
@@ -159,6 +176,7 @@ function Filters({
           setSearch('');
           setFilter('');
           setAvailability('');
+          setFavoritesOnly(false);
           setParams({});
         }}
       >
@@ -173,36 +191,50 @@ function CocktailLinks({ cocktails }: { cocktails: CocktailSummary[] }) {
     <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
       {cocktails.map((cocktail) => (
         <li key={cocktail.id}>
-          <DetailLink
-            className={`${card} ${cocktail.availability?.canMake ? 'border-primary bg-secondary' : ''}`}
-            kind="cocktail"
-            id={cocktail.id!}
+          <div
+            className={`relative rounded-xl border border-border bg-card hover:bg-secondary ${cocktail.availability?.canMake ? 'border-primary bg-secondary' : ''}`}
           >
-            <span className="block text-lg font-semibold">{cocktail.name}</span>
-            <span className="text-sm text-muted-foreground">
-              {cocktail.primarySpirit?.name}
-            </span>
-            {cocktail.availability && (
-              <span className="mt-3 block text-sm font-medium">
-                {cocktail.availability.canMake
-                  ? 'You can make this'
-                  : `${cocktail.availability.missingCount} ingredient${cocktail.availability.missingCount === 1 ? '' : 's'} away`}
+            <DetailLink
+              className="block min-h-full rounded-xl p-5 pr-16"
+              kind="cocktail"
+              id={cocktail.id!}
+            >
+              <span className="block text-lg font-semibold">
+                {cocktail.name}
               </span>
-            )}
-            {!cocktail.availability?.canMake &&
-              !!cocktail.availability?.missingIngredients?.length && (
-                <span className="mt-1 block text-sm text-muted-foreground">
-                  Missing:{' '}
-                  {cocktail.availability.missingIngredients
-                    .slice(0, 2)
-                    .map((i) => i.name)
-                    .join(', ')}
-                  {cocktail.availability.missingIngredients.length > 2
-                    ? ` +${cocktail.availability.missingIngredients.length - 2} more`
-                    : ''}
+              <span className="text-sm text-muted-foreground">
+                {cocktail.primarySpirit?.name}
+              </span>
+              {cocktail.availability && (
+                <span className="mt-3 block text-sm font-medium">
+                  {cocktail.availability.canMake
+                    ? 'You can make this'
+                    : `${cocktail.availability.missingCount} ingredient${cocktail.availability.missingCount === 1 ? '' : 's'} away`}
                 </span>
               )}
-          </DetailLink>
+              {!cocktail.availability?.canMake &&
+                !!cocktail.availability?.missingIngredients?.length && (
+                  <span className="mt-1 block text-sm text-muted-foreground">
+                    Missing:{' '}
+                    {cocktail.availability.missingIngredients
+                      .slice(0, 2)
+                      .map((i) => i.name)
+                      .join(', ')}
+                    {cocktail.availability.missingIngredients.length > 2
+                      ? ` +${cocktail.availability.missingIngredients.length - 2} more`
+                      : ''}
+                  </span>
+                )}
+            </DetailLink>
+            <div className="absolute right-3 top-3">
+              <FavoriteControl
+                cocktailId={cocktail.id!}
+                cocktailName={cocktail.name}
+                favorite={!!cocktail.favorite}
+                compact
+              />
+            </div>
+          </div>
         </li>
       ))}
     </ul>
@@ -279,13 +311,15 @@ export function CocktailCatalogPage() {
       search: params.get('search') ?? undefined,
       primarySpiritId: params.get('primarySpiritId') || undefined,
       availability: params.get('availability') || undefined,
+      favoritesOnly: params.get('favoritesOnly') === 'true' || undefined,
     },
     queryOptions,
   );
   const filtered = !!(
     params.get('search') ||
     params.get('primarySpiritId') ||
-    params.get('availability')
+    params.get('availability') ||
+    params.get('favoritesOnly')
   );
   const makeable = useListCocktails(
     { availability: 'can_make' },
@@ -324,7 +358,7 @@ export function CocktailCatalogPage() {
         </aside>
       )}
       <Filters
-        key={`${params.get('search')}:${params.get('primarySpiritId')}:${params.get('availability')}`}
+        key={`${params.get('search')}:${params.get('primarySpiritId')}:${params.get('availability')}:${params.get('favoritesOnly')}`}
         kind="cocktails"
         options={(spirits.data ?? []).map((spirit) => ({
           value: spirit.id!,
@@ -346,8 +380,9 @@ export function CocktailCatalogPage() {
           <p role="status">{query.data.length} cocktails</p>
           {query.data.length === 0 && (
             <p>
-              No cocktails match your search. Try another name or reset the
-              filters.
+              {params.get('favoritesOnly') === 'true'
+                ? 'No favorite cocktails match these filters. Favorite a drink or reset the filters.'
+                : 'No cocktails match your search. Try another name or reset the filters.'}
             </p>
           )}
           {query.data.some((c) => c.availability?.canMake) && (
@@ -473,6 +508,11 @@ export function CocktailDetailPage({
             {query.data.primarySpirit?.name}
           </p>
           <h1 className="text-3xl font-semibold">{query.data.name}</h1>
+          <FavoriteControl
+            cocktailId={id}
+            cocktailName={query.data.name}
+            favorite={!!query.data.favorite}
+          />
           <p>{recipe?.name}</p>
           {query.data.availability && (
             <section

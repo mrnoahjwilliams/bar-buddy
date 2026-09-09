@@ -69,7 +69,7 @@ class CatalogSearchIT {
     assertThat(catalog.ingredients("co", null))
         .extracting(CatalogResponses.IngredientSummary::id)
         .doesNotHaveDuplicates();
-    assertThat(catalog.cocktails("piña colada", null, null, "one"))
+    assertThat(catalog.cocktails("piña colada", null, null, false, "one"))
         .extracting(CatalogResponses.CocktailSummary::name)
         .containsExactly("Pina Colada");
     mvc.perform(get("/api/v1/ingredients").param("search", "TRIPLE SEC").with(jwt()))
@@ -80,7 +80,7 @@ class CatalogSearchIT {
             "one",
             new InventoryRequests.CreateInventory(
                 orange.id(), "Cointreau at home", InventoryStatus.Have));
-    var before = catalog.cocktails("", null, null, "one");
+    var before = catalog.cocktails("", null, null, false, "one");
     for (String name : new String[] {"Spiced rum", "Coconut rum", "Coconut rum liqueur"}) {
       var ingredient =
           catalog.ingredients(name, null).stream()
@@ -92,7 +92,7 @@ class CatalogSearchIT {
           "one",
           new InventoryRequests.CreateInventory(ingredient.id(), null, InventoryStatus.Have));
     }
-    assertThat(catalog.cocktails("", null, null, "one")).isEqualTo(before);
+    assertThat(catalog.cocktails("", null, null, false, "one")).isEqualTo(before);
     assertThat(catalog.ingredients("Malibu", null))
         .extracting(CatalogResponses.IngredientSummary::name)
         .containsExactly("Coconut rum liqueur");
@@ -143,6 +143,7 @@ class CatalogSearchIT {
             .dataSource(source)
             .schemas("alias_upgrade")
             .defaultSchema("alias_upgrade")
+            .target("4")
             .load();
     assertThat(upgrade.migrate().migrationsExecuted).isEqualTo(1);
     assertThat(upgrade.migrate().migrationsExecuted).isZero();
