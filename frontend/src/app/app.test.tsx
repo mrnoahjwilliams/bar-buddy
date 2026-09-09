@@ -14,6 +14,12 @@ const userA: AppSession = {
 };
 
 function renderApp(path: string, authGateway = new FakeAuthGateway()) {
+  const originalFetch = globalThis.fetch;
+  vi.stubGlobal('fetch', (url: string, options: RequestInit) =>
+    url === '/api/v1/me'
+      ? Promise.resolve(Response.json({ id: 'user', displayName: null }))
+      : originalFetch(url, options),
+  );
   const router = createMemoryRouter(appRoutes, { initialEntries: [path] });
   render(
     <AppProviders authGateway={authGateway}>
@@ -101,7 +107,7 @@ describe('session and navigation', () => {
         headers.get('Authorization') === 'Bearer user-b-token',
     );
     expect(
-      await screen.findByRole('heading', { name: /Good to see you, blake/ }),
+      await screen.findByRole('heading', { name: /Good to see you\./ }),
     ).toBeVisible();
     expect(await screen.findByText('2')).toBeVisible();
     expect(screen.queryByText('7')).not.toBeInTheDocument();
@@ -179,7 +185,7 @@ describe('account creation and recovery', () => {
 
     expect(gateway.updatedPassword).toBe('newpassword123');
     expect(
-      await screen.findByRole('heading', { name: /Good to see you, avery/ }),
+      await screen.findByRole('heading', { name: /Good to see you\./ }),
     ).toBeVisible();
   });
 
@@ -212,7 +218,7 @@ describe('unknown routes', () => {
     ).toBeVisible();
     await user.click(screen.getByRole('link', { name: 'Back to Bar Buddy' }));
     expect(
-      await screen.findByRole('heading', { name: /Good to see you, avery/ }),
+      await screen.findByRole('heading', { name: /Good to see you\./ }),
     ).toBeVisible();
   });
 });

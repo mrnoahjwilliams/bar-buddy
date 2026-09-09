@@ -37,6 +37,12 @@ Drink cards show the missing ingredient name for one-away results and up to two 
 
 Selecting ingredient or cocktail cards opens a large accessible detail overlay with catalog context visible around it. Support nested ingredient/drink inspection, close/Escape/browser Back, restored focus and catalog scroll/filters, and reloadable direct detail links. On small phones the overlay may occupy nearly the whole screen while retaining a visible margin.
 
+## Approved MVP polish
+
+Approved September 9, 2026: More includes an optional private display name (up to 80 characters), profile save feedback, password-reset email controls, and permanent account deletion requiring exact `DELETE` confirmation. Home greets by the saved name; no name uses a neutral greeting. An empty name clears the preference.
+
+Deletion removes the profile name, inventory and favorites, disables application access immediately, and reliably retries deletion of the Supabase login. Retain only the minimal identity/lifecycle record needed to reject old sessions and track retries; explain this retention and irreversibility before confirmation. Do not broaden this into history, theme, measurement, or notification settings scheduled for later releases. Requests and late responses must stay bound to the account that started them.
+
 ## Domain rules
 
 - Support the eleven-entity target and release allocation in Design. Recipes reference canonical ingredients, not commercial bottles. A user may own multiple inventory items for one ingredient; each may have a bottle label.

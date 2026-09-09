@@ -27,6 +27,18 @@ import org.springframework.web.bind.annotation.RestController;
   SecurityConfigurationTest.TestController.class
 })
 class SecurityConfigurationTest {
+  @org.springframework.test.context.bean.override.convention.TestBean(methodName = "deletionStub")
+  com.barbuddy.users.AccountDeletionService deletions;
+
+  static com.barbuddy.users.AccountDeletionService deletionStub() {
+    return new com.barbuddy.users.AccountDeletionService(null, null, null) {
+      @Override
+      public boolean requested(String subject) {
+        return false;
+      }
+    };
+  }
+
   @Autowired MockMvc mvc;
 
   @Test

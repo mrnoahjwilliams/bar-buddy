@@ -700,6 +700,29 @@
       }
     },
     "/api/v1/me" : {
+      "delete" : {
+        "operationId" : "deleteAccount",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DeleteAccount"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "202" : {
+            "description" : "Accepted"
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "summary" : "Permanently delete your account and queue identity removal",
+        "tags" : [ "Users" ]
+      },
       "get" : {
         "operationId" : "getCurrentUser",
         "responses" : {
@@ -728,6 +751,36 @@
           "bearerAuth" : [ ]
         } ],
         "summary" : "Resolve the current Bar Buddy user",
+        "tags" : [ "Users" ]
+      },
+      "put" : {
+        "operationId" : "updateProfile",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateProfile"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MeResponse"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "summary" : "Update your profile",
         "tags" : [ "Users" ]
       }
     }
@@ -858,6 +911,16 @@
         },
         "required" : [ "ingredientId", "status" ]
       },
+      "DeleteAccount" : {
+        "type" : "object",
+        "properties" : {
+          "confirmation" : {
+            "type" : "string",
+            "pattern" : "DELETE"
+          }
+        },
+        "required" : [ "confirmation" ]
+      },
       "DisplayMeasurement" : {
         "type" : "object",
         "properties" : {
@@ -973,6 +1036,9 @@
             "type" : "string",
             "format" : "date-time"
           },
+          "displayName" : {
+            "type" : "string"
+          },
           "id" : {
             "type" : "string",
             "format" : "uuid"
@@ -1057,6 +1123,18 @@
           }
         },
         "required" : [ "status" ]
+      },
+      "UpdateProfile" : {
+        "type" : "object",
+        "properties" : {
+          "displayName" : {
+            "type" : "string",
+            "maxLength" : 80,
+            "minLength" : 0,
+            "pattern" : "[^\\p{Cntrl}]*"
+          }
+        },
+        "required" : [ "displayName" ]
       }
     },
     "securitySchemes" : {

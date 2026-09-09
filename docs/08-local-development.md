@@ -1,6 +1,6 @@
 # Local Development
 
-This guide owns detailed setup, configuration, and verification commands. The root [README](../README.md) intentionally stays limited to the project overview, quick start, and current status.
+This guide owns detailed setup, configuration, and verification commands. The root [README](../README.md) intentionally stays limited to the product overview, screenshots, public app link, quick start, and documentation links.
 
 ## Prerequisites
 
@@ -76,9 +76,27 @@ The backend accepts only absolute HTTPS issuer and JWKS URLs, except loopback HT
 
 After both apps are running, authenticated `GET /api/v1/me` requests create or return the caller's local identity. Runtime API documentation remains disabled.
 
+## Account deletion
+
+Set `SUPABASE_AUTH_ADMIN_KEY` in **backend/.env only** to a Supabase secret API key (or legacy service-role key) from the same project as `AUTH_ISSUER`. The backend derives the Auth administration endpoint from that issuer. This credential is used only for identity deletion; application data still goes through the ordinary PostgreSQL connection. Never use it in a `VITE_` value, browser code, or logs. Without it, deletion returns a recoverable 503 and preserves the account.
+
+After exact `DELETE` confirmation, the backend atomically removes the user's inventory, favorites and display name and marks the local identity as deleted. All subsequent API requests using that subject are denied, including requests with otherwise-valid old tokens. The browser clears its local session. A background worker processes up to 25 pending identities every minute, hard-deleting the Supabase login; provider failures remain pending for the next pass. A provider 404 is treated as already deleted, making retries safe after a lost response. The backend must remain running for retries to progress.
+
+A minimal local identity record (opaque IDs and lifecycle timestamps, no name/inventory/favorites) remains to reject old sessions and record completion. Existing backups retain their normal retention period. Review any future retention change against token-replay protection before purging these records.
+
+For operations, inspect pending deletions using the trusted database connection:
+
+```sql
+SELECT count(*) AS pending_deletions, min(deletion_requested_at) AS oldest_request
+FROM app_user
+WHERE deletion_requested_at IS NOT NULL AND identity_deleted_at IS NULL;
+```
+
+Repeated `Account identity deletion pending` warnings indicate a provider/configuration issue. Correct the server credential or provider availability and leave the worker running; do not clear pending markers manually. `bar-buddy.account-deletion.worker-enabled=false` is reserved for isolated tests. Verify real deletion with disposable accounts and the public configuration during the release gate; local tests use a fake identity provider and never delete real users.
+
 ## Catalog and API generation
 
-Spring startup applies pending Flyway migrations: V2 creates the catalog tables, V3 creates user-owned Have/Out inventory, V4 adds searchable ingredient aliases, and V5 creates per-user cocktail preferences. Import is an explicit operator action; normal application startup does not load or overwrite catalog data.
+Spring startup applies pending Flyway migrations: V2 creates the catalog tables, V3 creates user-owned Have/Out inventory, V4 adds searchable ingredient aliases, V5 creates per-user cocktail preferences, and V6 adds the optional profile name and account-deletion lifecycle. Import is an explicit operator action; normal application startup does not load or overwrite catalog data.
 
 Stop a backend running from this checkout before rebuilding or generating API artifacts, or use an isolated checkout. Restart it after the build so it loads the current classes and migrations. For this usability update, import the revised catalog to populate aliases and the three new rum ingredients; restarting alone does not populate them.
 
@@ -88,17 +106,17 @@ With Node 24 available on `PATH`, build the backend, then run this command from 
 ./mvnw --batch-mode --no-transfer-progress verify
 java -Dloader.main=com.barbuddy.catalog.CatalogImportApplication \
   -cp target/bar-buddy-0.0.1-SNAPSHOT.jar \
-  org.springframework.boot.loader.launch.PropertiesLauncher ../catalog/cocktails.json
+  org.springframework.boot.loader.launch.PropertiesLauncher catalog/cocktails.json
 ```
 
 The command validates a snapshot of the complete input using the bundled catalog validator before opening the database. It then applies pending Flyway migrations and imports in one transaction, prints a completion message and exits. It starts no web listener and needs no Auth configuration. Invalid input or import failure produces a nonzero exit; failed catalog writes roll back together. Flyway migrations are a separate preceding operation and remain applied if a later import fails.
 
-Re-running the same file preserves database identities and does not duplicate records. Corrections update display data and synchronize ordered recipe lines. Missing stable entities, changed cocktail slugs or recipe membership require a reviewed migration; they are not automatic retirements or renames. See the [catalog correction contract](../catalog/README.md#import-and-correction-contract). Only run against the intended database; hosted deployment/import remains a separately authorized release operation. Node is required for this operator command and its backend integration tests, but not for normal backend startup.
+Re-running the same file preserves database identities and does not duplicate records. Corrections update display data and synchronize ordered recipe lines. Missing stable entities, changed cocktail slugs or recipe membership require a reviewed migration; they are not automatic retirements or renames. See the [catalog correction contract](../backend/catalog/README.md#import-and-correction-contract). Only run against the intended database; hosted deployment/import remains a separately authorized release operation. Node is required for this operator command and its backend integration tests, but not for normal backend startup.
 
 Validate the maintained catalog without installing extra dependencies:
 
 ```sh
-cd catalog
+cd backend/catalog
 npm run check
 ```
 
@@ -110,10 +128,10 @@ npm run api:generate
 npm run check
 ```
 
-Review and stage the generated changes, then run `npm run api:check`. Generation and drift verification use a disposable PostgreSQL container, do not start a listening backend, and require no hosted credentials. Do not hand-edit files under `contracts/openapi.json` or `frontend/src/api/generated/`.
+Review and stage the generated changes, then run `npm run api:check`. Generation and drift verification use a disposable PostgreSQL container, do not start a listening backend, and require no hosted credentials. Do not hand-edit files under `backend/contracts/openapi.json` or `frontend/src/api/generated/`.
 
 ## CI and credential hygiene
 
-GitHub Actions runs `backend-checks` and `frontend-checks` for pull requests to `main`, pushes to `main`, and manual runs. CI uses disposable services and no production credentials. Dependabot checks Maven, npm, GitHub Actions, and Docker dependencies weekly; vulnerability alerts and automated security updates are enabled in the repository settings.
+GitHub Actions runs `backend-checks` and `frontend-checks` for pull requests to `main`, pushes to `main`, and manual runs. CI uses disposable services and no production credentials. Dependency updates are reviewed manually. Dependabot version-update configuration is removed and automated security-update PRs are disabled; vulnerability alerts remain enabled.
 
 Backend `.env` files containing credentials should remain ignored and owner-readable (`chmod 600 backend/.env`). Frontend `VITE_` values are shipped to the browser and therefore must never be treated as secrets. Build output, dependency directories, caches, and generated temporary files are not source artifacts and should remain untracked.

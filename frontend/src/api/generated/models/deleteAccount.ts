@@ -5,8 +5,7 @@
  * OpenAPI spec version: v1
  */
 
-export interface MeResponse {
-  createdAt: string;
-  displayName?: string;
-  id: string;
+export interface DeleteAccount {
+  /** @pattern DELETE */
+  confirmation: string;
 }

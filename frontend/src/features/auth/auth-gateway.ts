@@ -17,5 +17,5 @@ export interface AuthGateway {
   sendPasswordReset(email: string, redirectTo: string): Promise<void>;
   updatePassword(password: string): Promise<void>;
   refreshSession(): Promise<AppSession | null>;
-  signOut(): Promise<void>;
+  signOut(scope?: 'global' | 'local'): Promise<void>;
 }

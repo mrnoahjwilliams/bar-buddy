@@ -26,11 +26,21 @@ Migration V1 revokes current and default privileges from `PUBLIC` and provider D
 
 Hosted backend acceptance completed September 3, 2026 using Supabase's East US (Ohio) Free-plan project, its ECC P-256/ES256 signing key, TLS database connection, and disabled Data API. Provider roles lacked application privileges; genuine tokens for two temporary users remained isolated through Spring; anonymous and user-token REST/GraphQL attempts could not access application data. Temporary users and rows were removed afterward. Credentials remained only in ignored owner-readable backend environment files.
 
+## MVP profile, account settings and deletion
+
+More now loads and saves the current user's optional display name (maximum 80 characters; whitespace-only clears it). Home uses this name or a neutral greeting. More also exposes password-reset email delivery and a confirmed account-deletion flow. Profile errors preserve the edit for retry; account switching clears drafts and private cached data.
+
+`PUT /api/v1/me` updates only the authenticated caller. `DELETE /api/v1/me` requires exact `DELETE` confirmation, removes the caller's inventory/favorites/name transactionally, and returns 202 with durable identity removal pending. V6 extends AppUser with name/deletion lifecycle fields. Old JWTs are denied after deletion; a worker retries hard deletion of the Supabase login and records completion. The remaining minimal identity record prevents account resurrection from old tokens. [Local development](08-local-development.md#account-deletion) owns required server configuration, retention and recovery. Hosted admin credentials and real provider deletion are not verified by this local polish pass; they are part of the publication gate.
+
+The transport binds requests, shared refreshes and responses to their original session generation. It discards work after account changes, and late profile saves cannot repopulate another user's cache.
+
+Verified September 9, 2026: backend formatting/static checks and 40 unit/integration tests; frontend formatting/lint/type checks, 57 behavior tests, API-tooling regression and production build; catalog validation and five validator tests; isolated OpenAPI/client generation and tracked-artifact drift verification. New coverage includes name persistence/clearing/validation, profile cache isolation, confirmed deletion, other-user data preservation, transaction rollback, durable provider failure/retry, old-token denial, V5-to-V6 upgrades, and account-switch refresh races. Browser review at 1360px and 390px covered the four main screens, profile saving and deletion confirmation. README screenshots use sample data. npm's production-dependency audit reported zero vulnerabilities; GitHub had no open dependency alerts at review time. These checks are not a production security certification or publication acceptance.
+
 ## Curated catalog
 
 The approved source-neutral catalog contains 116 canonical ingredients, 102 cocktails, 102 default recipes, and 416 ordered recipe lines. It preserves recipe wording, reviewed US/metric measurements, optional non-exclusive styles, and stable namespaced identifiers. An explicit operator command loads it into PostgreSQL; normal web-server startup does not import.
 
-Dependency-free validation covers the exact versioned structure, required fields, duplicate identity/name checks, references, controlled values, compatible measurement pairs, and array/display order. Known-result fixtures verify valid optional and qualitative data plus precise failures. [`catalog/README.md`](../catalog/README.md) owns the format, curation decisions, provenance archive, and future import/correction contract.
+Dependency-free validation covers the exact versioned structure, required fields, duplicate identity/name checks, references, controlled values, compatible measurement pairs, and array/display order. Known-result fixtures verify valid optional and qualitative data plus precise failures. [`backend/catalog/README.md`](../backend/catalog/README.md) owns the format, curation decisions, provenance archive, and future import/correction contract.
 
 Migration V2 adds empty Ingredient, Cocktail, Recipe and RecipeIngredient tables with UUID database identities and unique catalog IDs on the first three. JPA maps lazy relationships and independent US/metric decimal measurements. Constraints protect references, positive unique recipe positions, controlled categories/requirements/units, compatible measurement pairs and valid quantities. Repeated ingredients at different positions are supported. Optional styles remain in the reviewed source for Release 2.
 
@@ -122,6 +132,8 @@ Verified September 9, 2026: full backend verification (28 integration tests plus
 
 ## Application foundation and API generation
 
+The repository now has two application roots, `backend/` and `frontend/`, alongside `docs/`. Catalog data, its validator/fixtures/provenance, and the generated OpenAPI contract moved to `backend/catalog/` and `backend/contracts/`. Maven resources, import fixtures, CI and generation/drift tooling use the new paths; no catalog data was changed by the move. README now owns the product introduction, sample screenshots, local quick start, public-link placeholder and documentation links.
+
 The backend uses Java 25, Spring Boot 4.1, PostgreSQL 17, Flyway, formatting/static checks, JUnit, and Testcontainers. The frontend uses React 19, TypeScript, Vite, React Router, TanStack Query, Tailwind, shadcn/ui, ESLint, Prettier, Vitest, and React Testing Library. Exact versions are pinned in manifests, lockfiles, images, and wrappers. The Maven distribution has a committed checksum.
 
 springdoc exports the real application contract from an isolated Spring/Testcontainers context. Orval generates the tracked client and TanStack Query hook through the narrow shared Fetch adapter. Drift verification rejects missing, modified, unexpected, ignored, or untracked generated artifacts; generated output is retained because it is the compile-time boundary between the backend contract and frontend consumers, not a disposable build artifact.
@@ -130,6 +142,6 @@ springdoc exports the real application contract from an isolated Spring/Testcont
 
 GitHub Actions runs required `backend-checks` and `frontend-checks` for pull requests to `main` and pushes to `main`. The backend job runs the full Maven verification. The frontend job installs once, then validates the catalog, frontend, and independently regenerated API artifacts. Jobs use pinned actions, minimum read permissions, disposable services, no hosted credentials, timeouts, and cancellation of superseded runs.
 
-Protected `main` requires a pull request, resolved conversations, an up-to-date branch, and both required checks; force pushes and deletion are disabled, linear history is required, and only squash merges are enabled. Weekly Dependabot configuration covers Maven, npm, GitHub Actions, and Docker dependencies. GitHub vulnerability alerts, automated security updates, secret scanning, and push protection are enabled.
+Protected `main` requires a pull request, resolved conversations, an up-to-date branch, and both required checks; force pushes and deletion are disabled, linear history is required, and only squash merges are enabled. Dependency updates are manual. Dependabot PRs #22 and #23 were closed at the owner’s request on September 9, 2026; automated security-update PRs are disabled and this polish change removes version-update configuration. Vulnerability alerts, secret scanning, and push protection remain enabled.
 
 Bar Buddy has not been deployed. Public hosting, production email, observability, recovery, and release verification remain in plan unit 1.6.

@@ -19,7 +19,7 @@ The archived builder can reproduce the current review candidate from the frozen
 snapshot if historical inspection is needed:
 
 ```sh
-python3 catalog/archive/tools/build_catalog.py \
-  --source catalog/archive/sources/iba-2026-09-03.json \
-  --output catalog/cocktails.json
+python3 backend/catalog/archive/tools/build_catalog.py \
+  --source backend/catalog/archive/sources/iba-2026-09-03.json \
+  --output backend/catalog/cocktails.json
 ```

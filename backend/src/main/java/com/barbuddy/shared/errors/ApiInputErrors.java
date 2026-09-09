@@ -2,6 +2,7 @@ package com.barbuddy.shared.errors;
 
 import com.barbuddy.catalog.CatalogBrowseController;
 import com.barbuddy.inventory.InventoryController;
+import com.barbuddy.users.MeController;
 import jakarta.servlet.http.HttpServletRequest;
 import java.net.URI;
 import org.springframework.http.HttpStatus;
@@ -14,7 +15,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.server.ResponseStatusException;
 
-@RestControllerAdvice(assignableTypes = {CatalogBrowseController.class, InventoryController.class})
+@RestControllerAdvice(
+    assignableTypes = {
+      CatalogBrowseController.class,
+      InventoryController.class,
+      MeController.class
+    })
 public class ApiInputErrors {
   @ExceptionHandler(ResponseStatusException.class)
   ResponseEntity<ApiProblemResponse> domain(

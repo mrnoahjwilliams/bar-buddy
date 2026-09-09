@@ -1,6 +1,7 @@
 package com.barbuddy.shared.security;
 
 import com.barbuddy.shared.errors.ApiProblemWriter;
+import com.barbuddy.users.AccountDeletionService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -14,13 +15,17 @@ import org.springframework.security.oauth2.server.resource.web.access.BearerToke
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.access.intercept.AuthorizationFilter;
 
 @Configuration(proxyBeanMethods = false)
 public class SecurityConfiguration {
 
   @Bean
   SecurityFilterChain securityFilterChain(
-      HttpSecurity http, AuthProperties authProperties, ApiProblemWriter problems)
+      HttpSecurity http,
+      AuthProperties authProperties,
+      ApiProblemWriter problems,
+      AccountDeletionService deletions)
       throws Exception {
     AuthenticationEntryPoint authenticationEntryPoint =
         (request, response, exception) -> {
@@ -63,6 +68,7 @@ public class SecurityConfiguration {
                   .accessDeniedHandler(accessDeniedHandler));
     }
 
+    http.addFilterBefore(new DeletedAccountFilter(deletions, problems), AuthorizationFilter.class);
     return http.build();
   }
 }

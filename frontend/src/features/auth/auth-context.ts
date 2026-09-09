@@ -14,6 +14,7 @@ export interface AuthContextValue {
   ): Promise<'signed-in' | 'confirmation'>;
   sendPasswordReset(email: string): Promise<void>;
   updatePassword(password: string): Promise<void>;
+  finishAccountDeletion(): Promise<void>;
   signOut(): Promise<void>;
 }
 

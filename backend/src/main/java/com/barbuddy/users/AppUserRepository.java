@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 interface AppUserRepository extends JpaRepository<AppUser, UUID> {
+  @org.springframework.data.jpa.repository.Lock(jakarta.persistence.LockModeType.PESSIMISTIC_WRITE)
   Optional<AppUser> findByAuthSubject(String authSubject);
 
   @Modifying

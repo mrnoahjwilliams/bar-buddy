@@ -115,7 +115,7 @@
       </resource>
       <resource>
         <targetPath>catalog-tools</targetPath>
-        <directory>../catalog/scripts</directory>
+        <directory>catalog/scripts</directory>
         <includes>
           <include>catalog-validator.mjs</include>
           <include>validate-catalog.mjs</include>

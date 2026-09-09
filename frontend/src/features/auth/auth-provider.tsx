@@ -19,6 +19,7 @@ interface AuthProviderProps {
 export function AuthProvider({ children, gateway }: AuthProviderProps) {
   const queryClient = useQueryClient();
   const [session, setSession] = useState<AppSession | null>(null);
+  const sessionEpoch = useRef(0);
   const sessionRef = useRef<AppSession | null>(null);
   const lastUserId = useRef<string | null | undefined>(undefined);
   const [status, setStatus] = useState<AuthContextValue['status']>('loading');
@@ -27,6 +28,9 @@ export function AuthProvider({ children, gateway }: AuthProviderProps) {
   const applySession = useCallback(
     (event: AuthEvent, nextSession: AppSession | null) => {
       const nextUserId = nextSession?.userId ?? null;
+      const changed = lastUserId.current !== nextUserId;
+      if (changed) sessionEpoch.current += 1;
+      sessionRef.current = nextSession;
       if (
         lastUserId.current !== undefined &&
         lastUserId.current !== nextUserId
@@ -34,7 +38,6 @@ export function AuthProvider({ children, gateway }: AuthProviderProps) {
         queryClient.clear();
       }
       lastUserId.current = nextUserId;
-      sessionRef.current = nextSession;
       setSession(nextSession);
       setStatus(
         event === 'password-recovery'
@@ -48,13 +51,14 @@ export function AuthProvider({ children, gateway }: AuthProviderProps) {
   );
 
   const expireSession = useCallback(async () => {
+    const epoch = sessionEpoch.current;
     setNotice('Your session expired. Sign in again to keep using Bar Buddy.');
     try {
       await gateway.signOut();
     } catch {
       // The local session must still be discarded when provider sign-out fails.
     } finally {
-      applySession('session-changed', null);
+      if (sessionEpoch.current === epoch) applySession('session-changed', null);
     }
   }, [applySession, gateway]);
 
@@ -84,10 +88,13 @@ export function AuthProvider({ children, gateway }: AuthProviderProps) {
 
   useEffect(() => {
     setApiAuthBridge({
+      sessionKey: () => sessionEpoch.current,
       async getAccessToken(forceRefresh) {
+        const epoch = sessionEpoch.current;
         if (!forceRefresh) return sessionRef.current?.accessToken;
         try {
           const refreshed = await gateway.refreshSession();
+          if (sessionEpoch.current !== epoch) return undefined;
           if (refreshed) applySession('session-changed', refreshed);
           return refreshed?.accessToken;
         } catch {
@@ -131,6 +138,16 @@ export function AuthProvider({ children, gateway }: AuthProviderProps) {
         await gateway.updatePassword(password);
         setStatus('authenticated');
         setNotice('Your password has been updated.');
+      },
+      async finishAccountDeletion() {
+        try {
+          await gateway.signOut('local');
+        } finally {
+          applySession('session-changed', null);
+          setNotice(
+            'Your account data has been deleted. Login removal is being completed.',
+          );
+        }
       },
       async signOut() {
         await gateway.signOut();

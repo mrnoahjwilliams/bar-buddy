@@ -26,6 +26,7 @@ import type {
   CocktailPreferenceResponse,
   CocktailSummary,
   CreateInventory,
+  DeleteAccount,
   GetRandomCocktailParams,
   HomeSummary,
   IngredientDetail,
@@ -36,6 +37,7 @@ import type {
   MeResponse,
   UpdateCocktailPreference,
   UpdateInventory,
+  UpdateProfile,
 } from './models';
 
 import { apiFetch } from '../http.ts';
@@ -1484,6 +1486,109 @@ export const useUpdateInventory = <
   return useMutation(getUpdateInventoryMutationOptions(options), queryClient);
 };
 
+export const getDeleteAccountUrl = () => {
+  return `/api/v1/me`;
+};
+
+/**
+ * @summary Permanently delete your account and queue identity removal
+ */
+export const deleteAccount = async (
+  deleteAccountBody: DeleteAccount,
+  options?: Parameters<typeof apiFetch>[1],
+): Promise<void> => {
+  const getHeaders = (
+    h?: NonNullable<RequestInit['headers']>,
+  ): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Array.isArray(h)) return Object.fromEntries(h);
+    return h;
+  };
+  return apiFetch<void>(getDeleteAccountUrl(), {
+    ...options,
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      ...getHeaders(options?.headers),
+    },
+    body: JSON.stringify(deleteAccountBody),
+  });
+};
+
+export const getDeleteAccountMutationKey = () => ['deleteAccount'] as const;
+
+export const getDeleteAccountMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteAccount>>,
+    TError,
+    DeleteAccountMutationVariables,
+    TContext
+  >;
+  request?: SecondParameter<typeof apiFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deleteAccount>>,
+  TError,
+  DeleteAccountMutationVariables,
+  TContext
+> => {
+  const mutationKey = getDeleteAccountMutationKey();
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deleteAccount>>,
+    DeleteAccountMutationVariables
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return deleteAccount(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type DeleteAccountMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteAccount>>
+>;
+export type DeleteAccountMutationBody = DeleteAccount;
+export type DeleteAccountMutationError = ErrorType<unknown>;
+export type DeleteAccountMutationVariables = { data: DeleteAccount };
+
+/**
+ * @summary Permanently delete your account and queue identity removal
+ */
+export const useDeleteAccount = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof deleteAccount>>,
+      TError,
+      DeleteAccountMutationVariables,
+      TContext
+    >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof deleteAccount>>,
+  TError,
+  DeleteAccountMutationVariables,
+  TContext
+> => {
+  return useMutation(getDeleteAccountMutationOptions(options), queryClient);
+};
+
 export const getGetCurrentUserUrl = () => {
   return `/api/v1/me`;
 };
@@ -1618,3 +1723,106 @@ export function useGetCurrentUser<
 
   return withQueryKey(query, queryOptions.queryKey);
 }
+
+export const getUpdateProfileUrl = () => {
+  return `/api/v1/me`;
+};
+
+/**
+ * @summary Update your profile
+ */
+export const updateProfile = async (
+  updateProfileBody: UpdateProfile,
+  options?: Parameters<typeof apiFetch>[1],
+): Promise<MeResponse> => {
+  const getHeaders = (
+    h?: NonNullable<RequestInit['headers']>,
+  ): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Array.isArray(h)) return Object.fromEntries(h);
+    return h;
+  };
+  return apiFetch<MeResponse>(getUpdateProfileUrl(), {
+    ...options,
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      ...getHeaders(options?.headers),
+    },
+    body: JSON.stringify(updateProfileBody),
+  });
+};
+
+export const getUpdateProfileMutationKey = () => ['updateProfile'] as const;
+
+export const getUpdateProfileMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateProfile>>,
+    TError,
+    UpdateProfileMutationVariables,
+    TContext
+  >;
+  request?: SecondParameter<typeof apiFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof updateProfile>>,
+  TError,
+  UpdateProfileMutationVariables,
+  TContext
+> => {
+  const mutationKey = getUpdateProfileMutationKey();
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof updateProfile>>,
+    UpdateProfileMutationVariables
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return updateProfile(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type UpdateProfileMutationResult = NonNullable<
+  Awaited<ReturnType<typeof updateProfile>>
+>;
+export type UpdateProfileMutationBody = UpdateProfile;
+export type UpdateProfileMutationError = ErrorType<unknown>;
+export type UpdateProfileMutationVariables = { data: UpdateProfile };
+
+/**
+ * @summary Update your profile
+ */
+export const useUpdateProfile = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof updateProfile>>,
+      TError,
+      UpdateProfileMutationVariables,
+      TContext
+    >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof updateProfile>>,
+  TError,
+  UpdateProfileMutationVariables,
+  TContext
+> => {
+  return useMutation(getUpdateProfileMutationOptions(options), queryClient);
+};

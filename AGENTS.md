@@ -18,7 +18,7 @@ Use headings/search to load relevant sections, expanding for dependencies or con
 
 ## Document ownership
 
-Definition owns purpose, terminology, and scope boundaries. Requirements owns product obligations, business rules, and release assignments. Design owns architecture, stack, domain relationships, and API shape. Guidelines owns engineering conventions. Documentation records implemented behavior. Plan owns work order, decision gates, and completion. Workflow owns execution, Git/CI, and agent authority. README owns the project overview, quick start, and development status. Local development owns detailed environment, service, authentication, generation, and verification instructions.
+Definition owns purpose, terminology, and scope boundaries. Requirements owns product obligations, business rules, and release assignments. Design owns architecture, stack, domain relationships, and API shape. Guidelines owns engineering conventions. Documentation records implemented behavior. Plan owns work order, decision gates, and completion. Workflow owns execution, Git/CI, and agent authority. README owns the product overview, screenshots, public app link, quick start, and documentation links. Local development owns detailed environment, service, authentication, generation, and verification instructions.
 
 Link to the owning document instead of copying its content. Resolve contradictions explicitly. Current user instructions take precedence over repository guidance, subject to higher-priority agent instructions.
 

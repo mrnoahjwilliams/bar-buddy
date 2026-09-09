@@ -2,7 +2,10 @@ import { execFileSync } from 'node:child_process';
 import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
-export const artifactPaths = ['contracts', 'frontend/src/api/generated'];
+export const artifactPaths = [
+  'backend/contracts',
+  'frontend/src/api/generated',
+];
 
 export async function readArtifacts(root, paths = artifactPaths) {
   const files = new Map();

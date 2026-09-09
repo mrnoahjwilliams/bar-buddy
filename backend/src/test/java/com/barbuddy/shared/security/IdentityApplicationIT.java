@@ -1,7 +1,9 @@
 package com.barbuddy.shared.security;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -51,7 +53,8 @@ import org.testcontainers.postgresql.PostgreSQLContainer;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.json.JsonMapper;
 
-@SpringBootTest(properties = "spring.config.import=")
+@SpringBootTest(
+    properties = {"spring.config.import=", "bar-buddy.account-deletion.worker-enabled=false"})
 @AutoConfigureMockMvc
 @Testcontainers
 class IdentityApplicationIT {
@@ -64,6 +67,36 @@ class IdentityApplicationIT {
   @Container @ServiceConnection
   static final PostgreSQLContainer POSTGRES = new PostgreSQLContainer("postgres:17.11-alpine");
 
+  @org.springframework.test.context.bean.override.convention.TestBean(methodName = "fakeAdmin")
+  com.barbuddy.users.AuthAccountAdmin authAdmin;
+
+  static FakeAdmin fakeAdmin() {
+    return new FakeAdmin();
+  }
+
+  static class FakeAdmin extends com.barbuddy.users.AuthAccountAdmin {
+    boolean enabled;
+    boolean fail;
+
+    FakeAdmin() {
+      super(new AuthProperties(false, "https://auth.test", "", ""), "");
+    }
+
+    @Override
+    public boolean available() {
+      return enabled;
+    }
+
+    @Override
+    public void delete(String subject) {
+      if (fail) {
+        fail = false;
+        throw new IllegalStateException("temporary failure");
+      }
+    }
+  }
+
+  @Autowired com.barbuddy.users.AccountDeletionService deletions;
   @Autowired MockMvc mvc;
   @Autowired JdbcTemplate jdbc;
 
@@ -80,6 +113,8 @@ class IdentityApplicationIT {
   @BeforeEach
   void clearUsers() {
     jdbc.update("delete from app_user");
+    ((FakeAdmin) authAdmin).enabled = false;
+    ((FakeAdmin) authAdmin).fail = false;
   }
 
   @AfterAll
@@ -103,6 +138,185 @@ class IdentityApplicationIT {
     assertThat(second.get("id")).isNotEqualTo(first.get("id"));
     assertThat(first).containsKeys("id", "createdAt").doesNotContainKey("authSubject");
     assertThat(jdbc.queryForObject("select count(*) from app_user", Integer.class)).isEqualTo(2);
+  }
+
+  @Test
+  void profilePersistsNormalizesClearsAndCannotChangeAnotherUser() throws Exception {
+    var first = token(SIGNING_RSA_KEY, "profile-first", ISSUER, "authenticated", future());
+    var second = token(SIGNING_RSA_KEY, "profile-second", ISSUER, "authenticated", future());
+    var otherId = getMe(second).get("id");
+    mvc.perform(
+            put("/api/v1/me?userId=" + otherId)
+                .header("Authorization", "Bearer " + first)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    new JsonMapper()
+                        .writeValueAsString(
+                            Map.of("displayName", "  Noë Williams  ", "id", otherId))))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.displayName").value("Noë Williams"));
+    assertThat(getMe(first).get("displayName")).isEqualTo("Noë Williams");
+    assertThat(getMe(second).get("displayName")).isNull();
+    mvc.perform(
+            put("/api/v1/me")
+                .header("Authorization", "Bearer " + first)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"displayName\":\"  \"}"))
+        .andExpect(status().isOk());
+    assertThat(getMe(first).get("displayName")).isNull();
+  }
+
+  @Test
+  void profileRejectsInvalidFieldsAndUnauthenticatedWrites() throws Exception {
+    var accessToken =
+        token(SIGNING_RSA_KEY, "profile-validation", ISSUER, "authenticated", future());
+    for (String body :
+        List.of(
+            "{}",
+            "{\"displayName\":null}",
+            "{\"displayName\":\"" + "a".repeat(81) + "\"}",
+            "{\"displayName\":\"line\\nline\"}")) {
+      mvc.perform(
+              put("/api/v1/me")
+                  .header("Authorization", "Bearer " + accessToken)
+                  .contentType(MediaType.APPLICATION_JSON)
+                  .content(body))
+          .andExpect(status().isBadRequest())
+          .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON));
+    }
+    mvc.perform(
+            put("/api/v1/me")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"displayName\":\"Someone\"}"))
+        .andExpect(status().isUnauthorized());
+    assertThat(jdbc.queryForObject("select count(*) from app_user", Integer.class)).isZero();
+  }
+
+  @Test
+  void deletionRemovesPrivateDataBlocksOldTokensAndRetriesIdentityRemoval() throws Exception {
+    ((FakeAdmin) authAdmin).enabled = true;
+    var subject = UUID.randomUUID().toString();
+    var accessToken = token(SIGNING_RSA_KEY, subject, ISSUER, "authenticated", future());
+    var owner = UUID.fromString((String) getMe(accessToken).get("id"));
+    var second =
+        token(SIGNING_RSA_KEY, UUID.randomUUID().toString(), ISSUER, "authenticated", future());
+    var otherOwner = UUID.fromString((String) getMe(second).get("id"));
+    jdbc.update(
+        "insert into ingredient(id, catalog_id, name, category) values (?, 'ingredient:delete-test', 'Delete test', 'spirit')",
+        owner);
+    jdbc.update(
+        "insert into cocktail(id, catalog_id, slug, name) values (?, 'cocktail:delete-test', 'delete-test', 'Delete test')",
+        owner);
+    jdbc.update(
+        "insert into inventory_item(id, owner_user_id, ingredient_id, status) values (?, ?, ?, 'Have')",
+        owner,
+        owner,
+        owner);
+    jdbc.update(
+        "insert into user_cocktail_state(id, owner_user_id, cocktail_id, favorite) values (?, ?, ?, true)",
+        owner,
+        owner,
+        owner);
+    jdbc.update(
+        "insert into inventory_item(id, owner_user_id, ingredient_id, status) values (?, ?, ?, 'Have')",
+        otherOwner,
+        otherOwner,
+        owner);
+    jdbc.update(
+        "insert into user_cocktail_state(id, owner_user_id, cocktail_id, favorite) values (?, ?, ?, true)",
+        otherOwner,
+        otherOwner,
+        owner);
+    mvc.perform(
+            delete("/api/v1/me")
+                .header("Authorization", "Bearer " + accessToken)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"confirmation\":\"no\"}"))
+        .andExpect(status().isBadRequest());
+    mvc.perform(
+            delete("/api/v1/me")
+                .header("Authorization", "Bearer " + accessToken)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"confirmation\":\"DELETE\"}"))
+        .andExpect(status().isAccepted());
+    assertThat(jdbc.queryForObject("select count(*) from inventory_item", Integer.class))
+        .isEqualTo(1);
+    assertThat(jdbc.queryForObject("select count(*) from user_cocktail_state", Integer.class))
+        .isEqualTo(1);
+    assertThat(jdbc.queryForObject("select count(*) from cocktail", Integer.class)).isEqualTo(1);
+    for (String path :
+        List.of("/api/v1/me", "/api/v1/home", "/api/v1/inventory", "/api/v1/cocktails"))
+      mvc.perform(get(path).header("Authorization", "Bearer " + accessToken))
+          .andExpect(status().isUnauthorized());
+    getMe(second);
+    mvc.perform(delete("/api/v1/me").header("Authorization", "Bearer " + accessToken))
+        .andExpect(status().isAccepted());
+    ((FakeAdmin) authAdmin).fail = true;
+    org.assertj.core.api.Assertions.assertThatThrownBy(() -> deletions.finish(subject))
+        .isInstanceOf(IllegalStateException.class);
+    assertThat(deletions.pending()).contains(subject);
+    deletions.finish(subject);
+    assertThat(deletions.pending()).doesNotContain(subject);
+    assertThat(deletions.requested(subject)).isTrue();
+    mvc.perform(get("/api/v1/me").header("Authorization", "Bearer " + accessToken))
+        .andExpect(status().isUnauthorized());
+    jdbc.update("delete from inventory_item");
+    jdbc.update("delete from user_cocktail_state");
+    jdbc.update("delete from cocktail");
+    jdbc.update("delete from ingredient");
+  }
+
+  @Test
+  void deletionRollsBackPrivateDataWhenTheDatabaseRejectsTheMarker() throws Exception {
+    ((FakeAdmin) authAdmin).enabled = true;
+    String subject = UUID.randomUUID().toString();
+    var accessToken = token(SIGNING_RSA_KEY, subject, ISSUER, "authenticated", future());
+    var owner = UUID.fromString((String) getMe(accessToken).get("id"));
+    jdbc.update(
+        "insert into ingredient(id, catalog_id, name, category) values (?, 'ingredient:rollback-test', 'Rollback test', 'spirit')",
+        owner);
+    jdbc.update(
+        "insert into inventory_item(id, owner_user_id, ingredient_id, status) values (?, ?, ?, 'Have')",
+        owner,
+        owner,
+        owner);
+    jdbc.execute(
+        "alter table app_user add constraint test_reject_deletion check (deletion_requested_at is null)");
+    try {
+      org.assertj.core.api.Assertions.assertThatThrownBy(() -> deletions.request(subject))
+          .isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
+      assertThat(
+              jdbc.queryForObject(
+                  "select count(*) from inventory_item where owner_user_id = ?",
+                  Integer.class,
+                  owner))
+          .isEqualTo(1);
+      assertThat(deletions.requested(subject)).isFalse();
+      getMe(accessToken);
+    } finally {
+      jdbc.execute("alter table app_user drop constraint test_reject_deletion");
+      jdbc.update("delete from inventory_item");
+      jdbc.update("delete from ingredient");
+    }
+  }
+
+  @Test
+  void unavailableDeletionPreservesAnAccount() throws Exception {
+    var token =
+        token(SIGNING_RSA_KEY, UUID.randomUUID().toString(), ISSUER, "authenticated", future());
+    var before = getMe(token);
+    mvc.perform(
+            delete("/api/v1/me")
+                .header("Authorization", "Bearer " + token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"confirmation\":\"DELETE\"}"))
+        .andExpect(status().isServiceUnavailable());
+    assertThat(getMe(token)).isEqualTo(before);
+    mvc.perform(
+            delete("/api/v1/me")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"confirmation\":\"DELETE\"}"))
+        .andExpect(status().isUnauthorized());
   }
 
   @Test

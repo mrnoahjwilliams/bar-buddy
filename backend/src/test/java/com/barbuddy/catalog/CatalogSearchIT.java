@@ -46,7 +46,7 @@ class CatalogSearchIT {
   @Test
   void searchesNamesAndAliasesWithoutAccentsOrDuplicateResultsAndPreservesInventoryOnReimport()
       throws Exception {
-    var full = CatalogInput.read(Path.of("../catalog/cocktails.json"));
+    var full = CatalogInput.read(Path.of("catalog/cocktails.json"));
     importer.importCatalog(full);
     for (String search :
         new String[] {"creme de cacao", "CRÈME DE CACAO", "cre\u0300me de cacao"}) {

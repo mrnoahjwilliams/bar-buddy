@@ -85,7 +85,7 @@ The operator import command implements this repeatable contract:
 PostgreSQL integration tests cover empty-database import, identical and concurrent
 repeats, corrections retaining referenced identities, line synchronization, missing
 identities and rollback after a late database failure. The packaged command is
-verified independently of the web server. [Local development](../docs/08-local-development.md#catalog-and-api-generation)
+verified independently of the web server. [Local development](../../docs/08-local-development.md#catalog-and-api-generation)
 owns the command and configuration. Normal application startup does not import;
 styles stay in this source for Release 2.
 
