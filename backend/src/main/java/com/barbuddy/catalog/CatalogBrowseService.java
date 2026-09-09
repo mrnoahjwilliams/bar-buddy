@@ -8,6 +8,7 @@ import com.barbuddy.catalog.CatalogResponses.IngredientSummary;
 import com.barbuddy.catalog.CatalogResponses.RecipeDetail;
 import com.barbuddy.catalog.CatalogResponses.RecipeLine;
 import com.barbuddy.cocktails.Cocktail;
+import com.barbuddy.cocktails.CocktailPreferenceRepository;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,9 +40,12 @@ public class CatalogBrowseService {
           "garnish",
           "other");
   private final CatalogBrowseRepository repository;
+  private final CocktailPreferenceRepository preferences;
 
-  CatalogBrowseService(CatalogBrowseRepository repository) {
+  CatalogBrowseService(
+      CatalogBrowseRepository repository, CocktailPreferenceRepository preferences) {
     this.repository = repository;
+    this.preferences = preferences;
   }
 
   public List<IngredientSummary> ingredients(String search, String category) {
@@ -66,7 +70,11 @@ public class CatalogBrowseService {
   }
 
   public List<CocktailSummary> cocktails(
-      String search, UUID primarySpiritId, String availability, String subject) {
+      String search,
+      UUID primarySpiritId,
+      String availability,
+      boolean favoritesOnly,
+      String subject) {
     if (primarySpiritId != null) {
       var ingredient = repository.ingredient(primarySpiritId);
       if (ingredient == null || !ingredient.getCategory().equals("spirit"))
@@ -76,7 +84,9 @@ public class CatalogBrowseService {
     String filter = availability == null || availability.isBlank() ? "all" : availability.strip();
     if (!Set.of("all", "can_make", "one_away").contains(filter))
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown availability filter.");
-    return summaries(repository.cocktails(search(search), primarySpiritId), subject).stream()
+    return summaries(
+            repository.cocktails(search(search), primarySpiritId, favoritesOnly, subject), subject)
+        .stream()
         .filter(
             c ->
                 filter.equals("all")
@@ -119,23 +129,27 @@ public class CatalogBrowseService {
         summary.slug(),
         summary.primarySpirit(),
         detail,
-        summary.availability());
+        summary.availability(),
+        summary.favorite());
   }
 
   private List<CocktailSummary> summaries(List<Cocktail> cocktails, String subject) {
     if (cocktails.isEmpty()) return List.of();
+    var cocktailIds = cocktails.stream().map(Cocktail::getId).toList();
     var missing = new HashMap<UUID, List<IngredientSummary>>();
-    for (var row :
-        repository.missingIngredients(cocktails.stream().map(Cocktail::getId).toList(), subject)) {
+    for (var row : repository.missingIngredients(cocktailIds, subject)) {
       missing
           .computeIfAbsent((UUID) row[0], key -> new ArrayList<>())
           .add(new IngredientSummary((UUID) row[1], (String) row[2], (String) row[3], null));
     }
+    var favorites = Set.copyOf(preferences.favoriteCocktailIds(cocktailIds, subject));
     return cocktails.stream()
         .map(
             c ->
                 CocktailSummary.from(
-                    c, AvailabilityResult.from(missing.getOrDefault(c.getId(), List.of()))))
+                    c,
+                    AvailabilityResult.from(missing.getOrDefault(c.getId(), List.of())),
+                    favorites.contains(c.getId())))
         .toList();
   }
 

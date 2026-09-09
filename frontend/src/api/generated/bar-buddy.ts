@@ -23,6 +23,7 @@ import type {
 import type {
   ApiProblemResponse,
   CocktailDetail,
+  CocktailPreferenceResponse,
   CocktailSummary,
   CreateInventory,
   IngredientDetail,
@@ -31,6 +32,7 @@ import type {
   ListCocktailsParams,
   ListIngredientsParams,
   MeResponse,
+  UpdateCocktailPreference,
   UpdateInventory,
 } from './models';
 
@@ -347,6 +349,115 @@ export function useGetCocktail<
 
   return withQueryKey(query, queryOptions.queryKey);
 }
+
+export const getUpdateCocktailPreferenceUrl = (id: string) => {
+  return `/api/v1/cocktails/${id}/preference`;
+};
+
+export const updateCocktailPreference = async (
+  id: string,
+  updateCocktailPreferenceBody: UpdateCocktailPreference,
+  options?: Parameters<typeof apiFetch>[1],
+): Promise<CocktailPreferenceResponse> => {
+  const getHeaders = (
+    h?: NonNullable<RequestInit['headers']>,
+  ): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Array.isArray(h)) return Object.fromEntries(h);
+    return h;
+  };
+  return apiFetch<CocktailPreferenceResponse>(
+    getUpdateCocktailPreferenceUrl(id),
+    {
+      ...options,
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        ...getHeaders(options?.headers),
+      },
+      body: JSON.stringify(updateCocktailPreferenceBody),
+    },
+  );
+};
+
+export const getUpdateCocktailPreferenceMutationKey = () =>
+  ['updateCocktailPreference'] as const;
+
+export const getUpdateCocktailPreferenceMutationOptions = <
+  TError = ErrorType<ApiProblemResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateCocktailPreference>>,
+    TError,
+    UpdateCocktailPreferenceMutationVariables,
+    TContext
+  >;
+  request?: SecondParameter<typeof apiFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof updateCocktailPreference>>,
+  TError,
+  UpdateCocktailPreferenceMutationVariables,
+  TContext
+> => {
+  const mutationKey = getUpdateCocktailPreferenceMutationKey();
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof updateCocktailPreference>>,
+    UpdateCocktailPreferenceMutationVariables
+  > = (props) => {
+    const { id, data } = props ?? {};
+
+    return updateCocktailPreference(id, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type UpdateCocktailPreferenceMutationResult = NonNullable<
+  Awaited<ReturnType<typeof updateCocktailPreference>>
+>;
+export type UpdateCocktailPreferenceMutationBody = UpdateCocktailPreference;
+export type UpdateCocktailPreferenceMutationError =
+  ErrorType<ApiProblemResponse>;
+export type UpdateCocktailPreferenceMutationVariables = {
+  id: string;
+  data: UpdateCocktailPreference;
+};
+
+export const useUpdateCocktailPreference = <
+  TError = ErrorType<ApiProblemResponse>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof updateCocktailPreference>>,
+      TError,
+      UpdateCocktailPreferenceMutationVariables,
+      TContext
+    >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof updateCocktailPreference>>,
+  TError,
+  UpdateCocktailPreferenceMutationVariables,
+  TContext
+> => {
+  return useMutation(
+    getUpdateCocktailPreferenceMutationOptions(options),
+    queryClient,
+  );
+};
 
 export const getListIngredientsUrl = (params?: ListIngredientsParams) => {
   const normalizedParams = new URLSearchParams();

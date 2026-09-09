@@ -10,6 +10,7 @@ import type { RecipeDetail } from './recipeDetail.ts';
 
 export interface CocktailDetail {
   availability?: AvailabilityResult;
+  favorite?: boolean;
   id?: string;
   name?: string;
   primarySpirit?: IngredientSummary;

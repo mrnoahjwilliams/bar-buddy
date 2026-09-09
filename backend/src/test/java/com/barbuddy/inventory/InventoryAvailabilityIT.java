@@ -55,7 +55,7 @@ class InventoryAvailabilityIT {
   @BeforeEach
   void load() throws Exception {
     jdbc.execute(
-        "truncate inventory_item, recipe_ingredient, recipe, cocktail, ingredient, app_user");
+        "truncate user_cocktail_state, inventory_item, recipe_ingredient, recipe, cocktail, ingredient, app_user");
     importer.importCatalog(CatalogInput.read(Path.of("../catalog/cocktails.json")));
   }
 
@@ -174,7 +174,7 @@ class InventoryAvailabilityIT {
 
   @Test
   void distinctRequirementsIgnoreOptionalLinesAndOtherUsersAndMixedOutBottles() throws Exception {
-    var cocktail = catalog.cocktails("negroni", null, null, "one").getFirst();
+    var cocktail = catalog.cocktails("negroni", null, null, false, "one").getFirst();
     var recipe = catalog.cocktail(cocktail.id(), "one").recipe();
     var required = cocktail.availability().missingIngredients();
     assertThat(required).hasSize(3);
@@ -185,14 +185,15 @@ class InventoryAvailabilityIT {
     assertThat(catalog.cocktail(cocktail.id(), "one").availability().missingCount()).isEqualTo(3);
     for (int i = 0; i < 2; i++) add(required.get(i).id(), "", "Have");
     var out = add(required.get(2).id(), "Empty", "Out");
-    assertThat(catalog.cocktails("negroni", cocktail.primarySpirit().id(), "one_away", "one"))
+    assertThat(
+            catalog.cocktails("negroni", cocktail.primarySpirit().id(), "one_away", false, "one"))
         .hasSize(1);
-    assertThat(catalog.cocktails("negroni", null, "can_make", "one")).isEmpty();
+    assertThat(catalog.cocktails("negroni", null, "can_make", false, "one")).isEmpty();
     assertThat(catalog.cocktail(cocktail.id(), "one").availability().missingIngredients())
         .containsExactly(required.get(2));
     var have = add(required.get(2).id(), "Full", "Have");
     assertThat(catalog.cocktail(cocktail.id(), "one").availability().canMake()).isTrue();
-    assertThat(catalog.cocktails("negroni", null, "can_make", "one")).hasSize(1);
+    assertThat(catalog.cocktails("negroni", null, "can_make", false, "one")).hasSize(1);
     assertThat(
             catalog.ingredient(required.getFirst().id(), "one").relatedCocktails().stream()
                 .filter(c -> c.id().equals(cocktail.id()))
@@ -209,21 +210,21 @@ class InventoryAvailabilityIT {
     mvc.perform(get("/api/v1/cocktails").with(jwt()).param("availability", "wrong"))
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("status").value(400));
-    assertThat(catalog.cocktails("", null, "", "one")).hasSize(102);
-    assertThat(catalog.cocktails("", null, null, "one"))
+    assertThat(catalog.cocktails("", null, "", false, "one")).hasSize(102);
+    assertThat(catalog.cocktails("", null, null, false, "one"))
         .extracting(c -> c.availability().missingCount())
         .isSorted();
     var stats = emf.unwrap(SessionFactory.class).getStatistics();
     stats.clear();
-    catalog.cocktails("", null, null, "one");
-    assertThat(stats.getPrepareStatementCount()).isEqualTo(2);
+    catalog.cocktails("", null, null, false, "one");
+    assertThat(stats.getPrepareStatementCount()).isEqualTo(3);
     stats.clear();
     inventory.list("one");
     assertThat(stats.getPrepareStatementCount()).isEqualTo(1);
     jdbc.update(
         "insert into inventory_item select gen_random_uuid(), (select id from app_user where auth_subject = 'one'), id, null, 'Have' from ingredient");
-    assertThat(catalog.cocktails("", null, "can_make", "one")).hasSize(102);
-    assertThat(catalog.cocktails("", null, "can_make", "two")).isEmpty();
+    assertThat(catalog.cocktails("", null, "can_make", false, "one")).hasSize(102);
+    assertThat(catalog.cocktails("", null, "can_make", false, "two")).isEmpty();
   }
 
   @Test

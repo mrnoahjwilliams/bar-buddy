@@ -42,7 +42,8 @@ class CatalogBrowseIT {
 
   @BeforeEach
   void load() throws Exception {
-    jdbc.execute("truncate inventory_item, recipe_ingredient, recipe, cocktail, ingredient");
+    jdbc.execute(
+        "truncate user_cocktail_state, inventory_item, recipe_ingredient, recipe, cocktail, ingredient, app_user");
     importer.importCatalog(CatalogInput.read(Path.of("../catalog/cocktails.json")));
   }
 
@@ -56,9 +57,9 @@ class CatalogBrowseIT {
     assertThat(service.ingredients("  GIN  ", "spirit")).contains(gin);
     assertThat(service.ingredients("", "")).hasSize(116);
     assertThat(service.ingredients("%", null)).isEmpty();
-    assertThat(service.cocktails("", null, null, "user")).hasSize(102);
-    assertThat(service.cocktails("negroni", gin.id(), null, "user")).hasSize(1);
-    assertThat(service.cocktails("zzzz", gin.id(), null, "user")).isEmpty();
+    assertThat(service.cocktails("", null, null, false, "user")).hasSize(102);
+    assertThat(service.cocktails("negroni", gin.id(), null, false, "user")).hasSize(1);
+    assertThat(service.cocktails("zzzz", gin.id(), null, false, "user")).isEmpty();
     mvc.perform(get("/api/v1/ingredients").with(jwt()).param("category", "unknown"))
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("status").value(400));
@@ -75,7 +76,7 @@ class CatalogBrowseIT {
 
   @Test
   void relatedCocktailsStayDistinctAndOpenOrderedRecipeDetails() throws Exception {
-    var drink = service.cocktails("negroni", null, null, "user").getFirst();
+    var drink = service.cocktails("negroni", null, null, false, "user").getFirst();
     var detail = service.cocktail(drink.id(), "user");
     var first = detail.recipe().ingredients().getFirst();
     jdbc.update(
@@ -138,14 +139,14 @@ class CatalogBrowseIT {
   void fullCatalogUsesBoundedQueriesWithoutPerRowLoads() {
     var stats = emf.unwrap(SessionFactory.class).getStatistics();
     stats.clear();
-    var cocktails = service.cocktails("", null, null, "user");
-    assertThat(stats.getPrepareStatementCount()).isEqualTo(2);
+    var cocktails = service.cocktails("", null, null, false, "user");
+    assertThat(stats.getPrepareStatementCount()).isEqualTo(3);
     stats.clear();
     service.cocktail(cocktails.getFirst().id(), "user");
-    assertThat(stats.getPrepareStatementCount()).isEqualTo(4);
+    assertThat(stats.getPrepareStatementCount()).isEqualTo(5);
     var ingredient = service.ingredients("gin", "spirit").getFirst();
     stats.clear();
     service.ingredient(ingredient.id(), "user");
-    assertThat(stats.getPrepareStatementCount()).isEqualTo(3);
+    assertThat(stats.getPrepareStatementCount()).isEqualTo(4);
   }
 }

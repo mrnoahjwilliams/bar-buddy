@@ -33,6 +33,14 @@
           "schema" : {
             "type" : "string"
           }
+        }, {
+          "in" : "query",
+          "name" : "favoritesOnly",
+          "required" : false,
+          "schema" : {
+            "type" : "boolean",
+            "default" : false
+          }
         } ],
         "responses" : {
           "200" : {
@@ -107,6 +115,76 @@
               }
             },
             "description" : "Catalog result"
+          },
+          "400" : {
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiProblemResponse"
+                }
+              }
+            },
+            "description" : "Invalid catalog input"
+          },
+          "401" : {
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiProblemResponse"
+                }
+              }
+            },
+            "description" : "Authentication is required"
+          },
+          "404" : {
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiProblemResponse"
+                }
+              }
+            },
+            "description" : "Catalog item not found"
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "tags" : [ "catalog-browse-controller" ]
+      }
+    },
+    "/api/v1/cocktails/{id}/preference" : {
+      "put" : {
+        "operationId" : "updateCocktailPreference",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateCocktailPreference"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CocktailPreferenceResponse"
+                }
+              }
+            },
+            "description" : "Cocktail preference updated"
           },
           "400" : {
             "content" : {
@@ -591,6 +669,9 @@
           "availability" : {
             "$ref" : "#/components/schemas/AvailabilityResult"
           },
+          "favorite" : {
+            "type" : "boolean"
+          },
           "id" : {
             "type" : "string",
             "format" : "uuid"
@@ -609,11 +690,26 @@
           }
         }
       },
+      "CocktailPreferenceResponse" : {
+        "type" : "object",
+        "properties" : {
+          "cocktailId" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "favorite" : {
+            "type" : "boolean"
+          }
+        }
+      },
       "CocktailSummary" : {
         "type" : "object",
         "properties" : {
           "availability" : {
             "$ref" : "#/components/schemas/AvailabilityResult"
+          },
+          "favorite" : {
+            "type" : "boolean"
           },
           "id" : {
             "type" : "string",
@@ -795,6 +891,15 @@
             "$ref" : "#/components/schemas/DisplayMeasurement"
           }
         }
+      },
+      "UpdateCocktailPreference" : {
+        "type" : "object",
+        "properties" : {
+          "favorite" : {
+            "type" : "boolean"
+          }
+        },
+        "required" : [ "favorite" ]
       },
       "UpdateInventory" : {
         "type" : "object",
