@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -98,6 +99,18 @@ public class CatalogBrowseService {
                 .thenComparing(c -> c.name().toLowerCase(Locale.ROOT))
                 .thenComparing(CocktailSummary::id))
         .toList();
+  }
+
+  public CocktailSummary randomCocktail(
+      String search,
+      UUID primarySpiritId,
+      String availability,
+      boolean favoritesOnly,
+      String subject) {
+    var candidates = cocktails(search, primarySpiritId, availability, favoritesOnly, subject);
+    if (candidates.isEmpty())
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No matching cocktails.");
+    return candidates.get(ThreadLocalRandom.current().nextInt(candidates.size()));
   }
 
   public IngredientDetail ingredient(UUID id, String subject) {

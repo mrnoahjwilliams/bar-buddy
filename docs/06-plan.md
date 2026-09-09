@@ -136,11 +136,11 @@ No public app or application entity schema yet.
 
 #### 1.5.2 — Random cocktail
 
-- [ ] **Decide:** eligible filters/availability and no-match behavior. Implement random API and UI action opening an eligible cocktail. **Verify:** eligibility, filter combinations, empty candidate set and failure feedback.
+- [x] Use the approved [Random eligibility and no-match rules](02-requirements.md#navigation-and-interaction). Implement random API and UI action opening an eligible cocktail. **Verify:** eligibility, filter combinations, empty candidate set and failure feedback.
 
 #### 1.5.3 — Home and MVP integration
 
-- [ ] Build Home bar information and links to existing flows. Review responsive navigation, long content, loading/error/empty states and the end-to-end MVP journey. **Verify:** signup → Bar → makeability/missing ingredients → favorite/random → reload/logout. History statistics and recommendations wait for their releases.
+- [x] Build Home bar information and links to existing flows. Review responsive navigation, long content, loading/error/empty states and the end-to-end MVP journey. **Verify:** signup → Bar → makeability/missing ingredients → favorite/random → reload/logout. History statistics and recommendations wait for their releases.
 
 ### 1.6 — Publish the MVP
 

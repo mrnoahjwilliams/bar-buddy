@@ -84,6 +84,18 @@ public class CatalogBrowseController {
         search, primarySpiritId, availability, favoritesOnly, jwt.getSubject());
   }
 
+  @ApiResponse(responseCode = "200", description = "Random eligible cocktail")
+  @GetMapping("/cocktails/random")
+  public CocktailSummary getRandomCocktail(
+      @RequestParam(required = false) String search,
+      @RequestParam(required = false) UUID primarySpiritId,
+      @RequestParam(required = false) String availability,
+      @RequestParam(defaultValue = "false") boolean favoritesOnly,
+      @AuthenticationPrincipal Jwt jwt) {
+    return service.randomCocktail(
+        search, primarySpiritId, availability, favoritesOnly, jwt.getSubject());
+  }
+
   @ApiResponse(responseCode = "200", description = "Catalog result")
   @GetMapping("/cocktails/{id}")
   public CocktailDetail getCocktail(@PathVariable UUID id, @AuthenticationPrincipal Jwt jwt) {

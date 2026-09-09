@@ -120,7 +120,7 @@ All paths below are relative to `/api/v1`. Preserve the user actions; path wordi
 
 | Release | Operations |
 |---|---|
-| 1 | `GET /me`; `GET /ingredients`, `/ingredients/{id}`; `GET`, `POST /inventory`; `PATCH`, `DELETE /inventory/{id}`; `GET /cocktails`, `/cocktails/{id}`, `/cocktails/random`; `PUT /cocktails/{id}/preference` |
+| 1 | `GET /me`, `/home`; `GET /ingredients`, `/ingredients/{id}`; `GET`, `POST /inventory`; `PATCH`, `DELETE /inventory/{id}`; `GET /cocktails`, `/cocktails/{id}`, `/cocktails/random`; `PUT /cocktails/{id}/preference` |
 | 2 | Enrich discovery/list/detail operations for optional style filtering, metadata, aliases, new sorts and recently viewed behavior; settle any required state operation under the existing user/preference surface. Print/mixing/share behavior reuses the selected catalog recipe; sharing creates no public custom-content API. |
 | 3 | `GET /ingredients/{id}/unlock-impact`; `GET /shopping/recommendations`; `POST /shopping/plan` |
 | 4 | `GET`, `POST /drink-logs`; `GET /drink-logs/statistics`. POST is Made This Drink, not generic row insertion; include the agreed safe-retry contract. |
@@ -129,6 +129,8 @@ All paths below are relative to `/api/v1`. Preserve the user actions; path wordi
 | 7 | `GET /recommendations/drinks`, `/recommendations/ingredients`, `/cocktails/{id}/similar`; add cocktail-of-the-day through the agreed recommendation contract. |
 
 Backend DTOs/controllers generate springdoc OpenAPI; Orval generates TypeScript types, client and query hooks consumed by React. Custom transport integration may handle authentication without duplicating generated operations. Keep authentication errors and domain validation consistent.
+
+Home uses a read-only `/home` summary DTO, with owner-scoped inventory counts and the same catalog availability/favorite calculation as Drinks. Return counts rather than transferring the catalog to the browser. Random selection reuses Drinks eligibility and returns one uniformly selected summary; a 404 problem response means no eligible candidates. Neither operation persists derived state. The browser invokes the generated random request only on demand, cancels obsolete requests, and opens the existing detail overlay.
 
 ## UI and verification boundaries
 
