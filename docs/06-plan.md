@@ -150,21 +150,23 @@ No public app or application entity schema yet.
 
 #### 1.6.1 — Hosting and deployment setup
 
-- [ ] **Decide:** frontend/backend hosting, production deployment approach and Bar Buddy public URLs/branding assets within the near-$0 constraint. Implement deploy/build configuration (backend container where used), runtime settings, Flyway execution, secure transport, database access, browser/API origins and Auth redirect/recovery settings. Replace Supabase's development-only default email delivery with custom SMTP; configure editable Bar Buddy Auth templates, sender-domain authentication and suitable provider/Supabase rate limits. **Verify:** build/configuration checks and documented deployment, email-delivery and recovery steps; reuse established CI. Actual public verification occurs in 1.6.3.
+- [x] **Decide:** frontend/backend hosting, production deployment approach and Bar Buddy public URLs/branding assets within the near-$0 constraint. Implement deploy/build configuration (backend container where used), runtime settings, Flyway execution, secure transport, database access, browser/API origins and Auth redirect/recovery settings. Replace Supabase's development-only default email delivery with custom SMTP; configure editable Bar Buddy Auth templates, sender-domain authentication and suitable provider/Supabase rate limits. **Verify:** build/configuration checks and documented deployment, email-delivery and recovery steps; reuse established CI. Actual public verification occurs in 1.6.3.
 
   - [x] Select free-tier providers and canonical hostname; prepare Docker/runtime, Vercel proxy/routing, editable Auth templates and deployment/recovery instructions; verify local builds and deployment routing tests.
-  - [ ] Finish provider resources, DNS verification, SMTP and Auth settings; verify actual configuration before completing 1.6.1. User is taking over dashboard setup; see Documentation for the exact stopping state.
+  - [x] Finish provider resources, DNS verification, SMTP and Auth settings; verify actual configuration before completing 1.6.1. Completed and verified by the owner, September 10, 2026; see Documentation.
 
 #### 1.6.2 — PWA and deployed navigation readiness
 
-- [ ] Add installability assets/configuration and route-refresh/navigation support. **Verify:** responsive layouts and supported installation behavior locally; do not imply unspecified offline functionality. Deployment-specific installation checks remain in 1.6.3.
+- [x] Add installability assets/configuration and route-refresh/navigation support. **Verify:** responsive layouts and supported installation behavior locally; do not imply unspecified offline functionality. Deployment-specific installation checks remain in 1.6.3.
 
   - [x] Implement manifest, PNG/SVG icons, network-only service worker and SPA fallback; verify frontend build and routing tests.
-  - [ ] Verify browser installation, responsive presentation and deployed navigation before completing 1.6.2.
+  - [x] Verify browser installation, responsive presentation and deployed navigation before completing 1.6.2.
 
 #### 1.6.3 — Release 1 acceptance and publication
 
-- [ ] Complete the release gate, including catalog loading and the public two-account signup → email confirmation → inventory → availability/missing detail → favorite/random → reload/logout journey, recovery through custom SMTP to public recipient addresses, PWA installation and deep-link refresh. Confirm branded Auth email links and delivery limits work for the public flow. Verify real account deletion and retry processing with disposable accounts, and replace the README’s coming-soon text with the verified public app URL. Record actual published status; later scheduled releases remain incomplete.
+- [x] Complete the release gate, including catalog loading and the public two-account signup → email confirmation → inventory → availability/missing detail → favorite/random → reload/logout journey, recovery through custom SMTP to public recipient addresses, PWA installation and deep-link refresh. Confirm branded Auth email links and delivery limits work for the public flow. Verify real account deletion and retry processing with disposable accounts, and replace the README’s coming-soon text with the verified public app URL. Record actual published status; later scheduled releases remain incomplete.
+
+Publication acceptance for 1.6 is recorded from the owner’s September 10, 2026 confirmation that public hosting, publication and verification are complete.
 
 ## Release 2 — Bar Explorer
 

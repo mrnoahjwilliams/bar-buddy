@@ -5,7 +5,7 @@ services:
     runtime: docker
     plan: free
     branch: main
-    autoDeployTrigger: off
+    autoDeployTrigger: checksPass
     dockerContext: ./backend
     dockerfilePath: ./backend/Dockerfile
     healthCheckPath: /actuator/health

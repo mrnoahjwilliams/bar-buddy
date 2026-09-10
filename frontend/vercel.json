@@ -4,6 +4,9 @@
   "buildCommand": "npm run build:vercel",
   "installCommand": "npm ci --no-audit --no-fund",
   "git": {
-    "deploymentEnabled": false
+    "deploymentEnabled": {
+      "**": false,
+      "main": true
+    }
   }
 }

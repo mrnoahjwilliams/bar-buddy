@@ -12,7 +12,7 @@ The generated-client transport attaches the access token, preserves request opti
 
 Frontend behavior and transport tests cover configuration validation, provider adaptation, signed-in/out routing, complete requested-location return, bearer attachment, concurrent refresh, expired sessions, account switching, cache isolation, logout, signup confirmation, password recovery, error handling, and unknown routes.
 
-Hosted browser acceptance completed on September 4, 2026 against the accepted `bar-buddy` Supabase project and Spring/PostgreSQL environment. Signup with email confirmation, logout/login, password recovery, account switching, and the authenticated `GET /api/v1/me` flow passed. Supabase's default development email delivery is not suitable for public launch; release 1.6 still owns custom SMTP, templates, sender authentication, appropriate limits, and public-recipient verification.
+Hosted browser acceptance completed on September 4, 2026 against the accepted `bar-buddy` Supabase project and Spring/PostgreSQL environment. Signup with email confirmation, logout/login, password recovery, account switching, and the authenticated `GET /api/v1/me` flow passed. At that stage Supabase's default development email delivery was not suitable for public launch; subsequent production acceptance is recorded under Published MVP below.
 
 ## Backend identity and security
 
@@ -128,7 +128,7 @@ The Random cocktail button uses the currently applied URL filters, opens the exi
 
 Home replaces the foundation placeholders with this summary, links to Bar and the corresponding Drinks filters, and entry points to ingredient selection. Empty bars receive onboarding; bars with no makeable cocktails get a household-mixer reminder. Loading and retryable error states never represent a failed query as zero inventory. Inventory and favorite mutations invalidate Home as well as the affected existing views. Account changes clear and remount private views. Basic polish adds long-text wrapping, aligned summary counts, mobile safe-area spacing and reduced-motion support.
 
-Verified September 9, 2026: full backend verification (28 integration tests plus unit checks), 50 frontend behavior tests, formatting/lint/type/build and API-tooling checks, catalog validation, and generated API drift. The integrated frontend journey uses a persistent fake server and fresh query caches to cover signup → missing details → Bar add → makeability → favorite/random → detail reload → logout; provider email delivery is not exercised by that test. Live local Safari review with the existing authenticated session verified Home counts/filter links, random makeable selection, detail reload/close, no-match feedback, API failure/retry, and responsive layouts at desktop, 390px and 320px with scrollable long recipe instructions. No new hosted signup or public deployment acceptance was performed. Hosting, SMTP, PWA and publication remain in 1.6.
+Verified September 9, 2026: full backend verification (28 integration tests plus unit checks), 50 frontend behavior tests, formatting/lint/type/build and API-tooling checks, catalog validation, and generated API drift. The integrated frontend journey uses a persistent fake server and fresh query caches to cover signup → missing details → Bar add → makeability → favorite/random → detail reload → logout; provider email delivery is not exercised by that test. Live local Safari review with the existing authenticated session verified Home counts/filter links, random makeable selection, detail reload/close, no-match feedback, API failure/retry, and responsive layouts at desktop, 390px and 320px with scrollable long recipe instructions. No new hosted signup or public deployment acceptance was performed. That review preceded the hosting and publication acceptance recorded below.
 
 ## Application foundation and API generation
 
@@ -140,37 +140,20 @@ springdoc exports the real application contract from an isolated Spring/Testcont
 
 ## Repository and CI
 
-GitHub Actions runs required `backend-checks` and `frontend-checks` for pull requests to `main` and pushes to `main`. The backend job runs the full Maven verification. The frontend job installs once, then validates the catalog, frontend, and independently regenerated API artifacts. Jobs use pinned actions, minimum read permissions, disposable services, no hosted credentials, timeouts, and cancellation of superseded runs.
+GitHub Actions runs required `backend-checks` and `frontend-checks` for pull requests to `main` and pushes to `main`. The backend job runs the full Maven verification. The frontend job installs once, then validates the catalog, frontend, and independently regenerated API artifacts, and packages Vercel output using a non-production example origin. Jobs use pinned actions, minimum read permissions, disposable services, no hosted credentials, timeouts, and cancellation of superseded runs.
 
 Protected `main` requires a pull request, resolved conversations, an up-to-date branch, and both required checks; force pushes and deletion are disabled, linear history is required, and only squash merges are enabled. Dependency updates are manual. Dependabot PRs #22 and #23 were closed at the owner’s request on September 9, 2026; automated security-update PRs are disabled and this polish change removes version-update configuration. Vulnerability alerts, secret scanning, and push protection remain enabled.
 
-Bar Buddy has not been deployed. Public hosting, production email, observability, recovery, and release verification remain in plan unit 1.6.
+## Published MVP — September 10, 2026
 
-## Hosting preparation — not published
+Bar Buddy is public at [barbuddy.projects.williamsestate.net](https://barbuddy.projects.williamsestate.net). The owner confirmed successful deployment, publication and completed public-hosting verification on September 10, 2026. [GitHub release v1.0.0](https://github.com/mrnoahjwilliams/bar-buddy/releases/tag/v1.0.0) marks merged revision `931b491`. Plan units 1.6.1–1.6.3 are closed on that owner-provided acceptance; this docs/CI/CD pass does not claim to have repeated the private two-account, SMTP, deletion, recovery or installation acceptance tests.
 
-The hosting branch prepares Render Free Docker deployment with an unprivileged
-Java runtime, bounded memory, small connection pool, production binding and JWT
-configuration; Vercel Hobby build output with a configurable same-origin API proxy,
-no-store API responses and SPA route fallback; PWA manifest/icons and a network-only
-service worker; editable Supabase confirmation/recovery templates; and the operator
-setup/recovery guide in [Local development](08-local-development.md#production-hosting).
-No paid resources or automatic Git deployments are configured.
+The deployed MVP includes inventory and bottles, 102 catalog cocktails, makeability and missing ingredients, favorites/random discovery, Home, profile management and account deletion. Render Free hosts the Docker API; Vercel Hobby serves the same-origin SPA and PWA; Supabase supplies Auth/PostgreSQL and Resend supplies Auth SMTP. The PWA is network-only and does not store private data offline. See [Local development](08-local-development.md#production-hosting) for setup, operating limits and recovery.
 
-Verified locally September 9, 2026: full backend verification (34 integration tests
-plus unit checks), 57 frontend behavior tests, formatting/lint/type/build, three
-API/deployment tooling tests, generated API drift, catalog validation and Vercel
-output packaging with a disposable example origin. Docker image build passed after
-adding unzip for the existing pinned Maven ZIP checksum. A disposable PostgreSQL
-container smoke check under 512 MiB/0.5 CPU reached health UP, denied anonymous
-API access, ran as UID 10001, and used about 255 MiB at the observed idle point.
-This is not a hosted load test. Browser PWA installation,
-actual Vercel routing, SMTP delivery, hosted service setup and the public release
-gate remain unverified. Assets/configuration alone do not complete 1.6.2.
+The hosting implementation passed full backend verification, 57 frontend behavior tests, formatting/lint/type/build, API/deployment tooling, generated API drift, catalog validation, Vercel packaging and a resource-limited Docker health/auth smoke check before publication. Those historical checks are distinct from the owner's hosted acceptance.
 
-At the user's requested stopping point, Vercel/Render/Resend accounts exist. A Resend
-sender domain `barbuddy.projects.williamsestate.net` was created, and its DKIM TXT
-record was saved and observed in Cloudflare with user authorization. The sending
-SPF TXT and MX records remain to be added and Resend verification remains pending.
-No Vercel/Render project, app DNS CNAME, SMTP credential, Auth URL/template setting,
-public deployment or paid upgrade was created by this task. The existing unrelated
-`chefai.projects` DNS record was preserved.
+## Continuous delivery configuration
+
+The September 10 maintenance PR enables Vercel Git deployments only for `main` and Render `checksPass` deployments through `render.yaml`. Existing GitHub required checks and protection stay intact. The development workflow ends with a finished PR: review in GitHub, wait for passing checks, then squash-merge. The merge is production deployment approval; no routine “continue after CI” message is needed.
+
+Dashboard inspection confirmed Render's existing Free service `bar-buddy-api` is Blueprint-managed, linked to this repository's `main`, with Blueprint Auto Sync set to Yes and `render.yaml` as its path. Render shows Live at `931b491`. Its public origin is `https://bar-buddy-api.onrender.com`. Vercel's existing `bar-buddy` project is connected to `mrnoahjwilliams/bar-buddy`, tracks `main` for Production and shows Ready at `931b491` (hosting PR #30) on the canonical domain. The new automatic-delivery configuration takes effect when the maintenance PR is merged; its first automatic production rollout cannot be verified before that merge. [Workflow](07-development-workflow.md#continuous-delivery) defines rollout compatibility and the operational contract.
