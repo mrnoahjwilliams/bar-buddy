@@ -1,0 +1,12 @@
+*
+!Dockerfile
+!mvnw
+!pom.xml
+!checkstyle.xml
+!.mvn/
+!.mvn/**
+!src/
+!src/**
+!catalog/
+!catalog/scripts/
+!catalog/scripts/*.mjs

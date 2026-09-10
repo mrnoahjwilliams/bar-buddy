@@ -22,7 +22,8 @@
     "format:check": "prettier --check .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "check": "npm run format:check && npm run lint && npm run test && npm run test:api-tooling && npm run build"
+    "check": "npm run format:check && npm run lint && npm run test && npm run test:api-tooling && npm run build",
+    "build:vercel": "npm run build && node scripts/build-vercel.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.115.0",

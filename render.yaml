@@ -1,0 +1,26 @@
+# No paid database, disk, worker, preview, or cron resources.
+services:
+  - type: web
+    name: bar-buddy-api
+    runtime: docker
+    plan: free
+    branch: main
+    autoDeployTrigger: off
+    dockerContext: ./backend
+    dockerfilePath: ./backend/Dockerfile
+    healthCheckPath: /actuator/health
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: production
+      - key: DB_URL
+        sync: false
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: AUTH_ISSUER
+        sync: false
+      - key: AUTH_JWK_SET_URI
+        sync: false
+      - key: SUPABASE_AUTH_ADMIN_KEY
+        sync: false

@@ -67,7 +67,7 @@ Deletion removes the profile name, inventory and favorites, disables application
 
 ## Quality and platform
 
-- Public, responsive, mobile-friendly web app and installable PWA where supported. No offline behavior is promised. Initial infrastructure cost stays at or near $0; native packaging may be reconsidered later.
+- Public, responsive, mobile-friendly web app and installable PWA where supported. No offline behavior is promised. Hosting and application services must use ongoing free plans with a strict $0 spend policy: no paid upgrades or billable overages. If a free tier changes or is exhausted, pause or migrate the service rather than incur charges. Provider terms cannot guarantee perpetual availability; the existing domain renewal is separate. Native packaging may be reconsidered later.
 - Follow the stack and feature-oriented modular monolith in Design. Keep business rules independently testable; organize APIs around resources/user actions, not mechanical table exposure. Do not introduce distributed services or Clean Architecture.
 - Version reproducible schema changes; preserve valid catalog/user data during upgrades. Return consistent, useful validation/domain errors.
 - Keep core views responsive at side-project scale, avoid per-row queries and unnecessary full-dataset transfers, and bound calculations to relevant data. Add server filtering/pagination when catalog size or measurement warrants it. No numeric latency, capacity or coverage target is accepted.
