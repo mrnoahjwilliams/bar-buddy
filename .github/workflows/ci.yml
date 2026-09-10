@@ -71,3 +71,8 @@ jobs:
       - name: Verify generated API contract and client
         working-directory: frontend
         run: npm run api:check
+      - name: Verify Vercel deployment packaging
+        working-directory: frontend
+        env:
+          BACKEND_ORIGIN: https://api.example.com
+        run: node scripts/build-vercel.mjs

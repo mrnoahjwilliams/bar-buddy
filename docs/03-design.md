@@ -161,8 +161,11 @@ terminate TLS for this nested hostname without a paid Cloudflare certificate.
 Vercel proxies `/api/**` to the selected Render HTTPS origin, before SPA fallback.
 Browser requests remain same-origin; no permissive CORS policy is needed. API
 responses are never CDN-cached. Hosting output is generated from an explicit
-`BACKEND_ORIGIN`, never a guessed service name. Manual deployments use reviewed,
-merged revisions; Git pushes do not authorize production deployment.
+`BACKEND_ORIGIN`, never a guessed service name. Production follows reviewed merges to protected `main`: Vercel deploys only `main`,
+and Render deploys after its CI checks pass. The user authorized this continuous
+delivery policy on September 10, 2026. Provider builds finish independently, so
+API/schema changes must support both the previous and new frontend during rollout.
+[Workflow](07-development-workflow.md#continuous-delivery) owns the merge/deploy contract.
 
 Render uses one free web service with ephemeral storage, a bounded Java heap and
 small JDBC pool. Supabase's IPv4-compatible session pooler with TLS supports both

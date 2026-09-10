@@ -14,4 +14,4 @@
 
 ## Review notes
 
-<!-- Include material risks, migration/configuration changes, unresolved decisions, or remaining milestone work. Write “None” if there are none. Merge and deployment still require the user's approval. -->
+<!-- Include material risks, migration/configuration changes, unresolved decisions, or remaining milestone work. Write “None” if there are none. Merging into main approves automatic production deployment. Identify any required pre-merge backup/import and rollout compatibility constraints; do not leave routine post-CI agent work. -->

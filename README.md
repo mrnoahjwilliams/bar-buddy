@@ -11,7 +11,9 @@ Bar Buddy helps you keep track of your home-bar ingredients and discover cocktai
 
 Designed for phones, tablets, and desktops.
 
-**Public app:** coming soon. The hosted link will be added here when Bar Buddy launches.
+**Public app:** [Open Bar Buddy](https://barbuddy.projects.williamsestate.net).
+
+Changes ship through reviewed GitHub pull requests. Merging a passing PR into `main` automatically deploys the website and API; see the [development workflow](docs/07-development-workflow.md).
 
 ## A look inside
 

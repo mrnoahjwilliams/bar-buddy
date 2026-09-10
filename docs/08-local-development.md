@@ -111,7 +111,7 @@ java -Dloader.main=com.barbuddy.catalog.CatalogImportApplication \
 
 The command validates a snapshot of the complete input using the bundled catalog validator before opening the database. It then applies pending Flyway migrations and imports in one transaction, prints a completion message and exits. It starts no web listener and needs no Auth configuration. Invalid input or import failure produces a nonzero exit; failed catalog writes roll back together. Flyway migrations are a separate preceding operation and remain applied if a later import fails.
 
-Re-running the same file preserves database identities and does not duplicate records. Corrections update display data and synchronize ordered recipe lines. Missing stable entities, changed cocktail slugs or recipe membership require a reviewed migration; they are not automatic retirements or renames. See the [catalog correction contract](../backend/catalog/README.md#import-and-correction-contract). Only run against the intended database; hosted deployment/import remains a separately authorized release operation. Node is required for this operator command and its backend integration tests, but not for normal backend startup.
+Re-running the same file preserves database identities and does not duplicate records. Corrections update display data and synchronize ordered recipe lines. Missing stable entities, changed cocktail slugs or recipe membership require a reviewed migration; they are not automatic retirements or renames. See the [catalog correction contract](../backend/catalog/README.md#import-and-correction-contract). Only run against the intended database; hosted catalog import remains a separately authorized operator action; routine code deployment follows the continuous-delivery policy. Node is required for this operator command and its backend integration tests, but not for normal backend startup.
 
 Validate the maintained catalog without installing extra dependencies:
 
@@ -151,12 +151,12 @@ promise that providers will offer free service forever.
 
 ### Backend deployment
 
-1. Merge the reviewed hosting PR after required CI passes. Deploy only the approved
-   merged revision. `render.yaml` sets `plan: free` and disables automatic deploys.
+1. Merge reviewed PRs after required CI passes. `render.yaml` sets `plan: free`
+   and `autoDeployTrigger: checksPass`.
    Creating a Blueprint can perform an initial deploy, so do it only when ready.
 2. Create one Render Docker web service from this repository using the Blueprint,
    or its equivalent settings: Dockerfile `backend/Dockerfile`, context `backend`,
-   branch `main`, Free instance, health path `/actuator/health`, auto-deploy Off.
+   branch `main`, Free instance, health path `/actuator/health`, auto-deploy After CI Checks Pass.
    Choose a region close to the existing Supabase project. Do not create Render
    PostgreSQL; its free database expires.
 3. Supply `DB_URL`, `DB_USERNAME`, `DB_PASSWORD`, `AUTH_ISSUER`,
@@ -192,12 +192,12 @@ checksum (the wrapper otherwise selects a tar archive on minimal images).
 ### Frontend and DNS
 
 1. Import this GitHub repository into Vercel **Hobby**, root directory `frontend`,
-   Node 24. The committed configuration uses the Build Output API and disables
-   automatic Git deployments. Keep production deployments manual and approved.
+   Node 24. The committed configuration uses the Build Output API and enables
+   automatic Git deployments only for `main`. Set Production branch to `main`.
 2. Set `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` to the existing
    project, and `BACKEND_ORIGIN` to the Render HTTPS origin without paths or secrets.
    Scope production settings to Production; do not give preview builds production
-   credentials. Deploy the approved merged revision.
+   credentials. Reviewed merges deploy automatically.
 3. `npm run build:vercel` builds static assets and generates `.vercel/output`.
    Missing/insecure backend origins fail packaging. `/api/**` proxies before static
    lookup and SPA fallback, with no-store headers. Other GET/HEAD routes load the
@@ -216,18 +216,8 @@ checksum (the wrapper otherwise selects a tar archive on minimal images).
 
 ### Auth email delivery
 
-Current handoff: the sender domain and DKIM TXT record already exist. Add only the
-remaining two records below (TTL Auto), then click **I've already added the records**
-in Resend and wait for Verified:
-
-| Type | Cloudflare name | Content | Priority |
-|---|---|---|---|
-| TXT | `send.barbuddy.projects` | `v=spf1 include:amazonses.com ~all` | — |
-| MX | `send.barbuddy.projects` | `feedback-smtp.us-east-1.amazonses.com` | 10 |
-
-These values were read from this sender's Resend setup in North Virginia. If the
-sender is recreated or its region changes, use the new displayed records instead.
-
+The owner completed and verified production email setup on September 10, 2026.
+The steps below are the rebuild/reference procedure; use current provider-displayed DNS values.
 
 1. Add `barbuddy.projects.williamsestate.net` in Resend Domains. Use manual DNS
    setup and add only the displayed DKIM TXT plus sending SPF TXT/MX records in
@@ -283,6 +273,14 @@ its dashboard if needed; then check database TLS, backend health, issuer/JWKS an
 proxy origin. Rotate compromised credentials in their owning service and update only
 the server-side destination that uses them.
 
-Publication remains incomplete until the Plan's two-account public journeys, access
-restrictions, actual deletion retries, email delivery, PWA installation, deep-link
-refresh, and recovery verification pass. Keep README's coming-soon status until then.
+The owner confirmed MVP publication and verification complete on September 10, 2026.
+Repeat the applicable Plan release gates for later product releases.
+
+
+### Continuous delivery
+
+- GitHub: preserve protected `main` and required `backend-checks` / `frontend-checks`. Review the completed PR, wait for green checks, then squash-merge in GitHub. No second Codex turn is required.
+- Render: existing Blueprint **Bar Buddy** → Settings → Auto Sync **Yes**, branch **main**, path **render.yaml**. Its Free `bar-buddy-api` service uses **After CI Checks Pass**. The Blueprint applies the committed deployment setting after merge. Check Syncs if service settings diverge; a manually created replacement service must be configured equivalently.
+- Vercel: existing **bar-buddy** project → Git must remain connected to **mrnoahjwilliams/bar-buddy**; Production tracks **main**, root is **frontend**, with existing Production environment settings. `frontend/vercel.json` enables `main` and disables other branches, including slash-containing feature branches. Do not override it with an Ignored Build Step that skips production. No deploy hooks or Actions secrets are needed.
+- Observe deployment in Vercel Deployments and Render Deploys/Events. Match both revisions to the merged `main` commit, require Vercel Ready and Render Live/healthy, then check the public app and `/api/v1/me` rejects anonymous access. The first merge of this configuration is the first full automatic-delivery test; do not claim that future run has already passed.
+- Builds and startup take minutes and finish independently. Refresh an existing tab for new frontend assets. Follow [Workflow's compatibility rules](07-development-workflow.md#continuous-delivery) and the recovery procedure above if either provider fails; a GitHub Release or passing CI is not evidence that both services are live.
