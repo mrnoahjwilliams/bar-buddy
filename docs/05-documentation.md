@@ -145,3 +145,32 @@ GitHub Actions runs required `backend-checks` and `frontend-checks` for pull req
 Protected `main` requires a pull request, resolved conversations, an up-to-date branch, and both required checks; force pushes and deletion are disabled, linear history is required, and only squash merges are enabled. Dependency updates are manual. Dependabot PRs #22 and #23 were closed at the owner’s request on September 9, 2026; automated security-update PRs are disabled and this polish change removes version-update configuration. Vulnerability alerts, secret scanning, and push protection remain enabled.
 
 Bar Buddy has not been deployed. Public hosting, production email, observability, recovery, and release verification remain in plan unit 1.6.
+
+## Hosting preparation — not published
+
+The hosting branch prepares Render Free Docker deployment with an unprivileged
+Java runtime, bounded memory, small connection pool, production binding and JWT
+configuration; Vercel Hobby build output with a configurable same-origin API proxy,
+no-store API responses and SPA route fallback; PWA manifest/icons and a network-only
+service worker; editable Supabase confirmation/recovery templates; and the operator
+setup/recovery guide in [Local development](08-local-development.md#production-hosting).
+No paid resources or automatic Git deployments are configured.
+
+Verified locally September 9, 2026: full backend verification (34 integration tests
+plus unit checks), 57 frontend behavior tests, formatting/lint/type/build, three
+API/deployment tooling tests, generated API drift, catalog validation and Vercel
+output packaging with a disposable example origin. Docker image build passed after
+adding unzip for the existing pinned Maven ZIP checksum. A disposable PostgreSQL
+container smoke check under 512 MiB/0.5 CPU reached health UP, denied anonymous
+API access, ran as UID 10001, and used about 255 MiB at the observed idle point.
+This is not a hosted load test. Browser PWA installation,
+actual Vercel routing, SMTP delivery, hosted service setup and the public release
+gate remain unverified. Assets/configuration alone do not complete 1.6.2.
+
+At the user's requested stopping point, Vercel/Render/Resend accounts exist. A Resend
+sender domain `barbuddy.projects.williamsestate.net` was created, and its DKIM TXT
+record was saved and observed in Cloudflare with user authorization. The sending
+SPF TXT and MX records remain to be added and Resend verification remains pending.
+No Vercel/Render project, app DNS CNAME, SMTP credential, Auth URL/template setting,
+public deployment or paid upgrade was created by this task. The existing unrelated
+`chefai.projects` DNS record was preserved.

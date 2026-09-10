@@ -1,0 +1,28 @@
+# Required production settings deliberately have no local defaults.
+spring:
+  config:
+    import: ""
+  datasource:
+    hikari:
+      maximum-pool-size: 3
+      minimum-idle: 0
+      connection-timeout: 30000
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+
+bar-buddy:
+  auth:
+    enabled: true
+  account-deletion:
+    admin-key: ${SUPABASE_AUTH_ADMIN_KEY}
+
+server:
+  address: 0.0.0.0
+  port: ${PORT:10000}
+  tomcat:
+    threads:
+      max: 20
+      min-spare: 2

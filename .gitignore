@@ -30,3 +30,6 @@ pgdata/
 *~
 
 # Commit lockfiles, build wrappers, migrations, and generated API contracts/client.
+
+# Local hosting links and generated deployment output.
+.vercel/

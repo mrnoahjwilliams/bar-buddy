@@ -15,7 +15,7 @@ Disable the unused Supabase Data API and remove application-object access for `a
 | Frontend | React 19, TypeScript, Vite, React Router, TanStack Query, Tailwind CSS, shadcn/ui, Orval; Vitest and React Testing Library |
 | Backend | Java 25 LTS, Spring Boot 4.1, Spring MVC, Spring Security, Spring Data JPA/Hibernate, Jakarta Validation, Flyway, springdoc-openapi; JUnit, Spring Boot Test and Testcontainers |
 | Identity/data | Supabase Auth JWT issuance; Spring token validation and application authorization; PostgreSQL initially hosted by Supabase |
-| Delivery | Responsive PWA first; optional later Capacitor packaging. GitHub/GitHub Actions and execution policy are specified in Workflow. Hosting/deployment provider decisions remain in the publication milestone. |
+| Delivery | Responsive PWA first; optional later Capacitor packaging. GitHub/GitHub Actions and execution policy are specified in Workflow. Vercel Hobby serves the SPA, Render Free runs the container, Supabase Free supplies Auth/PostgreSQL, and Resend Free supplies Auth SMTP. See the hosting decision below. |
 
 Foundation verifies compatible patch/library versions, chooses the remaining toolchain details, and commits wrappers/lockfiles. Do not substitute a different accepted stack without a decision.
 
@@ -147,3 +147,35 @@ AppUser owns the optional display name plus deletion-request/completion timestam
 Account deletion atomically removes owned inventory and preferences, clears the name, and marks the existing AppUser row. A security-chain filter checks this marker for every authenticated request; repeated DELETE requests return 202, and other requests from a deleted subject return 401. A minute-based worker hard-deletes the provider login with a server-only Supabase admin key, accepts already-deleted identities, and records completion only after success. This avoids coupling a database commit to an irreversible network call. [Supabase documents](https://supabase.com/docs/guides/auth/managing-user-data) that deleting a login does not invalidate already-issued JWTs; the local marker enforces immediate denial. The existing identity row is the durable retry record and token-replay tombstone, not a new product entity. [Local development](08-local-development.md#account-deletion) owns configuration, retention and recovery operations.
 
 The browser transport captures the account session generation before a request. It checks that generation before dispatch/retry and after asynchronous responses, and discards obsolete work. A refresh result cannot replace a newer account session. Profile edits reset on account change and do not repopulate the cache after unmount.
+
+## MVP hosting decision
+
+Selected September 9, 2026 under the user's strict $0 requirement: Vercel Hobby +
+Render Free, keeping Supabase Free. Fly.io is excluded because it has no ongoing
+free tier. This fits the existing Java application without a stack rewrite.
+Provider terms may change; pause or migrate rather than authorize charges.
+
+The canonical browser origin is `https://barbuddy.projects.williamsestate.net`.
+Cloudflare remains authoritative DNS; its app CNAME is DNS-only so Vercel can
+terminate TLS for this nested hostname without a paid Cloudflare certificate.
+Vercel proxies `/api/**` to the selected Render HTTPS origin, before SPA fallback.
+Browser requests remain same-origin; no permissive CORS policy is needed. API
+responses are never CDN-cached. Hosting output is generated from an explicit
+`BACKEND_ORIGIN`, never a guessed service name. Manual deployments use reviewed,
+merged revisions; Git pushes do not authorize production deployment.
+
+Render uses one free web service with ephemeral storage, a bounded Java heap and
+small JDBC pool. Supabase's IPv4-compatible session pooler with TLS supports both
+Flyway and JPA. Flyway runs at startup; catalog import remains an explicit local
+operator command against the selected hosted database. No temporary Render database,
+paid disk, cron job, or artificial keep-alive is provisioned. Idle sleep delays both
+first requests and pending account-deletion retries; durable markers survive sleep.
+
+Resend Free sends Supabase Auth messages from
+`Bar Buddy <noreply@barbuddy.projects.williamsestate.net>`. Supabase holds the SMTP
+credential; Render never sends SMTP. Editable templates live in `deploy/auth/`.
+Provider confirmation links retain Supabase's verification endpoint and redirect to
+the app; a custom Supabase Auth domain is not purchased. The PWA uses repository-owned
+cocktail-glass artwork and a network-only service worker, with no offline private-data
+cache. [Local development](08-local-development.md#production-hosting) owns setup,
+limits, DNS, email delivery, backup and recovery procedures.

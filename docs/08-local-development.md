@@ -135,3 +135,154 @@ Review and stage the generated changes, then run `npm run api:check`. Generation
 GitHub Actions runs `backend-checks` and `frontend-checks` for pull requests to `main`, pushes to `main`, and manual runs. CI uses disposable services and no production credentials. Dependency updates are reviewed manually. Dependabot version-update configuration is removed and automated security-update PRs are disabled; vulnerability alerts remain enabled.
 
 Backend `.env` files containing credentials should remain ignored and owner-readable (`chmod 600 backend/.env`). Frontend `VITE_` values are shipped to the browser and therefore must never be treated as secrets. Build output, dependency directories, caches, and generated temporary files are not source artifacts and should remain untracked.
+
+## Production hosting
+
+[Design](03-design.md#mvp-hosting-decision) owns provider selection. Keep every
+service on its ongoing free plan. Do not add a payment method to Render: its
+[free limits](https://render.com/docs/free) can otherwise produce bandwidth/build
+overages. No paid trials, disks, databases, workers, scheduled keep-alives, or
+upgrades. Vercel Hobby is for personal/non-commercial use. Supabase Free can pause
+after inactivity; Resend Free currently limits sending to 100/day and 3,000/month.
+Review provider dashboards before launch and after usage alerts. Exhausted or
+withdrawn free capacity means suspend/migrate, not purchase. Domain renewal is
+separate from application hosting. These are policy/configuration choices, not a
+promise that providers will offer free service forever.
+
+### Backend deployment
+
+1. Merge the reviewed hosting PR after required CI passes. Deploy only the approved
+   merged revision. `render.yaml` sets `plan: free` and disables automatic deploys.
+   Creating a Blueprint can perform an initial deploy, so do it only when ready.
+2. Create one Render Docker web service from this repository using the Blueprint,
+   or its equivalent settings: Dockerfile `backend/Dockerfile`, context `backend`,
+   branch `main`, Free instance, health path `/actuator/health`, auto-deploy Off.
+   Choose a region close to the existing Supabase project. Do not create Render
+   PostgreSQL; its free database expires.
+3. Supply `DB_URL`, `DB_USERNAME`, `DB_PASSWORD`, `AUTH_ISSUER`,
+   `AUTH_JWK_SET_URI`, and `SUPABASE_AUTH_ADMIN_KEY` using Render's environment UI.
+   Copy from the intended existing Supabase project, never browser build variables.
+   Use the session pooler (port 5432, IPv4 compatible), its displayed username, and
+   a JDBC URL with `sslmode=require`. Do not use the transaction pooler for Flyway.
+   Keep the Data API disabled and existing application/default grants restricted.
+4. `production` binds `0.0.0.0:$PORT` (default 10000), always enables JWT validation,
+   limits the JDBC pool to three connections and disables local `.env` import.
+   The image runs as an unprivileged user with a bounded heap. Render terminates
+   public HTTPS; the application exposes only the existing health endpoint publicly.
+5. Startup applies Flyway then validates JPA mappings. Check logs and health before
+   routing browser traffic. Never bypass a failed migration or enable automatic DDL.
+   Copy Render's actual HTTPS service origin for Vercel's `BACKEND_ORIGIN`.
+6. Import the catalog with the existing operator command in
+   [Catalog and API generation](#catalog-and-api-generation), using the same reviewed
+   revision and the explicitly selected hosted database. The runtime container has
+   no Node or catalog data and Render Free has no shell/one-off jobs. Do not add a
+   public import endpoint. Existing reviewed catalog imports need no overwrite.
+
+Local container verification:
+
+```sh
+docker build -t bar-buddy:hosting backend
+```
+
+Full tests run separately with `./mvnw verify`; the container package step skips
+execution of tests because a build environment has no disposable database engine.
+The image installs unzip to preserve verification of the wrapper's pinned ZIP
+checksum (the wrapper otherwise selects a tar archive on minimal images).
+
+### Frontend and DNS
+
+1. Import this GitHub repository into Vercel **Hobby**, root directory `frontend`,
+   Node 24. The committed configuration uses the Build Output API and disables
+   automatic Git deployments. Keep production deployments manual and approved.
+2. Set `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` to the existing
+   project, and `BACKEND_ORIGIN` to the Render HTTPS origin without paths or secrets.
+   Scope production settings to Production; do not give preview builds production
+   credentials. Deploy the approved merged revision.
+3. `npm run build:vercel` builds static assets and generates `.vercel/output`.
+   Missing/insecure backend origins fail packaging. `/api/**` proxies before static
+   lookup and SPA fallback, with no-store headers. Other GET/HEAD routes load the
+   SPA, including `/reset-password` and copied drink details. No CORS wildcard or
+   backend custom domain is required. API calls remain protected by Spring JWTs.
+4. Add `barbuddy.projects.williamsestate.net` to the Vercel project. In Cloudflare,
+   add **CNAME** name `barbuddy.projects`, target **the exact value Vercel displays**,
+   TTL Auto, proxy **DNS only**. Add a Vercel ownership TXT only if requested.
+   Do not change nameservers or unrelated records. Vercel issues the HTTPS
+   certificate for the exact nested hostname; Cloudflare Universal SSL's ordinary
+   wildcard does not cover it. Wait for Vercel's Valid Configuration/TLS result.
+5. Review installation at the canonical HTTPS URL. The manifest includes 192/512px
+   maskable icons and an Apple touch icon. The service worker passes all requests
+   to the network and stores nothing. Browser installation UI varies; no offline
+   data access is promised. Review deep-link refresh and reset links on mobile.
+
+### Auth email delivery
+
+Current handoff: the sender domain and DKIM TXT record already exist. Add only the
+remaining two records below (TTL Auto), then click **I've already added the records**
+in Resend and wait for Verified:
+
+| Type | Cloudflare name | Content | Priority |
+|---|---|---|---|
+| TXT | `send.barbuddy.projects` | `v=spf1 include:amazonses.com ~all` | — |
+| MX | `send.barbuddy.projects` | `feedback-smtp.us-east-1.amazonses.com` | 10 |
+
+These values were read from this sender's Resend setup in North Virginia. If the
+sender is recreated or its region changes, use the new displayed records instead.
+
+
+1. Add `barbuddy.projects.williamsestate.net` in Resend Domains. Use manual DNS
+   setup and add only the displayed DKIM TXT plus sending SPF TXT/MX records in
+   Cloudflare. Keep receiving disabled and preserve existing domain mail records.
+   The sending MX is for the `send` subdomain, not the root domain. Resend must
+   show Verified before SMTP is enabled. No Cloudflare account-wide access needed.
+2. Create a Resend **sending-only** API key restricted to this domain. Store it as
+   the SMTP password in Supabase Auth custom SMTP, never in Git/Render/Vercel.
+   Host `smtp.resend.com`, port `465`, username `resend`, sender name `Bar Buddy`,
+   sender address `noreply@barbuddy.projects.williamsestate.net`.
+3. Supabase Site URL becomes `https://barbuddy.projects.williamsestate.net`.
+   Allow the exact `/reset-password` URL there. Retain exact local development
+   redirect entries if needed; do not allow wildcard preview domains. Enable email
+   confirmation. Custom SMTP must deliver to public recipients before publication.
+4. Paste [confirmation](../deploy/auth/confirmation.html) into Confirm signup
+   (subject `Confirm your Bar Buddy email`) and
+   [recovery](../deploy/auth/recovery.html) into Reset password
+   (subject `Reset your Bar Buddy password`). Preserve `{{ .ConfirmationURL }}`:
+   Supabase verifies the token and redirects to the configured app. Branding is in
+   sender/content; verification links still use Supabase's domain. No paid custom
+   Auth domain. Disable Resend click/open tracking for authentication emails.
+5. Start with Supabase's custom-SMTP email limit of 30/hour and a 60-second per-user
+   interval, staying within Resend's daily/monthly caps. These hourly limits alone
+   do not guarantee staying below the daily cap; check both dashboards and leave
+   the provider on Free so exceeding quotas cannot silently buy more delivery.
+6. Test signup confirmation and password recovery with disposable public recipient
+   accounts, including expired/used links. Inspect Resend delivery/bounce status.
+   Quota, unverified sender or bad SMTP credentials are delivery failures, not a
+   reason to disable confirmation. Never paste credentials into PRs or chat.
+
+### Recovery and release checks
+
+Render may sleep after 15 idle minutes; its next request can take about a minute.
+Do not add synthetic traffic to prevent sleep. Requests can time out while waking;
+existing retry controls should work once healthy. Pending account deletions remain
+in PostgreSQL and resume when the backend wakes. Inspect pending markers as described
+in [Account deletion](#account-deletion); do not promise immediate provider deletion
+while the service is asleep. A sustained memory failure within the free allowance
+blocks publication until resolved without a paid upgrade.
+
+Before production migrations, take an encrypted local database backup using the
+trusted operator connection (`pg_dump --format=custom`) and verify restoration into
+a disposable database. Keep the credential in an owner-readable password file,
+never a command URL or repository. Supabase Free does not provide the same backup
+recovery guarantees as paid plans; schedule operator backups before releases and
+important data changes. Account for separately managed Auth identities on restore.
+
+If a deploy fails, retain the last working frontend/backend revision. Roll back code
+only when compatible with the applied schema; Flyway migrations are not undone by
+container rollback. Prefer a reviewed forward fix. Restore a backup only after
+explicitly approving data loss and validating it in isolation. Unpause Supabase in
+its dashboard if needed; then check database TLS, backend health, issuer/JWKS and
+proxy origin. Rotate compromised credentials in their owning service and update only
+the server-side destination that uses them.
+
+Publication remains incomplete until the Plan's two-account public journeys, access
+restrictions, actual deletion retries, email delivery, PWA installation, deep-link
+refresh, and recovery verification pass. Keep README's coming-soon status until then.
