@@ -43,7 +43,7 @@ class CatalogImportIT {
 
   @Test
   void fullCatalogAndConcurrentRepeatsPreserveEveryIdentity() throws Exception {
-    CatalogInput full = CatalogInput.read(Path.of("../catalog/cocktails.json"));
+    CatalogInput full = CatalogInput.read(Path.of("catalog/cocktails.json"));
     importer.importCatalog(full);
     assertThat(count("ingredient")).isEqualTo(116);
     assertThat(count("cocktail")).isEqualTo(102);
@@ -176,8 +176,7 @@ class CatalogImportIT {
   @Test
   void invalidSnapshotIsRejectedAndCannotBeChangedAfterValidation() throws Exception {
     assertThatThrownBy(
-            () ->
-                CatalogInput.read(Path.of("../catalog/test/fixtures/invalid/broken-catalog.json")))
+            () -> CatalogInput.read(Path.of("catalog/test/fixtures/invalid/broken-catalog.json")))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessageContaining("catalog validation failed");
     Path file = temporary.resolve("snapshot.json");
@@ -199,7 +198,7 @@ class CatalogImportIT {
             "-cp",
             jar.toString(),
             "org.springframework.boot.loader.launch.PropertiesLauncher",
-            Path.of("../catalog/test/fixtures/valid/minimal-catalog.json")
+            Path.of("catalog/test/fixtures/valid/minimal-catalog.json")
                 .toAbsolutePath()
                 .toString());
     command.directory(temporary.toFile());
@@ -226,7 +225,7 @@ class CatalogImportIT {
         .command()
         .set(
             5,
-            Path.of("../catalog/test/fixtures/invalid/broken-catalog.json")
+            Path.of("catalog/test/fixtures/invalid/broken-catalog.json")
                 .toAbsolutePath()
                 .toString());
     command.environment().put("DB_URL", "jdbc:postgresql://127.0.0.1:1/unreachable");
@@ -241,7 +240,7 @@ class CatalogImportIT {
   private ObjectNode fixture() throws Exception {
     return (ObjectNode)
         mapper.readTree(
-            Files.readString(Path.of("../catalog/test/fixtures/valid/minimal-catalog.json")));
+            Files.readString(Path.of("catalog/test/fixtures/valid/minimal-catalog.json")));
   }
 
   private CatalogInput validated(ObjectNode document) throws Exception {

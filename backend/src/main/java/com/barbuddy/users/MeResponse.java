@@ -6,8 +6,9 @@ import java.util.UUID;
 
 public record MeResponse(
     @Schema(requiredMode = Schema.RequiredMode.REQUIRED) UUID id,
-    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) Instant createdAt) {
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) Instant createdAt,
+    String displayName) {
   static MeResponse from(AppUser user) {
-    return new MeResponse(user.getId(), user.getCreatedAt());
+    return new MeResponse(user.getId(), user.getCreatedAt(), user.getDisplayName());
   }
 }

@@ -47,7 +47,7 @@ class DiscoveryIT {
   void load() throws Exception {
     jdbc.execute(
         "truncate user_cocktail_state, inventory_item, recipe_ingredient, recipe, cocktail, ingredient, app_user");
-    importer.importCatalog(CatalogInput.read(Path.of("../catalog/cocktails.json")));
+    importer.importCatalog(CatalogInput.read(Path.of("catalog/cocktails.json")));
   }
 
   @Test

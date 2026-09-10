@@ -47,8 +47,8 @@ try {
       env: { ...process.env, BAR_BUDDY_API_WORKSPACE: apiWorkspace },
     },
   );
-  await mkdir(join(workspace, 'contracts'), { recursive: true });
-  await cp(contract, join(workspace, 'contracts/openapi.json'));
+  await mkdir(join(workspace, 'backend/contracts'), { recursive: true });
+  await cp(contract, join(workspace, 'backend/contracts/openapi.json'));
   const expected = await readArtifacts(workspace);
   if (!expected.has('frontend/src/api/generated/bar-buddy.ts'))
     throw new Error('Orval did not produce its client artifact.');
@@ -70,7 +70,7 @@ try {
       await writeFile(join(root, path), contents);
     }
     console.log(
-      'Generated contracts/openapi.json and frontend/src/api/generated/.',
+      'Generated backend/contracts/openapi.json and frontend/src/api/generated/.',
     );
   }
 } finally {

@@ -1,4 +1,5 @@
 export interface ApiAuthBridge {
+  sessionKey?(): number;
   getAccessToken(forceRefresh: boolean): Promise<string | undefined>;
   handleUnauthorized(): Promise<void>;
 }

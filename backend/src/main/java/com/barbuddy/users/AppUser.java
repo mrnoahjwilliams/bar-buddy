@@ -18,7 +18,25 @@ public class AppUser {
   @Column(name = "created_at", nullable = false, insertable = false, updatable = false)
   private Instant createdAt;
 
+  @Column(name = "display_name", length = 80)
+  private String displayName;
+
+  @Column(name = "deletion_requested_at")
+  private Instant deletionRequestedAt;
+
+  public boolean isDeletionRequested() {
+    return deletionRequestedAt != null;
+  }
+
   protected AppUser() {}
+
+  public String getDisplayName() {
+    return displayName;
+  }
+
+  void setDisplayName(String displayName) {
+    this.displayName = displayName;
+  }
 
   public UUID getId() {
     return id;

@@ -117,6 +117,40 @@ class CatalogSchemaIT {
   }
 
   @Test
+  void upgradesExistingMvpUsersToOptionalProfilesWithoutDataLoss() {
+    var source =
+        new DriverManagerDataSource(
+            POSTGRES.getJdbcUrl(), POSTGRES.getUsername(), POSTGRES.getPassword());
+    var db = new JdbcTemplate(source);
+    Flyway.configure()
+        .dataSource(source)
+        .schemas("profile_upgrade")
+        .defaultSchema("profile_upgrade")
+        .target("5")
+        .load()
+        .migrate();
+    UUID id = UUID.randomUUID();
+    db.update("insert into profile_upgrade.app_user(id, auth_subject) values (?, 'preserved')", id);
+    var migration =
+        Flyway.configure()
+            .dataSource(source)
+            .schemas("profile_upgrade")
+            .defaultSchema("profile_upgrade")
+            .load();
+    assertThat(migration.migrate().migrationsExecuted).isEqualTo(1);
+    assertThat(migration.migrate().migrationsExecuted).isZero();
+    assertThat(db.queryForObject("select id from profile_upgrade.app_user", UUID.class))
+        .isEqualTo(id);
+    assertThat(db.queryForObject("select display_name from profile_upgrade.app_user", String.class))
+        .isNull();
+    assertThat(
+            db.queryForObject(
+                "select deletion_requested_at from profile_upgrade.app_user",
+                java.time.Instant.class))
+        .isNull();
+  }
+
+  @Test
   void upgradesIdentityDatabaseWithoutLosingUsersAndCanRerunMigrations() {
     var source =
         new DriverManagerDataSource(

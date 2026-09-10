@@ -1,11 +1,16 @@
 import { ArrowRight, GlassWater, Plus } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useGetHomeSummary } from '@/api/generated/bar-buddy';
+import {
+  useGetCurrentUser,
+  useGetHomeSummary,
+} from '@/api/generated/bar-buddy';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/features/auth/use-auth';
 
 export function HomePage() {
-  const { session, notice, clearNotice } = useAuth();
+  const { notice, clearNotice } = useAuth();
+  const profile = useGetCurrentUser({ query: { retry: false } });
+  const displayName = profile.isError ? undefined : profile.data?.displayName;
   const summary = useGetHomeSummary({ query: { retry: false } });
   const data = summary.isError ? undefined : summary.data;
 
@@ -17,12 +22,10 @@ export function HomePage() {
         </p>
         <h1 className="mt-3 max-w-2xl font-serif text-4xl leading-tight sm:text-6xl">
           Good to see you
-          {session?.email ? (
+          {displayName ? (
             <>
               ,{' '}
-              <span className="block text-2xl sm:text-4xl">
-                {session.email.split('@')[0]}.
-              </span>
+              <span className="block text-2xl sm:text-4xl">{displayName}.</span>
             </>
           ) : (
             '.'

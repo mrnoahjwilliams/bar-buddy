@@ -9,7 +9,7 @@ import { checkArtifacts } from './api-artifacts.mjs';
 test('drift detection covers content, missing files and Git tracking without repairing files', async (t) => {
   const root = await mkdtemp(join(tmpdir(), 'bar-buddy-drift-test-'));
   t.after(() => rm(root, { recursive: true, force: true }));
-  const contract = 'contracts/openapi.json';
+  const contract = 'backend/contracts/openapi.json';
   const client = 'frontend/src/api/generated/bar-buddy.ts';
   const expected = new Map([
     [contract, Buffer.from('{"paths":{}}\n')],

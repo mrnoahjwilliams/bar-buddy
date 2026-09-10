@@ -104,8 +104,8 @@ export class SupabaseAuthGateway implements AuthGateway {
     return toAppSession(data.session);
   }
 
-  async signOut() {
-    const { error } = await this.client.auth.signOut();
+  async signOut(scope: 'global' | 'local' = 'global') {
+    const { error } = await this.client.auth.signOut({ scope });
     throwIfError(error);
   }
 }

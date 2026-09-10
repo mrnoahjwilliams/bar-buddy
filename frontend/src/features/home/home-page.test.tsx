@@ -15,6 +15,12 @@ const empty = {
   favorites: 0,
 };
 function open() {
+  const originalFetch = globalThis.fetch;
+  vi.stubGlobal('fetch', (url: string, options: RequestInit) =>
+    url === '/api/v1/me'
+      ? Promise.resolve(Response.json({ id: 'user', displayName: null }))
+      : originalFetch(url, options),
+  );
   const router = createMemoryRouter(appRoutes, { initialEntries: ['/'] });
   const view = render(
     <AppProviders

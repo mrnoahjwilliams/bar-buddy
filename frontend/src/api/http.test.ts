@@ -172,3 +172,96 @@ describe('generated-client transport', () => {
     expect(handleUnauthorized).toHaveBeenCalledOnce();
   });
 });
+
+it('never retries a mutation under a new account after an old session refresh', async () => {
+  let finish!: (token: string) => void;
+  const unauthorized = vi.fn();
+  const oldBridge = {
+    getAccessToken: vi.fn((refresh: boolean) =>
+      refresh
+        ? new Promise<string>((resolve) => {
+            finish = resolve;
+          })
+        : Promise.resolve('old-token'),
+    ),
+    handleUnauthorized: unauthorized,
+  };
+  setApiAuthBridge(oldBridge);
+  const fetch = vi.fn().mockResolvedValue(new Response(null, { status: 401 }));
+  vi.stubGlobal('fetch', fetch);
+  const request = apiFetch('/api/v1/inventory', { method: 'POST', body: '{}' });
+  const result = expect(request).rejects.toMatchObject({ name: 'AbortError' });
+  await vi.waitFor(() => expect(finish).toBeDefined());
+  const newBridge = {
+    getAccessToken: vi.fn(async () => 'new-token'),
+    handleUnauthorized: vi.fn(),
+  };
+  setApiAuthBridge(newBridge);
+  finish('old-refreshed-token');
+  await result;
+  expect(fetch).toHaveBeenCalledOnce();
+  expect(newBridge.getAccessToken).not.toHaveBeenCalled();
+  expect(unauthorized).not.toHaveBeenCalled();
+});
+
+it('discards a private response after the original session ends', async () => {
+  let finish!: (response: Response) => void;
+  let current = true;
+  setApiAuthBridge({
+    sessionKey: () => (current ? 1 : 2),
+    getAccessToken: async () => 'old-token',
+    handleUnauthorized: vi.fn(),
+  });
+  vi.stubGlobal(
+    'fetch',
+    vi.fn(
+      () =>
+        new Promise<Response>((resolve) => {
+          finish = resolve;
+        }),
+    ),
+  );
+  const request = apiFetch('/api/v1/me');
+  const result = expect(request).rejects.toMatchObject({ name: 'AbortError' });
+  await vi.waitFor(() => expect(finish).toBeDefined());
+  current = false;
+  finish(Response.json({ displayName: 'Private name' }));
+  await result;
+});
+
+it('does not share a pending refresh between two account generations', async () => {
+  let key = 1;
+  let finishOld!: (token: string) => void;
+  let fresh = false;
+  const unauthorized = vi.fn();
+  const refresh = vi.fn(async (force: boolean) => {
+    if (!force) return key === 1 ? 'old' : fresh ? 'new-fresh' : 'new-expired';
+    if (key === 1)
+      return new Promise<string>((resolve) => {
+        finishOld = resolve;
+      });
+    fresh = true;
+    return 'new-fresh';
+  });
+  setApiAuthBridge({
+    sessionKey: () => key,
+    getAccessToken: refresh,
+    handleUnauthorized: unauthorized,
+  });
+  vi.stubGlobal(
+    'fetch',
+    vi.fn(async (_url: string, options: RequestInit) =>
+      new Headers(options.headers).get('Authorization') === 'Bearer new-fresh'
+        ? Response.json({ owner: 'new' })
+        : new Response(null, { status: 401 }),
+    ),
+  );
+  const old = apiFetch('/old');
+  const oldResult = expect(old).rejects.toMatchObject({ name: 'AbortError' });
+  await vi.waitFor(() => expect(finishOld).toBeDefined());
+  key = 2;
+  await expect(apiFetch('/new')).resolves.toEqual({ owner: 'new' });
+  finishOld('old-fresh');
+  await oldResult;
+  expect(unauthorized).not.toHaveBeenCalled();
+});

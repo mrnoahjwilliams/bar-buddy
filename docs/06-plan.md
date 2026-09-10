@@ -142,6 +142,10 @@ No public app or application entity schema yet.
 
 - [x] Build Home bar information and links to existing flows. Review responsive navigation, long content, loading/error/empty states and the end-to-end MVP journey. **Verify:** signup → Bar → makeability/missing ingredients → favorite/random → reload/logout. History statistics and recommendations wait for their releases.
 
+### Approved final MVP polish — before 1.6
+
+- [x] Add private display names, account settings/recovery, confirmed account deletion with durable provider retry and old-token denial; fix account-switch request races. Reorganize catalog/contracts under backend ownership, overhaul README with sample screenshots and local setup, remove Dependabot PR automation. **Verify:** profile validation/persistence/isolation; deletion failure/retry/ownership/migration behavior; session race regressions; moved catalog validation/import/generation; full local checks and responsive browser review. Approved September 9, 2026.
+
 ### 1.6 — Publish the MVP
 
 #### 1.6.1 — Hosting and deployment setup
@@ -154,7 +158,7 @@ No public app or application entity schema yet.
 
 #### 1.6.3 — Release 1 acceptance and publication
 
-- [ ] Complete the release gate, including catalog loading and the public two-account signup → email confirmation → inventory → availability/missing detail → favorite/random → reload/logout journey, recovery through custom SMTP to public recipient addresses, PWA installation and deep-link refresh. Confirm branded Auth email links and delivery limits work for the public flow. Record actual published status; later scheduled releases remain incomplete.
+- [ ] Complete the release gate, including catalog loading and the public two-account signup → email confirmation → inventory → availability/missing detail → favorite/random → reload/logout journey, recovery through custom SMTP to public recipient addresses, PWA installation and deep-link refresh. Confirm branded Auth email links and delivery limits work for the public flow. Verify real account deletion and retry processing with disposable accounts, and replace the README’s coming-soon text with the verified public app URL. Record actual published status; later scheduled releases remain incomplete.
 
 ## Release 2 — Bar Explorer
 

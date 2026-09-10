@@ -15,6 +15,8 @@ spring:
     clean-disabled: true
 
 bar-buddy:
+  account-deletion:
+    admin-key: ${SUPABASE_AUTH_ADMIN_KEY:}
   auth:
     enabled: ${AUTH_ENABLED:false}
     issuer: ${AUTH_ISSUER:}

@@ -1,70 +1,75 @@
 # Bar Buddy
 
-Bar Buddy is a personal home-bar app for tracking ingredients, finding cocktails you can make, and seeing what you are missing.
+**Know your bar. Find your next drink.**
 
-The application is a React frontend backed by a Spring Boot API and PostgreSQL. Supabase provides user authentication; authorization and application data access stay behind the backend.
+Bar Buddy helps you keep track of your home-bar ingredients and discover cocktails you can make with what you already have. See exactly what is missing, save your favorites, or let Bar Buddy pick a drink for you.
 
-## Development status
+- **Your bar:** track ingredients and individual bottles, with simple Have and Out states.
+- **Your next pour:** browse 102 cocktails, follow their recipes, and find drinks that are just one ingredient away.
+- **Your favorites:** save drinks and narrow your next random pick by your current filters.
+- **Your account:** keep your bar private, add your name, and manage your account.
 
-The application foundation, curated cocktail catalog, backend identity boundary, and browser authentication flow are complete. Users can sign up, sign in, recover a password, sign out, and reach protected application routes. The catalog schema and validated operator import are implemented. Authenticated catalog browsing, search, filters, recipe details and related-cocktail navigation are implemented through the generated client. Have/Out inventory, multiple labeled bottles, and calculated drink availability are implemented, including makeable/one-away filtering and missing-ingredient links. Accent/alias search, additional rum ingredients, contextual detail overlays, missing names on cards, recipe-line status and a household-mixer reminder are implemented. Per-user cocktail favorites are persistent and available from drink cards/details with a combinable favorites-only filter. Random cocktail discovery uses the applied Drinks filters. Home shows current bar and discovery counts with links to the existing flows; basic responsive and state polish is complete through 1.5.3. Hosting and publication preparation are next in 1.6.
+Designed for phones, tablets, and desktops.
 
-Bar Buddy is under active development and has not been deployed for public use. See the [development plan](docs/06-plan.md) for release progress and [implementation documentation](docs/05-documentation.md) for verified behavior.
+**Public app:** coming soon. The hosted link will be added here when Bar Buddy launches.
 
-## Start locally
+## A look inside
 
-Prerequisites:
+Screenshots use a sample account and illustrative inventory.
 
-- JDK 25
-- Node.js 24 and npm 11
-- Docker with Docker Compose v2
+![Bar Buddy Home with a personal greeting, bar summary, and drink discovery](docs/images/home.png)
 
-From the repository root, start PostgreSQL:
+![Drinks grouped by what you can make, with favorites and missing ingredients](docs/images/drinks.png)
 
-```sh
-docker compose up -d --wait
-```
+![Your bar with Have and Out ingredients and bottle controls](docs/images/bar.png)
 
-On first setup, create the ignored local configuration files:
+## Run locally
 
-```sh
-cd backend
-install -m 600 .env.example .env
-cd ../frontend
-cp .env.example .env
-npm ci
-cd ..
-```
+You’ll need **Java 25**, **Node.js 24 / npm 11**, **Docker Compose v2**, and a **Supabase Auth project** for sign-in.
 
-Start the backend and frontend in separate terminals:
+1. Clone the repository and start the local database:
 
-```sh
-cd backend
-./mvnw spring-boot:run
-```
+   ```sh
+   git clone https://github.com/mrnoahjwilliams/bar-buddy.git
+   cd bar-buddy
+   docker compose up -d --wait
+   ```
 
-```sh
-cd frontend
-npm run dev
-```
+2. Create local configuration and install the frontend dependencies:
 
-Open <http://127.0.0.1:5173>. The default examples start the application with authentication disabled. Add the Supabase settings described in the [local development guide](docs/08-local-development.md#authentication) to exercise signup and login.
+   ```sh
+   install -m 600 backend/.env.example backend/.env
+   cp frontend/.env.example frontend/.env
+   npm --prefix frontend ci
+   ```
 
-Run the main checks with Docker available:
+   Configure Supabase using the [authentication setup](docs/08-local-development.md#authentication). The example files alone do not enable sign-in. Keep the database local unless you deliberately configure a hosted database.
 
-```sh
-cd catalog && npm run check
-cd ../backend && ./mvnw --batch-mode --no-transfer-progress verify
-cd ../frontend && npm run check && npm run api:check
-```
+3. Build and import the cocktail catalog into your configured database:
 
-The [local development guide](docs/08-local-development.md) covers environment variables, authentication setup, database lifecycle, API generation, and individual commands.
+   ```sh
+   cd backend
+   ./mvnw --batch-mode --no-transfer-progress verify
+   java -Dloader.main=com.barbuddy.catalog.CatalogImportApplication \
+     -cp target/bar-buddy-0.0.1-SNAPSHOT.jar \
+     org.springframework.boot.loader.launch.PropertiesLauncher catalog/cocktails.json
+   ./mvnw spring-boot:run
+   ```
 
-## Project documentation
+4. In another terminal, start the frontend from the repository root:
 
-- [Product definition](docs/01-definition.md)
-- [Requirements](docs/02-requirements.md)
-- [Technical design](docs/03-design.md)
-- [Development guidelines](docs/04-development-guidelines.md)
-- [Implemented behavior](docs/05-documentation.md)
-- [Development plan](docs/06-plan.md)
-- [Development workflow](docs/07-development-workflow.md)
+   ```sh
+   npm --prefix frontend run dev
+   ```
+
+Open [Bar Buddy locally](http://127.0.0.1:5173). See [Local development](docs/08-local-development.md) for configuration, account-deletion setup, database management, and verification commands.
+
+## Documentation
+
+Bar Buddy uses React and TypeScript, a Spring Boot API, PostgreSQL, and Supabase Auth.
+
+- [Product definition](docs/01-definition.md) and [requirements](docs/02-requirements.md)
+- [Technical design](docs/03-design.md) and [development guidelines](docs/04-development-guidelines.md)
+- [Implemented behavior](docs/05-documentation.md) and [roadmap](docs/06-plan.md)
+- [Development workflow](docs/07-development-workflow.md) and [local setup](docs/08-local-development.md)
+- [Cocktail catalog](backend/catalog/README.md)

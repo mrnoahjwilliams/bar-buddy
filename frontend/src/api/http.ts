@@ -2,6 +2,7 @@ import { getApiAuthBridge } from '@/api/auth';
 import type { ApiAuthBridge } from '@/api/auth';
 
 interface AuthAttemptState {
+  sessionKey?: number;
   refresh?: Promise<string | undefined>;
   unauthorized?: Promise<void>;
 }
@@ -10,8 +11,8 @@ const authAttempts = new WeakMap<ApiAuthBridge, AuthAttemptState>();
 
 function attemptState(bridge: ApiAuthBridge) {
   let state = authAttempts.get(bridge);
-  if (!state) {
-    state = {};
+  if (!state || state.sessionKey !== bridge.sessionKey?.()) {
+    state = { sessionKey: bridge.sessionKey?.() };
     authAttempts.set(bridge, state);
   }
   return state;
@@ -20,7 +21,12 @@ function attemptState(bridge: ApiAuthBridge) {
 function refreshOnce(bridge: ApiAuthBridge) {
   const state = attemptState(bridge);
   if (!state.refresh) {
-    const refresh = Promise.resolve().then(() => bridge.getAccessToken(true));
+    const refresh = Promise.resolve().then(() =>
+      getApiAuthBridge() === bridge &&
+      state.sessionKey === bridge.sessionKey?.()
+        ? bridge.getAccessToken(true)
+        : undefined,
+    );
     const shared = refresh.finally(() => {
       if (state.refresh === shared) state.refresh = undefined;
     });
@@ -33,7 +39,10 @@ function handleUnauthorizedOnce(bridge: ApiAuthBridge) {
   const state = attemptState(bridge);
   if (!state.unauthorized) {
     const unauthorized = Promise.resolve().then(() =>
-      bridge.handleUnauthorized(),
+      getApiAuthBridge() === bridge &&
+      state.sessionKey === bridge.sessionKey?.()
+        ? bridge.handleUnauthorized()
+        : undefined,
     );
     const shared = unauthorized.finally(() => {
       if (state.unauthorized === shared) state.unauthorized = undefined;
@@ -61,9 +70,23 @@ export async function apiFetch<T>(
   options?: RequestInit,
 ): Promise<T> {
   const bridge = getApiAuthBridge();
+  const sessionKey = bridge?.sessionKey?.();
+  const assertCurrentSession = () => {
+    options?.signal?.throwIfAborted();
+    if (
+      bridge &&
+      (getApiAuthBridge() !== bridge || bridge.sessionKey?.() !== sessionKey)
+    )
+      throw new DOMException(
+        'The account changed during this request.',
+        'AbortError',
+      );
+  };
   const request = async (forceRefresh: boolean) => {
+    assertCurrentSession();
     const headers = new Headers(options?.headers);
     const accessToken = await bridge?.getAccessToken(forceRefresh);
+    assertCurrentSession();
     if (accessToken && !headers.has('Authorization')) {
       headers.set('Authorization', `Bearer ${accessToken}`);
     }
@@ -71,12 +94,16 @@ export async function apiFetch<T>(
   };
 
   let response = await request(false);
+  assertCurrentSession();
   if (response.status === 401 && bridge) {
     const refreshedToken = await refreshOnce(bridge);
+    assertCurrentSession();
     if (refreshedToken) response = await request(false);
+    assertCurrentSession();
     if (response.status === 401) await handleUnauthorizedOnce(bridge);
   }
   const text = await response.text();
+  assertCurrentSession();
   const contentType = response.headers.get('content-type') ?? '';
   let body: unknown = text || undefined;
   if (
