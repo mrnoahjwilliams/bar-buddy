@@ -80,9 +80,19 @@ public class CatalogBrowseController {
       @RequestParam(required = false) UUID ingredientId,
       @RequestParam(required = false) String availability,
       @RequestParam(defaultValue = "false") boolean favoritesOnly,
+      @RequestParam(required = false) String style,
+      @RequestParam(required = false) String tag,
+      @RequestParam(required = false) String alcohol,
+      @RequestParam(required = false) String sort,
       @AuthenticationPrincipal Jwt jwt) {
     return service.cocktails(
-        search, primarySpiritId, ingredientId, availability, favoritesOnly, jwt.getSubject());
+        search,
+        primarySpiritId,
+        ingredientId,
+        availability,
+        favoritesOnly,
+        new CatalogDiscovery(style, tag, alcohol, sort),
+        jwt.getSubject());
   }
 
   @ApiResponse(responseCode = "200", description = "Random eligible cocktail")
@@ -93,9 +103,19 @@ public class CatalogBrowseController {
       @RequestParam(required = false) UUID ingredientId,
       @RequestParam(required = false) String availability,
       @RequestParam(defaultValue = "false") boolean favoritesOnly,
+      @RequestParam(required = false) String style,
+      @RequestParam(required = false) String tag,
+      @RequestParam(required = false) String alcohol,
+      @RequestParam(required = false) String sort,
       @AuthenticationPrincipal Jwt jwt) {
     return service.randomCocktail(
-        search, primarySpiritId, ingredientId, availability, favoritesOnly, jwt.getSubject());
+        search,
+        primarySpiritId,
+        ingredientId,
+        availability,
+        favoritesOnly,
+        new CatalogDiscovery(style, tag, alcohol, sort),
+        jwt.getSubject());
   }
 
   @ApiResponse(responseCode = "200", description = "Catalog result")

@@ -654,3 +654,168 @@ it('refuses unconfirmed ingredient results during an older API rollout and recov
   expect(await screen.findByRole('link', { name: /Gimlet/ })).toBeVisible();
   expect(router.state.location.search).toBe('?ingredientId=lime');
 });
+
+it('combines Explorer controls, preserves detail and history state, and clears individual options', async () => {
+  const fetch = vi.fn(async (input: string) => {
+    const url = new URL(input, 'http://localhost');
+    if (url.pathname === '/api/v1/ingredients')
+      return Response.json([gin, lime]);
+    const enriched = {
+      ...gimlet,
+      styles: ['sour'],
+      tags: ['summer'],
+      alcoholFree: false,
+      ingredientCount: 2,
+      discoveryVersion: 1,
+      availability: { canMake: true, missingCount: 0, missingIngredients: [] },
+    };
+    if (url.pathname === '/api/v1/cocktails/gimlet')
+      return Response.json({ ...detail, ...enriched });
+    if (url.pathname === '/api/v1/cocktails')
+      return Response.json([
+        {
+          ...enriched,
+          matchedIngredientId: url.searchParams.get('ingredientId'),
+        },
+      ]);
+    return Response.json({}, { status: 404 });
+  });
+  vi.stubGlobal('fetch', fetch);
+  const router = open('/drinks');
+  const user = userEvent.setup();
+  await screen.findByRole('link', { name: /Gimlet/ });
+  await user.click(screen.getByText('More ways to explore'));
+  await user.selectOptions(screen.getByLabelText('Cocktail style'), 'sour');
+  await user.selectOptions(screen.getByLabelText('Tag'), 'summer');
+  await user.selectOptions(screen.getByLabelText('Alcohol'), 'alcoholic');
+  await user.selectOptions(
+    screen.getByLabelText('Sort drinks'),
+    'ingredient_count',
+  );
+  await user.selectOptions(screen.getByLabelText('Recipe ingredient'), 'lime');
+  await user.click(screen.getByRole('button', { name: 'Search' }));
+  await waitFor(() =>
+    expect(
+      fetch.mock.calls.some(([url]) =>
+        url.includes(
+          'style=sour&tag=summer&alcohol=alcoholic&sort=ingredient_count',
+        ),
+      ),
+    ).toBe(true),
+  );
+  const applied = router.state.location.search;
+  expect(screen.getByLabelText('Applied discovery options')).toHaveTextContent(
+    'Fewest ingredients',
+  );
+  await user.click(await screen.findByRole('link', { name: /Gimlet/ }));
+  const dialog = await screen.findByRole('dialog');
+  expect(within(dialog).getByText('2 required ingredients')).toBeVisible();
+  expect(within(dialog).getByText('Summer')).toBeVisible();
+  await user.keyboard('{Escape}');
+  await waitFor(() =>
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument(),
+  );
+  expect(router.state.location.search).toBe(applied);
+  await user.click(screen.getByRole('button', { name: 'Clear tag' }));
+  expect(router.state.location.search).not.toContain('tag=summer');
+  expect(router.state.location.search).toContain('style=sour');
+  await act(() => router.navigate(-1));
+  expect(screen.getByLabelText('Tag')).toHaveValue('summer');
+  await user.click(screen.getByRole('button', { name: 'Reset filters' }));
+  expect(router.state.location.search).toBe('');
+  expect(screen.getByLabelText('Sort drinks')).toHaveValue('');
+});
+
+it('restores copied Explorer URLs, explains cocktail aliases and shows alcohol-free recipes', async () => {
+  vi.stubGlobal(
+    'fetch',
+    vi.fn(async (input: string) => {
+      const url = new URL(input, 'http://localhost');
+      if (url.pathname === '/api/v1/ingredients') return Response.json([lime]);
+      return Response.json([
+        {
+          id: 'virgin',
+          name: 'Virgin Mojito',
+          matchedAlias: 'Nojito',
+          styles: ['highball'],
+          tags: ['summer'],
+          alcoholFree: true,
+          ingredientCount: 4,
+          discoveryVersion: 1,
+          availability: {
+            canMake: false,
+            missingCount: 4,
+            missingIngredients: [lime],
+          },
+        },
+      ]);
+    }),
+  );
+  open(
+    '/drinks?search=nojito&style=highball&tag=summer&alcohol=alcohol_free&sort=alphabetical',
+  );
+  expect(
+    await screen.findByRole('link', { name: /Virgin Mojito/ }),
+  ).toHaveTextContent('Alcohol-free');
+  expect(screen.getByText('Matched “Nojito”')).toBeVisible();
+  expect(screen.getByLabelText('Cocktail style')).toHaveValue('highball');
+  expect(screen.getByLabelText('Tag')).toHaveValue('summer');
+  expect(screen.getByLabelText('Alcohol')).toHaveValue('alcohol_free');
+  expect(screen.getByLabelText('Sort drinks')).toHaveValue('alphabetical');
+});
+
+it('rejects nonempty discovery results from an older API and allows retry without widening filters', async () => {
+  let ready = false;
+  vi.stubGlobal(
+    'fetch',
+    vi.fn(async (input: string) => {
+      const url = new URL(input, 'http://localhost');
+      if (url.pathname === '/api/v1/ingredients') return Response.json([gin]);
+      return Response.json([
+        {
+          ...gimlet,
+          ...(ready
+            ? { discoveryVersion: 1, styles: ['sour'], tags: ['summer'] }
+            : {}),
+        },
+      ]);
+    }),
+  );
+  const user = userEvent.setup();
+  const router = open('/drinks?style=sour&tag=summer&sort=alphabetical');
+  expect(await screen.findByRole('alert')).toHaveTextContent(
+    'could not be loaded',
+  );
+  expect(
+    screen.queryByRole('link', { name: /Gimlet/ }),
+  ).not.toBeInTheDocument();
+  expect(router.state.location.search).toContain('style=sour');
+  ready = true;
+  await user.click(screen.getByRole('button', { name: 'Try again' }));
+  expect(await screen.findByRole('link', { name: /Gimlet/ })).toBeVisible();
+});
+
+it('normalizes blank and padded discovery URL inputs consistently with the API', async () => {
+  const fetch = vi.fn(async (input: string) => {
+    const url = new URL(input, 'http://localhost');
+    if (url.pathname === '/api/v1/ingredients') return Response.json([gin]);
+    return Response.json([
+      { ...gimlet, discoveryVersion: 1, tags: ['summer'] },
+    ]);
+  });
+  vi.stubGlobal('fetch', fetch);
+  open(
+    '/drinks?style=%20%20&tag=%20summer%20&alcohol=%20all%20&sort=%20availability%20',
+  );
+  await screen.findByRole('link', { name: /Gimlet/ });
+  expect(screen.getByLabelText('Cocktail style')).toHaveValue('');
+  expect(screen.getByLabelText('Tag')).toHaveValue('summer');
+  expect(screen.getByLabelText('Alcohol')).toHaveValue('all');
+  expect(screen.getByLabelText('Sort drinks')).toHaveValue('availability');
+  expect(
+    fetch.mock.calls.some(([url]) =>
+      url.includes('tag=summer&alcohol=all&sort=availability'),
+    ),
+  ).toBe(true);
+  expect(fetch.mock.calls.some(([url]) => url.includes('style='))).toBe(false);
+});

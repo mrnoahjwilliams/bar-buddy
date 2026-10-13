@@ -96,9 +96,9 @@ Repeated `Account identity deletion pending` warnings indicate a provider/config
 
 ## Catalog and API generation
 
-Spring startup applies pending Flyway migrations: V2 creates the catalog tables, V3 creates user-owned Have/Out inventory, V4 adds searchable ingredient aliases, V5 creates per-user cocktail preferences, and V6 adds the optional profile name and account-deletion lifecycle. Import is an explicit operator action; normal application startup does not load or overwrite catalog data.
+Spring startup applies pending Flyway migrations: V2 creates the catalog tables, V3 creates user-owned Have/Out inventory, V4 adds searchable ingredient aliases, V5 creates per-user cocktail preferences, V6 adds the optional profile name and account-deletion lifecycle, and V7 adds cocktail styles/tags/aliases and nullable alcohol classification. Import is an explicit operator action; normal application startup does not load or overwrite catalog data.
 
-Stop a backend running from this checkout before rebuilding or generating API artifacts, or use an isolated checkout. Restart it after the build so it loads the current classes and migrations. For this usability update, import the revised catalog to populate aliases and the three new rum ingredients; restarting alone does not populate them.
+Stop a backend running from this checkout before rebuilding or generating API artifacts, or use an isolated checkout. Restart it after the build so it loads the current classes and migrations. For Explorer discovery, import the revised schema-version-3 catalog after V7/the updated importer are deployed to populate styles/tags/aliases, reviewed alcohol classification and the three mocktails. Restarting alone does not populate them. Existing rows remain browseable with empty metadata and unknown alcohol classification; specific discovery filters can return no results until import.
 
 With Node 24 available on `PATH`, build the backend, then run this command from `backend/` using the intended server-only database settings in `.env` or the process environment:
 

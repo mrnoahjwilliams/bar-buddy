@@ -1,8 +1,8 @@
 # Bar Buddy cocktail catalog
 
-[`cocktails.json`](cocktails.json) is the approved permanent Bar Buddy dataset. It
-contains 102 cocktails, one default recipe for each cocktail, and 116 canonical
-ingredients. It is the validated database import source for unit 1.2.1.
+[`cocktails.json`](cocktails.json) is the maintained Bar Buddy dataset. It
+contains 105 cocktails, one default recipe for each cocktail, and 118 canonical
+ingredients. It is the validated database import source; see the Explorer additions below.
 
 ## Dataset shape
 
@@ -56,7 +56,7 @@ from the product catalog. The valid fixture covers required and optional lines a
 qualitative quantities. The deliberately invalid fixture covers duplicate identity,
 broken-reference, controlled-value, measurement, and display-order failures. Tests
 also preserve the intentional rule that an ingredient may appear more than once in
-one recipe. The validator is strict for schema versions 1 and 2; changing fields or
+one recipe. The validator is strict for schema versions 1, 2 and 3; changing fields or
 controlled vocabularies requires a versioned validator and import change rather than
 silently accepting drift.
 
@@ -87,7 +87,7 @@ repeats, corrections retaining referenced identities, line synchronization, miss
 identities and rollback after a late database failure. The packaged command is
 verified independently of the web server. [Local development](../../docs/08-local-development.md#catalog-and-api-generation)
 owns the command and configuration. Normal application startup does not import;
-styles stay in this source for Release 2.
+styles and Explorer metadata are persisted by the importer for Release 2 discovery.
 
 ## Optional cocktail styles
 
@@ -116,7 +116,7 @@ The controlled vocabulary is:
 - `duo-and-trio`
 - `tiki`
 
-Styles are catalog metadata for later discovery. They do not affect ingredient
+Styles are optional catalog discovery metadata. They do not affect ingredient
 availability, recipe selection, or the primary-spirit classification.
 
 ## Curation decisions
@@ -165,3 +165,13 @@ automatically change it.
 The product owner approved the names, canonical ingredients, optional styles,
 measurement pairs, requirements, instructions, glassware, and garnish on September
 3, 2026. The validated file is the only maintained import input; the archive is not.
+
+## Explorer metadata and house mocktails
+
+Schema version 3 retains all existing identities and recipe measurements, adding required cocktail `aliases`, `tags` and `alcoholFree` fields. Alias/tag arrays may be empty. Versions 1–2 remain valid with empty added metadata and unknown alcohol classification. Imports synchronize styles and all added metadata without replacing database IDs, bottles or favorites. The maintained catalog now contains 118 ingredients, 105 cocktails/default recipes and 424 recipe lines.
+
+The owner approved the tag vocabulary, expanded unambiguous aliases and three starter mocktail compositions on October 13, 2026; [Requirements](../../docs/02-requirements.md#approved-explorer-discovery-decisions) owns their behavior and classification rules. Tags are curated optional contexts; untagged and unclassified-style drinks remain valid. The validator rejects unknown/duplicate tags, ambiguous normalized cocktail aliases, malformed classification, and alcohol-free recipes with a primary spirit or spirit/liqueur/fortified-wine/bitters ingredient, including optional lines. Explicit review still covers mixer wording; categories alone are not a complete alcohol classifier.
+
+Virgin Mojito, Shirley Temple and Arnold Palmer use original Bar Buddy house instructions and independently represented US/metric quantities for PR review. Black tea and Lemonade are new canonical mixers. The existing 102 recipes are unchanged and explicitly classified as containing alcohol, including cocktails without a primary spirit such as Americano. Review the added recipe text, measurements, aliases and tag assignments in the feature PR before importing. These additions do not claim IBA provenance or precise ABV values.
+
+Code deployment runs V7 but never imports the catalog. After deployment of the new importer/API, the operator must explicitly import schema version 3 against the intended hosted database to populate metadata and mocktails; see [Local development](../../docs/08-local-development.md#catalog-and-api-generation). Until import, existing rows retain empty discovery arrays and unknown classification, so specific new filters may return no results. Existing browsing remains usable.

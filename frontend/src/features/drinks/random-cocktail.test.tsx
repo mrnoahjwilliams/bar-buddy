@@ -169,3 +169,43 @@ it('keeps an unconfirmed ingredient pick closed during an older API rollout', as
   expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   expect(router.state.location.search).toContain('ingredientId=gin');
 });
+
+it('random picks use applied Explorer options and reject an older API before opening a drink', async () => {
+  let ready = false;
+  const fetch = mockRandom(async () =>
+    Response.json({
+      ...drink,
+      ...(ready
+        ? {
+            discoveryVersion: 1,
+            styles: ['sour'],
+            tags: ['summer'],
+            alcoholFree: false,
+          }
+        : {}),
+    }),
+  );
+  const { router } = open();
+  await act(() =>
+    router.navigate(
+      '/drinks?style=sour&tag=summer&alcohol=alcoholic&sort=ingredient_count',
+    ),
+  );
+  const user = userEvent.setup();
+  await user.click(
+    await screen.findByRole('button', { name: 'Random cocktail' }),
+  );
+  expect(
+    await screen.findByText('A cocktail couldn’t be picked. Please try again.'),
+  ).toBeVisible();
+  expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  expect(router.state.location.search).toContain('tag=summer');
+  ready = true;
+  await user.click(screen.getByRole('button', { name: 'Random cocktail' }));
+  expect(await screen.findByRole('heading', { name: 'Gimlet' })).toBeVisible();
+  const requests = fetch.mock.calls.filter(([url]) => url.includes('/random'));
+  expect(requests).toHaveLength(2);
+  expect(requests[0]?.[0]).toContain(
+    'style=sour&tag=summer&alcohol=alcoholic&sort=ingredient_count',
+  );
+});

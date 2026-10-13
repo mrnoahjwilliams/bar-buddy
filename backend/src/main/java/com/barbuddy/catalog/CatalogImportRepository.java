@@ -52,11 +52,16 @@ class CatalogImportRepository {
         json);
     jdbc.update(
         """
-        insert into cocktail (id, catalog_id, slug, name, primary_spirit_id)
-        select gen_random_uuid(), c->>'id', c->>'slug', c->>'name', i.id
+        insert into cocktail (id, catalog_id, slug, name, primary_spirit_id, styles, tags, aliases, alcohol_free)
+        select gen_random_uuid(), c->>'id', c->>'slug', c->>'name', i.id,
+          array(select jsonb_array_elements_text(c->'styles')),
+          array(select jsonb_array_elements_text(coalesce(c->'tags', '[]'::jsonb))),
+          array(select jsonb_array_elements_text(coalesce(c->'aliases', '[]'::jsonb))),
+          (c->>'alcoholFree')::boolean
         from jsonb_array_elements(?::jsonb->'cocktails') c
         left join ingredient i on i.catalog_id = c->>'primarySpiritId'
-        on conflict (catalog_id) do update set name = excluded.name, primary_spirit_id = excluded.primary_spirit_id
+        on conflict (catalog_id) do update set name = excluded.name, primary_spirit_id = excluded.primary_spirit_id,
+          styles = excluded.styles, tags = excluded.tags, aliases = excluded.aliases, alcohol_free = excluded.alcohol_free
         """,
         json);
     jdbc.update(

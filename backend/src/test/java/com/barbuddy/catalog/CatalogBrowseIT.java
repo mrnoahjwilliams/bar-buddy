@@ -55,9 +55,9 @@ class CatalogBrowseIT {
             .findFirst()
             .orElseThrow();
     assertThat(service.ingredients("  GIN  ", "spirit")).contains(gin);
-    assertThat(service.ingredients("", "")).hasSize(116);
+    assertThat(service.ingredients("", "")).hasSize(118);
     assertThat(service.ingredients("%", null)).isEmpty();
-    assertThat(service.cocktails("", null, null, null, false, "user")).hasSize(102);
+    assertThat(service.cocktails("", null, null, null, false, "user")).hasSize(105);
     assertThat(service.cocktails("negroni", gin.id(), null, null, false, "user")).hasSize(1);
     assertThat(service.cocktails("zzzz", gin.id(), null, null, false, "user")).isEmpty();
     mvc.perform(get("/api/v1/ingredients").with(jwt()).param("category", "unknown"))

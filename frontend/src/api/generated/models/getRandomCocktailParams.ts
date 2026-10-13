@@ -11,4 +11,8 @@ export type GetRandomCocktailParams = {
   ingredientId?: string;
   availability?: string;
   favoritesOnly?: boolean;
+  style?: string;
+  tag?: string;
+  alcohol?: string;
+  sort?: string;
 };
