@@ -229,7 +229,17 @@ export function IngredientInventory({
       />
       {query.data && !query.isError && (
         <>
-          {items.length === 0 && <p>You haven’t added this ingredient yet.</p>}
+          {items.length === 0 ? (
+            <p>You haven’t added this ingredient yet.</p>
+          ) : (
+            <p>
+              {items.filter((item) => item.status === 'Have').length} Have ·{' '}
+              {items.filter((item) => item.status === 'Out').length} Out.{' '}
+              {items.some((item) => item.status === 'Have')
+                ? 'Available for recipes.'
+                : 'Out items do not count as available for recipes.'}
+            </p>
+          )}
           <div className="grid gap-3 sm:grid-cols-2">
             {items.map((item) => (
               <InventoryItemControls key={item.id} item={item} />

@@ -11,6 +11,7 @@ export interface CocktailSummary {
   availability?: AvailabilityResult;
   favorite?: boolean;
   id?: string;
+  matchedIngredientId?: string;
   name?: string;
   primarySpirit?: IngredientSummary;
   slug?: string;

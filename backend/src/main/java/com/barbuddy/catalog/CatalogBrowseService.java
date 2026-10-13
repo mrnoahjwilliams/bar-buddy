@@ -73,6 +73,7 @@ public class CatalogBrowseService {
   public List<CocktailSummary> cocktails(
       String search,
       UUID primarySpiritId,
+      UUID ingredientId,
       String availability,
       boolean favoritesOnly,
       String subject) {
@@ -82,11 +83,17 @@ public class CatalogBrowseService {
         throw new ResponseStatusException(
             HttpStatus.BAD_REQUEST, "Primary spirit must identify a catalog spirit.");
     }
+    if (ingredientId != null && repository.ingredient(ingredientId) == null)
+      throw new ResponseStatusException(
+          HttpStatus.BAD_REQUEST, "Ingredient must identify a catalog ingredient.");
     String filter = availability == null || availability.isBlank() ? "all" : availability.strip();
     if (!Set.of("all", "can_make", "one_away").contains(filter))
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown availability filter.");
     return summaries(
-            repository.cocktails(search(search), primarySpiritId, favoritesOnly, subject), subject)
+            repository.cocktails(
+                search(search), primarySpiritId, ingredientId, favoritesOnly, subject),
+            subject,
+            ingredientId)
         .stream()
         .filter(
             c ->
@@ -104,10 +111,12 @@ public class CatalogBrowseService {
   public CocktailSummary randomCocktail(
       String search,
       UUID primarySpiritId,
+      UUID ingredientId,
       String availability,
       boolean favoritesOnly,
       String subject) {
-    var candidates = cocktails(search, primarySpiritId, availability, favoritesOnly, subject);
+    var candidates =
+        cocktails(search, primarySpiritId, ingredientId, availability, favoritesOnly, subject);
     if (candidates.isEmpty())
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No matching cocktails.");
     return candidates.get(ThreadLocalRandom.current().nextInt(candidates.size()));
@@ -147,6 +156,11 @@ public class CatalogBrowseService {
   }
 
   private List<CocktailSummary> summaries(List<Cocktail> cocktails, String subject) {
+    return summaries(cocktails, subject, null);
+  }
+
+  private List<CocktailSummary> summaries(
+      List<Cocktail> cocktails, String subject, UUID matchedIngredientId) {
     if (cocktails.isEmpty()) return List.of();
     var cocktailIds = cocktails.stream().map(Cocktail::getId).toList();
     var missing = new HashMap<UUID, List<IngredientSummary>>();
@@ -162,7 +176,8 @@ public class CatalogBrowseService {
                 CocktailSummary.from(
                     c,
                     AvailabilityResult.from(missing.getOrDefault(c.getId(), List.of())),
-                    favorites.contains(c.getId())))
+                    favorites.contains(c.getId()),
+                    matchedIngredientId))
         .toList();
   }
 

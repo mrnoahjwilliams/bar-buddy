@@ -50,8 +50,9 @@ class CocktailPreferenceIT {
 
   @Test
   void favoritesPersistRemainIsolatedAndCombineWithEveryDrinksFilter() throws Exception {
-    var negroni = catalog.cocktails("negroni", null, null, false, "one").getFirst();
+    var negroni = catalog.cocktails("negroni", null, null, null, false, "one").getFirst();
     var spirit = negroni.primarySpirit().id();
+    var filterIngredient = catalog.ingredients("campari", null).getFirst().id();
 
     favorite("one", negroni.id(), true);
     favorite("one", negroni.id(), true);
@@ -64,7 +65,7 @@ class CocktailPreferenceIT {
 
     assertThat(catalog.cocktail(negroni.id(), "one").favorite()).isTrue();
     assertThat(catalog.cocktail(negroni.id(), "two").favorite()).isFalse();
-    assertThat(catalog.cocktails("negroni", spirit, "one_away", true, "one"))
+    assertThat(catalog.cocktails("negroni", spirit, filterIngredient, "one_away", true, "one"))
         .singleElement()
         .satisfies(
             favorite -> {
@@ -72,12 +73,14 @@ class CocktailPreferenceIT {
               assertThat(favorite.favorite()).isTrue();
               assertThat(favorite.availability().missingCount()).isEqualTo(1);
             });
-    assertThat(catalog.cocktails("negroni", spirit, "one_away", true, "two")).isEmpty();
+    assertThat(catalog.cocktails("negroni", spirit, filterIngredient, "one_away", true, "two"))
+        .isEmpty();
     mvc.perform(
             get("/api/v1/cocktails")
                 .with(jwt().jwt(j -> j.subject("one")))
                 .param("search", "negroni")
                 .param("primarySpiritId", spirit.toString())
+                .param("ingredientId", filterIngredient.toString())
                 .param("availability", "one_away")
                 .param("favoritesOnly", "true"))
         .andExpect(status().isOk())
@@ -87,7 +90,7 @@ class CocktailPreferenceIT {
     favorite("one", negroni.id(), false);
     favorite("one", negroni.id(), false);
     assertThat(catalog.cocktail(negroni.id(), "one").favorite()).isFalse();
-    assertThat(catalog.cocktails("", null, null, true, "one")).isEmpty();
+    assertThat(catalog.cocktails("", null, null, null, true, "one")).isEmpty();
     assertThat(
             jdbc.queryForObject(
                 "select count(*) from user_cocktail_state where cocktail_id = ?",
@@ -98,7 +101,7 @@ class CocktailPreferenceIT {
 
   @Test
   void preferenceRequiresAuthenticationAndValidInputAndIgnoresClientOwnership() throws Exception {
-    var cocktail = catalog.cocktails("negroni", null, null, false, "one").getFirst().id();
+    var cocktail = catalog.cocktails("negroni", null, null, null, false, "one").getFirst().id();
     mvc.perform(
             put("/api/v1/cocktails/" + cocktail + "/preference")
                 .contentType("application/json")

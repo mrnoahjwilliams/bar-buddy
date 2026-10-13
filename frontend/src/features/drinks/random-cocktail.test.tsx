@@ -9,6 +9,7 @@ import { FakeAuthGateway } from '@/test/fake-auth';
 const gin = { id: 'gin', name: 'Gin', category: 'spirit' };
 const drink = {
   id: 'drink',
+  matchedIngredientId: 'gin',
   name: 'Gimlet',
   favorite: true,
   primarySpirit: gin,
@@ -33,7 +34,7 @@ function mockRandom(random: (options: RequestInit) => Promise<Response>) {
 function open() {
   const router = createMemoryRouter(appRoutes, {
     initialEntries: [
-      '/drinks?search=Gim&primarySpiritId=gin&availability=can_make&favoritesOnly=true',
+      '/drinks?search=Gim&primarySpiritId=gin&ingredientId=gin&availability=can_make&favoritesOnly=true',
     ],
   });
   const gateway = new FakeAuthGateway({
@@ -63,14 +64,14 @@ it('picks with every applied filter, opens the overlay and restores filters and 
       .filter(([url]) => url.includes('/random'))
       .map(([url]) => url),
   ).toEqual([
-    '/api/v1/cocktails/random?search=Gim&primarySpiritId=gin&availability=can_make&favoritesOnly=true',
+    '/api/v1/cocktails/random?search=Gim&primarySpiritId=gin&ingredientId=gin&availability=can_make&favoritesOnly=true',
   ]);
   await user.keyboard('{Escape}');
   await waitFor(() =>
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument(),
   );
   expect(router.state.location.search).toBe(
-    '?search=Gim&primarySpiritId=gin&availability=can_make&favoritesOnly=true',
+    '?search=Gim&primarySpiritId=gin&ingredientId=gin&availability=can_make&favoritesOnly=true',
   );
   expect(button).toHaveFocus();
   await user.click(button);
@@ -152,4 +153,19 @@ it('discards a pending private selection on account change', async () => {
   await waitFor(() => expect(signal?.aborted).toBe(true));
   await act(async () => resolve(Response.json(drink)));
   expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+});
+
+it('keeps an unconfirmed ingredient pick closed during an older API rollout', async () => {
+  mockRandom(async () =>
+    Response.json({ ...drink, matchedIngredientId: undefined }),
+  );
+  const { router } = open();
+  await userEvent.click(
+    await screen.findByRole('button', { name: 'Random cocktail' }),
+  );
+  expect(await screen.findByRole('alert')).toHaveTextContent(
+    'couldn’t be picked',
+  );
+  expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  expect(router.state.location.search).toContain('ingredientId=gin');
 });

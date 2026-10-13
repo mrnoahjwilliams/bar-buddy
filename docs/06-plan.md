@@ -172,7 +172,7 @@ Publication acceptance for 1.6 is recorded from the owner’s September 10, 2026
 
 ### 2.1 — Ingredient-based discovery
 
-- [ ] Extend existing related-cocktail detail with category/inventory context and cocktail filtering by any chosen recipe ingredient. Combine it with existing search/MVP filters; link to filtered Drinks with change/clear controls. **Verify:** distinct counts across repeated lines/recipes, correct matching, availability groups, missing explanations and detail/back/filter-clear navigation. Preserve the MVP primary-spirit filter and related list; do not add unlocks early.
+- [x] Extend existing related-cocktail detail with category/inventory context and cocktail filtering by any chosen recipe ingredient. Combine it with existing search/MVP filters; link to filtered Drinks with change/clear controls. **Verify:** distinct counts across repeated lines/recipes, correct matching, availability groups, missing explanations and detail/back/filter-clear navigation. Preserve the MVP primary-spirit filter and related list; do not add unlocks early.
 
 ### 2.2 — Catalog enrichment and discovery
 

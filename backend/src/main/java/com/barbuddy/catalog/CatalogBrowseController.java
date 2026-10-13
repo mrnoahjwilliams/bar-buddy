@@ -77,11 +77,12 @@ public class CatalogBrowseController {
   public List<CocktailSummary> listCocktails(
       @RequestParam(required = false) String search,
       @RequestParam(required = false) UUID primarySpiritId,
+      @RequestParam(required = false) UUID ingredientId,
       @RequestParam(required = false) String availability,
       @RequestParam(defaultValue = "false") boolean favoritesOnly,
       @AuthenticationPrincipal Jwt jwt) {
     return service.cocktails(
-        search, primarySpiritId, availability, favoritesOnly, jwt.getSubject());
+        search, primarySpiritId, ingredientId, availability, favoritesOnly, jwt.getSubject());
   }
 
   @ApiResponse(responseCode = "200", description = "Random eligible cocktail")
@@ -89,11 +90,12 @@ public class CatalogBrowseController {
   public CocktailSummary getRandomCocktail(
       @RequestParam(required = false) String search,
       @RequestParam(required = false) UUID primarySpiritId,
+      @RequestParam(required = false) UUID ingredientId,
       @RequestParam(required = false) String availability,
       @RequestParam(defaultValue = "false") boolean favoritesOnly,
       @AuthenticationPrincipal Jwt jwt) {
     return service.randomCocktail(
-        search, primarySpiritId, availability, favoritesOnly, jwt.getSubject());
+        search, primarySpiritId, ingredientId, availability, favoritesOnly, jwt.getSubject());
   }
 
   @ApiResponse(responseCode = "200", description = "Catalog result")

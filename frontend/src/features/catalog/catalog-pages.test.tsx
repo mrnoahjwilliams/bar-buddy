@@ -71,7 +71,14 @@ function mockCatalog() {
     }
     if (url.pathname === '/api/v1/cocktails')
       return Response.json(
-        url.searchParams.get('search') === 'missing' ? [] : [gimlet],
+        url.searchParams.get('search') === 'missing'
+          ? []
+          : [
+              {
+                ...gimlet,
+                matchedIngredientId: url.searchParams.get('ingredientId'),
+              },
+            ],
       );
     return Response.json({}, { status: 404 });
   });
@@ -498,4 +505,152 @@ it('keeps the current favorite state and shows feedback when saving fails', asyn
     'Your favorite could not be saved',
   );
   expect(add).not.toBePressed();
+});
+
+it('explores a non-spirit ingredient with bottle context and combines every Drinks filter', async () => {
+  const base = mockCatalog();
+  const fetch = vi.fn(async (input: string, options: RequestInit) => {
+    const url = new URL(input, 'http://localhost');
+    if (url.pathname === '/api/v1/ingredients/lime')
+      return Response.json({
+        ...lime,
+        usageCount: 1,
+        relatedCocktails: [gimlet],
+      });
+    if (url.pathname === '/api/v1/inventory')
+      return Response.json([
+        {
+          id: 'bottle-one',
+          ingredient: lime,
+          bottleLabel: 'Fresh juice',
+          status: 'Have',
+        },
+        {
+          id: 'bottle-two',
+          ingredient: lime,
+          bottleLabel: 'Old bottle',
+          status: 'Out',
+        },
+      ]);
+    if (url.pathname === '/api/v1/cocktails')
+      return Response.json([
+        {
+          ...gimlet,
+          matchedIngredientId: url.searchParams.get('ingredientId'),
+          availability: {
+            canMake: false,
+            missingCount: 1,
+            missingIngredients: [gin],
+          },
+        },
+      ]);
+    return (base as typeof globalThis.fetch)(input, options);
+  });
+  vi.stubGlobal('fetch', fetch);
+  const user = userEvent.setup();
+  const router = open('/bar/ingredients?search=lime&category=juice');
+  await user.click(await screen.findByRole('link', { name: /Lime Juice/ }));
+  const dialog = await screen.findByRole('dialog', {
+    name: 'Ingredient details',
+  });
+  expect(within(dialog).getByText('juice')).toBeVisible();
+  expect(
+    await screen.findByText('1 Have · 1 Out. Available for recipes.'),
+  ).toBeVisible();
+  expect(within(dialog).getByText(/Fresh juice/)).toBeVisible();
+  await user.click(
+    screen.getByRole('link', { name: 'Explore drinks with Lime Juice' }),
+  );
+  expect(router.state.location.pathname).toBe('/drinks');
+  expect(router.state.location.search).toBe('?ingredientId=lime');
+  await waitFor(() =>
+    expect(screen.getByLabelText('Recipe ingredient')).toHaveValue('lime'),
+  );
+  expect(
+    await screen.findByRole('region', { name: 'Other Drinks' }),
+  ).toHaveTextContent('Missing: Gin');
+  await user.type(screen.getByLabelText('Search cocktails'), 'Gim');
+  await user.selectOptions(screen.getByLabelText('Primary spirit'), 'gin');
+  await user.selectOptions(screen.getByLabelText('Availability'), 'one_away');
+  await user.click(screen.getByLabelText('Favorites only'));
+  await user.click(screen.getByRole('button', { name: 'Search' }));
+  await waitFor(() =>
+    expect(
+      fetch.mock.calls.some(
+        ([url]) =>
+          url ===
+          '/api/v1/cocktails?search=Gim&primarySpiritId=gin&ingredientId=lime&availability=one_away&favoritesOnly=true',
+      ),
+    ).toBe(true),
+  );
+  await user.click(screen.getByRole('link', { name: /Gimlet/ }));
+  await screen.findByRole('heading', { name: 'Gimlet' });
+  await user.keyboard('{Escape}');
+  expect(screen.getByLabelText('Recipe ingredient')).toHaveValue('lime');
+  await user.click(screen.getByRole('button', { name: 'Clear ingredient' }));
+  expect(router.state.location.search).toBe(
+    '?search=Gim&primarySpiritId=gin&availability=one_away&favoritesOnly=true',
+  );
+  expect(screen.getByLabelText('Recipe ingredient')).toHaveValue('');
+  await act(() => router.navigate(-1));
+  expect(screen.getByLabelText('Recipe ingredient')).toHaveValue('lime');
+  await user.click(screen.getByRole('button', { name: 'Reset filters' }));
+  expect(router.state.location.search).toBe('');
+});
+
+it('restores copied ingredient filters, changes ingredients and preserves other filters from nested detail', async () => {
+  mockCatalog();
+  const user = userEvent.setup();
+  const router = open('/drinks?search=Gim&ingredientId=lime');
+  await waitFor(() =>
+    expect(screen.getByLabelText('Recipe ingredient')).toHaveValue('lime'),
+  );
+  await waitFor(() =>
+    expect(screen.getByLabelText('Recipe ingredient')).toBeEnabled(),
+  );
+  await user.selectOptions(screen.getByLabelText('Recipe ingredient'), 'gin');
+  await user.click(screen.getByRole('button', { name: 'Search' }));
+  expect(router.state.location.search).toBe('?search=Gim&ingredientId=gin');
+  await user.click(await screen.findByRole('link', { name: /Gimlet/ }));
+  await user.click(await screen.findByRole('link', { name: 'Dry gin' }));
+  await user.click(
+    await screen.findByRole('link', { name: 'Explore drinks with Gin' }),
+  );
+  expect(router.state.location.search).toBe('?search=Gim&ingredientId=gin');
+  expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  await act(() => router.navigate(-1));
+  expect(
+    await screen.findByRole('dialog', { name: 'Ingredient details' }),
+  ).toBeVisible();
+});
+
+it('refuses unconfirmed ingredient results during an older API rollout and recovers on retry', async () => {
+  const base = mockCatalog();
+  let updated = false;
+  vi.stubGlobal(
+    'fetch',
+    vi.fn(async (input: string, options: RequestInit) => {
+      const url = new URL(input, 'http://localhost');
+      if (
+        url.pathname === '/api/v1/cocktails' &&
+        url.searchParams.has('ingredientId')
+      )
+        return Response.json([
+          { ...gimlet, ...(updated ? { matchedIngredientId: 'lime' } : {}) },
+        ]);
+      return (base as typeof globalThis.fetch)(input, options);
+    }),
+  );
+  const user = userEvent.setup();
+  const router = open('/drinks?ingredientId=lime');
+  expect(await screen.findByRole('alert')).toHaveTextContent(
+    'The catalog could not be loaded',
+  );
+  expect(
+    screen.queryByRole('link', { name: /Gimlet/ }),
+  ).not.toBeInTheDocument();
+  updated = true;
+  await user.click(screen.getByRole('button', { name: 'Try again' }));
+  expect(await screen.findByRole('link', { name: /Gimlet/ })).toBeVisible();
+  expect(router.state.location.search).toBe('?ingredientId=lime');
 });

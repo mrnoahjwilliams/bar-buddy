@@ -25,7 +25,7 @@ Product obligations live here. [Definition](01-definition.md) owns terminology/s
 - Release 2 adds photo/visual fallbacks and accessible light/dark presentation, printable recipes, a focused mixing view and screen-awake behavior where supported. Sharing covers catalog cocktails; settle mechanism and recipient access before implementation. Private custom content, inventory and personal notes must not become public through sharing.
 - Release 5 display/scaling/batch tools use the selected recipe without changing its reviewed measurement pairs. US is the initial catalog default; a later user preference selects US or metric presentation. Viewing or preparing a batch preview does not log drinks or deduct stock; explicit Made This Drink uses the agreed servings/consumption rules.
 
-Random cocktail uses the currently applied Drinks search, primary spirit, availability and favorites filters. Pick uniformly from eligible cocktails; repeats are allowed. With no candidates, show “No matching cocktails” and keep the filters unchanged. A failed request shows retry feedback and does not broaden eligibility. Approved September 9, 2026.
+Random cocktail uses the currently applied Drinks search, primary spirit, availability and favorites filters, plus the selected recipe ingredient from Release 2. Pick uniformly from eligible cocktails; repeats are allowed. With no candidates, show “No matching cocktails” and keep the filters unchanged. A failed request shows retry feedback and does not broaden eligibility. Approved September 9, 2026.
 
 ## Approved MVP usability follow-up
 

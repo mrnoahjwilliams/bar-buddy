@@ -40,12 +40,13 @@ public class CatalogBrowseRepository {
   }
 
   public List<Cocktail> cocktails(
-      String search, UUID spirit, boolean favoritesOnly, String subject) {
+      String search, UUID spirit, UUID ingredient, boolean favoritesOnly, String subject) {
     return em.createQuery(
-            "select c from Cocktail c left join fetch c.primarySpirit where locate(:search, function('catalog_search_key', c.name)) > 0 and (:spirit is null or c.primarySpirit.id = :spirit) and (:favoritesOnly = false or exists (select s.id from UserCocktailState s where s.cocktail = c and s.owner.authSubject = :subject and s.favorite = true)) order by lower(c.name), c.id",
+            "select c from Cocktail c left join fetch c.primarySpirit where locate(:search, function('catalog_search_key', c.name)) > 0 and (:spirit is null or c.primarySpirit.id = :spirit) and (:ingredient is null or exists (select l.id from RecipeIngredient l where l.recipe.cocktail = c and l.ingredient.id = :ingredient)) and (:favoritesOnly = false or exists (select s.id from UserCocktailState s where s.cocktail = c and s.owner.authSubject = :subject and s.favorite = true)) order by lower(c.name), c.id",
             Cocktail.class)
         .setParameter("search", search)
         .setParameter("spirit", spirit)
+        .setParameter("ingredient", ingredient)
         .setParameter("favoritesOnly", favoritesOnly)
         .setParameter("subject", subject)
         .getResultList();
