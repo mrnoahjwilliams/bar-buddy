@@ -52,7 +52,7 @@ class DiscoveryIT {
 
   @Test
   void randomUsesAllFiltersAndCurrentUserWithoutFallback() throws Exception {
-    var negroni = catalog.cocktails("negroni", null, null, false, "one").getFirst();
+    var negroni = catalog.cocktails("negroni", null, null, null, false, "one").getFirst();
     favorite("one", negroni.id());
     for (var ingredient : negroni.availability().missingIngredients().subList(0, 2)) {
       stock(ingredient.id(), "Have");
@@ -63,11 +63,17 @@ class DiscoveryIT {
                   .with(jwt().jwt(j -> j.subject("one")))
                   .param("search", "NÉGRONI")
                   .param("primarySpiritId", negroni.primarySpirit().id().toString())
+                  .param(
+                      "ingredientId",
+                      catalog.ingredients("campari", null).getFirst().id().toString())
                   .param("availability", "one_away")
                   .param("favoritesOnly", "true"))
           .andExpect(status().isOk())
           .andExpect(jsonPath("$.id").value(negroni.id().toString()))
           .andExpect(jsonPath("$.favorite").value(true))
+          .andExpect(
+              jsonPath("$.matchedIngredientId")
+                  .value(catalog.ingredients("campari", null).getFirst().id().toString()))
           .andExpect(jsonPath("$.availability.missingCount").value(1));
     }
     for (String subject : new String[] {"one", "two"}) {
@@ -82,15 +88,15 @@ class DiscoveryIT {
     mvc.perform(get("/api/v1/cocktails/random").with(jwt()).param("search", "no such cocktail"))
         .andExpect(status().isNotFound());
     var eligible =
-        catalog.cocktails(null, null, null, false, "one").stream().map(c -> c.id()).toList();
+        catalog.cocktails(null, null, null, null, false, "one").stream().map(c -> c.id()).toList();
     for (int attempt = 0; attempt < 20; attempt++) {
-      assertThat(catalog.randomCocktail(null, null, null, false, "one").id()).isIn(eligible);
+      assertThat(catalog.randomCocktail(null, null, null, null, false, "one").id()).isIn(eligible);
     }
   }
 
   @Test
   void summaryCountsDistinctHaveIngredientsAndRefreshesFromOwnedRecords() throws Exception {
-    var negroni = catalog.cocktails("negroni", null, null, false, "one").getFirst();
+    var negroni = catalog.cocktails("negroni", null, null, null, false, "one").getFirst();
     favorite("one", negroni.id());
     for (var ingredient : negroni.availability().missingIngredients())
       stock(ingredient.id(), "Have");
@@ -106,9 +112,9 @@ class DiscoveryIT {
     assertThat(summary.favorites()).isEqualTo(1);
     assertThat(summary.canMake()).isPositive();
     assertThat(summary.canMake())
-        .isEqualTo(catalog.cocktails(null, null, "can_make", false, "one").size());
+        .isEqualTo(catalog.cocktails(null, null, null, "can_make", false, "one").size());
     assertThat(summary.oneAway())
-        .isEqualTo(catalog.cocktails(null, null, "one_away", false, "one").size());
+        .isEqualTo(catalog.cocktails(null, null, null, "one_away", false, "one").size());
     mvc.perform(get("/api/v1/home").with(jwt().jwt(j -> j.subject("two"))).param("subject", "one"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.haveItems").value(0))

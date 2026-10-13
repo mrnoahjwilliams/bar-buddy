@@ -32,6 +32,11 @@ export function RandomCocktail({ filters }: { filters: ListCocktailsParams }) {
       });
       if (controller.signal.aborted) return;
       if (!cocktail.id) throw new Error('Missing cocktail');
+      if (
+        filters.ingredientId &&
+        cocktail.matchedIngredientId !== filters.ingredientId
+      )
+        throw new Error('Ingredient filtering is not available yet.');
       const params = new URLSearchParams(location.search);
       if (button.current)
         remember(params.getAll('detail').length, button.current);

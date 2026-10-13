@@ -18,7 +18,7 @@ public class HomeService {
   }
 
   public HomeSummary summary(String subject) {
-    var cocktails = catalog.cocktails(null, null, null, false, subject);
+    var cocktails = catalog.cocktails(null, null, null, null, false, subject);
     return new HomeSummary(
         inventory.countItems(subject, InventoryStatus.Have),
         inventory.countItems(subject, InventoryStatus.Out),

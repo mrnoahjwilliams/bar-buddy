@@ -23,15 +23,18 @@ public final class CatalogResponses {
       String slug,
       IngredientSummary primarySpirit,
       AvailabilityResult availability,
-      boolean favorite) {
-    static CocktailSummary from(Cocktail c, AvailabilityResult availability, boolean favorite) {
+      boolean favorite,
+      UUID matchedIngredientId) {
+    static CocktailSummary from(
+        Cocktail c, AvailabilityResult availability, boolean favorite, UUID matchedIngredientId) {
       return new CocktailSummary(
           c.getId(),
           c.getName(),
           c.getSlug(),
           c.getPrimarySpirit() == null ? null : IngredientSummary.from(c.getPrimarySpirit()),
           availability,
-          favorite);
+          favorite,
+          matchedIngredientId);
     }
   }
 

@@ -134,6 +134,8 @@ Backend DTOs/controllers generate springdoc OpenAPI; Orval generates TypeScript 
 
 Home uses a read-only `/home` summary DTO, with owner-scoped inventory counts and the same catalog availability/favorite calculation as Drinks. Return counts rather than transferring the catalog to the browser. Random selection reuses Drinks eligibility and returns one uniformly selected summary; a 404 problem response means no eligible candidates. Neither operation persists derived state. The browser invokes the generated random request only on demand, cancels obsolete requests, and opens the existing detail overlay.
 
+Ingredient discovery uses an optional `ingredientId` on the existing cocktail list and random operations. Validate the canonical reference, then match with an `exists` query across required and optional recipe lines so repeated lines or recipes return one cocktail. Availability and favorites remain owner-scoped and use the existing calculation. Filtered summaries echo `matchedIngredientId`; unfiltered and related summaries leave it null. The frontend checks this acknowledgement before presenting nonempty filtered results or opening a random pick, making independent provider rollouts safe when an older API ignores the new parameter. No schema or catalog import is needed for this step.
+
 ## UI and verification boundaries
 
 Requirements owns navigation and screen behavior. Reuse ingredient detail across owned/unowned inventory. Photos/visuals, dark mode, print/share and mixing view arrive in Release 2; Made This Drink in Release 4; conversion/scaling/batch tools in Release 5; recipe selection in Release 6; flavor/strength and daily suggestions in Release 7. Asset coverage/fallback and sharing details remain explicit Release 2 decisions.

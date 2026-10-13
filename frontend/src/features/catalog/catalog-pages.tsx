@@ -75,9 +75,13 @@ function QueryState({
 function Filters({
   kind,
   options,
+  ingredients = [],
+  ingredientsPending = false,
 }: {
   kind: 'ingredients' | 'cocktails';
   options: { value: string; name: string }[];
+  ingredients?: { value: string; name: string }[];
+  ingredientsPending?: boolean;
 }) {
   const [params, setParams] = useSearchParams();
   const filterKey = kind === 'ingredients' ? 'category' : 'primarySpiritId';
@@ -88,12 +92,17 @@ function Filters({
   const [favoritesOnly, setFavoritesOnly] = useState(
     params.get('favoritesOnly') === 'true',
   );
+  const [ingredient, setIngredient] = useState(
+    params.get('ingredientId') ?? '',
+  );
   const [filter, setFilter] = useState(params.get(filterKey) ?? '');
   function apply(event: FormEvent) {
     event.preventDefault();
     const next = new URLSearchParams();
     if (search.trim()) next.set('search', search.trim());
     if (filter) next.set(filterKey, filter);
+    if (kind === 'cocktails' && ingredient)
+      next.set('ingredientId', ingredient);
     if (kind === 'cocktails' && availability)
       next.set('availability', availability);
     if (kind === 'cocktails' && favoritesOnly)
@@ -138,6 +147,26 @@ function Filters({
       {kind === 'cocktails' && (
         <>
           <label className="grid gap-2">
+            Recipe ingredient
+            <select
+              className={control}
+              value={ingredient}
+              disabled={ingredientsPending}
+              onChange={(event) => setIngredient(event.target.value)}
+            >
+              <option value="">All ingredients</option>
+              {ingredient &&
+                !ingredients.some((option) => option.value === ingredient) && (
+                  <option value={ingredient}>Selected ingredient</option>
+                )}
+              {ingredients.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.name}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="grid gap-2">
             Availability
             <select
               className={control}
@@ -176,6 +205,7 @@ function Filters({
         onClick={() => {
           setSearch('');
           setFilter('');
+          setIngredient('');
           setAvailability('');
           setFavoritesOnly(false);
           setParams({});
@@ -306,17 +336,31 @@ export function IngredientCatalogPage() {
 }
 
 export function CocktailCatalogPage() {
-  const [params] = useSearchParams();
+  const [params, setParams] = useSearchParams();
   const filters = {
     search: params.get('search') ?? undefined,
     primarySpiritId: params.get('primarySpiritId') || undefined,
+    ingredientId: params.get('ingredientId') || undefined,
     availability: params.get('availability') || undefined,
     favoritesOnly: params.get('favoritesOnly') === 'true' || undefined,
   };
-  const query = useListCocktails(filters, queryOptions);
+  const query = useListCocktails(filters, {
+    query: {
+      retry: false,
+      select: (cocktails) => {
+        if (
+          filters.ingredientId &&
+          cocktails.some((c) => c.matchedIngredientId !== filters.ingredientId)
+        )
+          throw new Error('Ingredient filtering is not available yet.');
+        return cocktails;
+      },
+    },
+  });
   const filtered = !!(
     params.get('search') ||
     params.get('primarySpiritId') ||
+    params.get('ingredientId') ||
     params.get('availability') ||
     params.get('favoritesOnly')
   );
@@ -329,7 +373,10 @@ export function CocktailCatalogPage() {
     : !!query.data &&
       !query.isError &&
       query.data.every((c) => c.availability?.canMake === false);
-  const spirits = useListIngredients({ category: 'spirit' }, queryOptions);
+  const ingredients = useListIngredients(undefined, queryOptions);
+  const spirits = (ingredients.data ?? []).filter(
+    (i) => i.category === 'spirit',
+  );
   return (
     <section className="space-y-6">
       <p className="text-sm uppercase tracking-widest text-muted-foreground">
@@ -357,18 +404,44 @@ export function CocktailCatalogPage() {
         </aside>
       )}
       <Filters
-        key={`${params.get('search')}:${params.get('primarySpiritId')}:${params.get('availability')}:${params.get('favoritesOnly')}`}
+        key={`${params.get('search')}:${params.get('primarySpiritId')}:${params.get('ingredientId')}:${params.get('availability')}:${params.get('favoritesOnly')}`}
         kind="cocktails"
-        options={(spirits.data ?? []).map((spirit) => ({
+        options={spirits.map((spirit) => ({
           value: spirit.id!,
           name: spirit.name!,
         }))}
+        ingredients={(ingredients.data ?? []).map((i) => ({
+          value: i.id!,
+          name: i.name!,
+        }))}
+        ingredientsPending={ingredients.isPending || ingredients.isError}
       />
+      {filters.ingredientId && (
+        <div className="flex flex-wrap items-center gap-3">
+          <p>
+            Using{' '}
+            {ingredients.data?.find((i) => i.id === filters.ingredientId)
+              ?.name ?? 'the selected ingredient'}
+          </p>
+          <Button
+            type="button"
+            variant="outline"
+            className="min-h-11"
+            onClick={() => {
+              const next = new URLSearchParams(params);
+              next.delete('ingredientId');
+              setParams(next);
+            }}
+          >
+            Clear ingredient
+          </Button>
+        </div>
+      )}
       <RandomCocktail key={JSON.stringify(filters)} filters={filters} />
       <QueryState
-        pending={spirits.isPending}
-        error={spirits.error}
-        retry={() => void spirits.refetch()}
+        pending={ingredients.isPending}
+        error={ingredients.error}
+        retry={() => void ingredients.refetch()}
       />
       <QueryState
         pending={query.isPending}
@@ -437,6 +510,12 @@ export function IngredientDetailPage({
 }: { detailId?: string; overlay?: boolean } = {}) {
   const { id: routeId = '' } = useParams();
   const id = detailId ?? routeId;
+  const location = useLocation();
+  const drinksParams = new URLSearchParams(
+    location.pathname === '/drinks' ? location.search : '',
+  );
+  drinksParams.delete('detail');
+  drinksParams.set('ingredientId', id);
   const query = useGetIngredient(id, queryOptions);
   return (
     <section className="space-y-6">
@@ -475,6 +554,12 @@ export function IngredientDetailPage({
           <h2 className="text-xl font-semibold">
             Used in {query.data.usageCount} cocktails
           </h2>
+          <Link
+            className="inline-block min-h-11 py-2 font-medium underline"
+            to={`/drinks?${drinksParams}`}
+          >
+            Explore drinks with {query.data.name}
+          </Link>
           {query.data.relatedCocktails?.length ? (
             <CocktailLinks cocktails={query.data.relatedCocktails} />
           ) : (

@@ -28,6 +28,14 @@
           }
         }, {
           "in" : "query",
+          "name" : "ingredientId",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }, {
+          "in" : "query",
           "name" : "availability",
           "required" : false,
           "schema" : {
@@ -106,6 +114,14 @@
         }, {
           "in" : "query",
           "name" : "primarySpiritId",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }, {
+          "in" : "query",
+          "name" : "ingredientId",
           "required" : false,
           "schema" : {
             "type" : "string",
@@ -878,6 +894,10 @@
             "type" : "boolean"
           },
           "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "matchedIngredientId" : {
             "type" : "string",
             "format" : "uuid"
           },

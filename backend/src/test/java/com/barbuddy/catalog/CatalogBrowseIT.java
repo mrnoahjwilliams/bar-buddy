@@ -57,9 +57,9 @@ class CatalogBrowseIT {
     assertThat(service.ingredients("  GIN  ", "spirit")).contains(gin);
     assertThat(service.ingredients("", "")).hasSize(116);
     assertThat(service.ingredients("%", null)).isEmpty();
-    assertThat(service.cocktails("", null, null, false, "user")).hasSize(102);
-    assertThat(service.cocktails("negroni", gin.id(), null, false, "user")).hasSize(1);
-    assertThat(service.cocktails("zzzz", gin.id(), null, false, "user")).isEmpty();
+    assertThat(service.cocktails("", null, null, null, false, "user")).hasSize(102);
+    assertThat(service.cocktails("negroni", gin.id(), null, null, false, "user")).hasSize(1);
+    assertThat(service.cocktails("zzzz", gin.id(), null, null, false, "user")).isEmpty();
     mvc.perform(get("/api/v1/ingredients").with(jwt()).param("category", "unknown"))
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("status").value(400));
@@ -76,7 +76,7 @@ class CatalogBrowseIT {
 
   @Test
   void relatedCocktailsStayDistinctAndOpenOrderedRecipeDetails() throws Exception {
-    var drink = service.cocktails("negroni", null, null, false, "user").getFirst();
+    var drink = service.cocktails("negroni", null, null, null, false, "user").getFirst();
     var detail = service.cocktail(drink.id(), "user");
     var first = detail.recipe().ingredients().getFirst();
     jdbc.update(
@@ -101,6 +101,90 @@ class CatalogBrowseIT {
     mvc.perform(get("/api/v1/ingredients/" + ingredient.id()).with(jwt()))
         .andExpect(status().isOk())
         .andExpect(jsonPath("usageCount").value(ingredient.usageCount()));
+  }
+
+  @Test
+  void ingredientFilterMatchesAnyRecipeLineOnceAcrossRecipes() throws Exception {
+    var negroni = service.cocktails("negroni", null, null, null, false, "one").getFirst();
+    var recipe = service.cocktail(negroni.id(), "one").recipe();
+    var campari = service.ingredients("campari", "liqueur").getFirst();
+    var extraRecipe = UUID.randomUUID();
+    jdbc.update(
+        "insert into recipe select ?, 'recipe:negroni:test', cocktail_id, name, instructions, glassware, garnish from recipe where id = ?",
+        extraRecipe,
+        recipe.id());
+    jdbc.update(
+        "insert into recipe_ingredient select ?, ?, ingredient_id, 1, recipe_display_name, 'optional', preparation, us_quantity, us_maximum_quantity, us_unit, us_modifier, metric_quantity, metric_maximum_quantity, metric_unit, metric_modifier from recipe_ingredient where recipe_id = ? and ingredient_id = ?",
+        UUID.randomUUID(),
+        extraRecipe,
+        recipe.id(),
+        campari.id());
+    var stats = emf.unwrap(SessionFactory.class).getStatistics();
+    stats.clear();
+    var matches = service.cocktails(null, null, campari.id(), null, false, "one");
+    assertThat(stats.getPrepareStatementCount()).isEqualTo(4);
+    assertThat(matches).extracting(CatalogResponses.CocktailSummary::id).doesNotHaveDuplicates();
+    assertThat(matches).extracting(CatalogResponses.CocktailSummary::id).contains(negroni.id());
+    assertThat(matches)
+        .extracting(CatalogResponses.CocktailSummary::matchedIngredientId)
+        .containsOnly(campari.id());
+    assertThat(matches)
+        .extracting(CatalogResponses.CocktailSummary::id)
+        .containsExactlyInAnyOrderElementsOf(
+            service.ingredient(campari.id(), "one").relatedCocktails().stream()
+                .map(CatalogResponses.CocktailSummary::id)
+                .toList());
+    assertThat(service.ingredient(campari.id(), "one").usageCount()).isEqualTo(matches.size());
+    mvc.perform(
+            get("/api/v1/cocktails")
+                .with(jwt())
+                .param("ingredientId", campari.id().toString())
+                .param("search", "negroni"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.length()").value(1));
+    // A cocktail can be discovered through an optional ingredient in another recipe.
+    var optional = service.ingredients("spiced rum", null).getFirst();
+    jdbc.update(
+        "insert into recipe_ingredient select ?, ?, ?, 2, 'Optional spice', 'optional', preparation, us_quantity, us_maximum_quantity, us_unit, us_modifier, metric_quantity, metric_maximum_quantity, metric_unit, metric_modifier from recipe_ingredient where recipe_id = ? and ingredient_id = ?",
+        UUID.randomUUID(),
+        extraRecipe,
+        optional.id(),
+        recipe.id(),
+        campari.id());
+    var optionalMatches = service.cocktails(null, null, optional.id(), null, false, "one");
+    assertThat(optionalMatches)
+        .extracting(CatalogResponses.CocktailSummary::id)
+        .containsExactly(negroni.id());
+    assertThat(optionalMatches.getFirst().availability()).isEqualTo(negroni.availability());
+    assertThat(service.ingredient(optional.id(), "one").usageCount()).isEqualTo(1);
+    var unused = service.ingredients("coconut rum", "spirit").getFirst();
+    assertThat(service.cocktails(null, null, unused.id(), null, false, "one")).isEmpty();
+    mvc.perform(
+            get("/api/v1/cocktails/random")
+                .with(jwt())
+                .param("ingredientId", unused.id().toString()))
+        .andExpect(status().isNotFound());
+  }
+
+  @Test
+  void ingredientFilterValidatesBothEndpointsAndKeepsExistingPrimarySpiritRules() throws Exception {
+    for (var endpoint : new String[] {"/api/v1/cocktails", "/api/v1/cocktails/random"}) {
+      for (var id : new String[] {"bad", UUID.randomUUID().toString()}) {
+        mvc.perform(get(endpoint).with(jwt()).param("ingredientId", id))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("status").value(400));
+      }
+      mvc.perform(get(endpoint).param("ingredientId", UUID.randomUUID().toString()))
+          .andExpect(status().isUnauthorized());
+    }
+    var lime = service.ingredients("lime juice", "juice").getFirst();
+    mvc.perform(get("/api/v1/cocktails").with(jwt()).param("ingredientId", lime.id().toString()))
+        .andExpect(status().isOk());
+    mvc.perform(get("/api/v1/cocktails").with(jwt()).param("primarySpiritId", lime.id().toString()))
+        .andExpect(status().isBadRequest());
+    assertThat(service.cocktails(null, null, lime.id(), null, false, "one"))
+        .extracting(CatalogResponses.CocktailSummary::id)
+        .doesNotHaveDuplicates();
   }
 
   @Test
@@ -139,7 +223,7 @@ class CatalogBrowseIT {
   void fullCatalogUsesBoundedQueriesWithoutPerRowLoads() {
     var stats = emf.unwrap(SessionFactory.class).getStatistics();
     stats.clear();
-    var cocktails = service.cocktails("", null, null, false, "user");
+    var cocktails = service.cocktails("", null, null, null, false, "user");
     assertThat(stats.getPrepareStatementCount()).isEqualTo(3);
     stats.clear();
     service.cocktail(cocktails.getFirst().id(), "user");
