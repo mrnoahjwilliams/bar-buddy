@@ -3,6 +3,12 @@ import { DetailLink } from './detail-links';
 import { FavoriteControl } from './favorite-control';
 import { IngredientInventory } from '@/features/bar/inventory-controls';
 import { measurement } from './measurement';
+import {
+  discoveryReady,
+  styles,
+  tagGroups,
+  displayMetadata,
+} from './discovery';
 import { useState, type FormEvent } from 'react';
 import {
   Link,
@@ -96,6 +102,10 @@ function Filters({
     params.get('ingredientId') ?? '',
   );
   const [filter, setFilter] = useState(params.get(filterKey) ?? '');
+  const [style, setStyle] = useState(params.get('style')?.trim() ?? '');
+  const [tag, setTag] = useState(params.get('tag')?.trim() ?? '');
+  const [alcohol, setAlcohol] = useState(params.get('alcohol')?.trim() ?? '');
+  const [sort, setSort] = useState(params.get('sort')?.trim() ?? '');
   function apply(event: FormEvent) {
     event.preventDefault();
     const next = new URLSearchParams();
@@ -107,6 +117,10 @@ function Filters({
       next.set('availability', availability);
     if (kind === 'cocktails' && favoritesOnly)
       next.set('favoritesOnly', 'true');
+    if (kind === 'cocktails') {
+      for (const [key, value] of Object.entries({ style, tag, alcohol, sort }))
+        if (value) next.set(key, value);
+    }
     setParams(next);
   }
   return (
@@ -184,6 +198,100 @@ function Filters({
                 )}
             </select>
           </label>
+          <details
+            className="sm:col-span-2 lg:col-span-3"
+            open={!!(style || tag || alcohol || sort)}
+          >
+            <summary className="min-h-11 cursor-pointer py-2 font-medium">
+              More ways to explore
+            </summary>
+            <div className="mt-3 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              <label className="grid gap-2">
+                Cocktail style
+                <select
+                  className={control}
+                  value={style}
+                  onChange={(e) => setStyle(e.target.value)}
+                >
+                  <option value="">All styles</option>
+                  {style && !styles.includes(style) && (
+                    <option value={style}>Unknown style</option>
+                  )}
+                  {styles.map((value) => (
+                    <option key={value} value={value}>
+                      {displayMetadata(value)}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label className="grid gap-2">
+                Tag
+                <select
+                  className={control}
+                  value={tag}
+                  onChange={(e) => setTag(e.target.value)}
+                >
+                  <option value="">All tags</option>
+                  {tag && !Object.values(tagGroups).flat().includes(tag) && (
+                    <option value={tag}>Unknown tag</option>
+                  )}
+                  {Object.entries(tagGroups).map(([group, values]) => (
+                    <optgroup key={group} label={group}>
+                      {values.map((value) => (
+                        <option key={value} value={value}>
+                          {displayMetadata(value)}
+                        </option>
+                      ))}
+                    </optgroup>
+                  ))}
+                </select>
+              </label>
+              <label className="grid gap-2">
+                Alcohol
+                <select
+                  className={control}
+                  value={alcohol}
+                  onChange={(e) => setAlcohol(e.target.value)}
+                >
+                  <option value="">All drinks</option>
+                  <option value="alcohol_free">Alcohol-free</option>
+                  <option value="alcoholic">Contains alcohol</option>
+                  {alcohol &&
+                    !['all', 'alcohol_free', 'alcoholic'].includes(alcohol) && (
+                      <option value={alcohol}>Unknown alcohol filter</option>
+                    )}
+                  {alcohol === 'all' && <option value="all">All drinks</option>}
+                </select>
+              </label>
+              <label className="grid gap-2">
+                Sort drinks
+                <select
+                  className={control}
+                  value={sort}
+                  onChange={(e) => setSort(e.target.value)}
+                >
+                  <option value="">Availability</option>
+                  <option value="alphabetical">Alphabetical</option>
+                  <option value="ingredient_count">Fewest ingredients</option>
+                  {sort &&
+                    ![
+                      'availability',
+                      'alphabetical',
+                      'ingredient_count',
+                    ].includes(sort) && (
+                      <option value={sort}>Unknown sort</option>
+                    )}
+                  {sort === 'availability' && (
+                    <option value="availability">Availability</option>
+                  )}
+                </select>
+              </label>
+            </div>
+            <p className="mt-3 text-sm text-muted-foreground">
+              Sorting keeps makeable drinks first and one-away drinks next.
+              Ingredient count excludes optional garnishes.
+            </p>
+          </details>
           <label className="flex min-h-11 items-center gap-3 rounded-lg border border-border bg-card px-3 py-2">
             <input
               type="checkbox"
@@ -208,12 +316,45 @@ function Filters({
           setIngredient('');
           setAvailability('');
           setFavoritesOnly(false);
+          setStyle('');
+          setTag('');
+          setAlcohol('');
+          setSort('');
           setParams({});
         }}
       >
         Reset filters
       </Button>
     </form>
+  );
+}
+
+function CocktailMetadata({
+  cocktail,
+}: {
+  cocktail: Pick<
+    CocktailSummary,
+    'styles' | 'tags' | 'alcoholFree' | 'ingredientCount'
+  >;
+}) {
+  const values = [
+    ...(cocktail.alcoholFree === true ? ['alcohol_free'] : []),
+    ...(cocktail.styles ?? []),
+    ...(cocktail.tags ?? []),
+  ];
+  return (
+    <span className="mt-2 flex flex-wrap gap-1.5 text-xs">
+      {values.map((value) => (
+        <span key={value} className="rounded-full bg-secondary px-2 py-1">
+          {displayMetadata(value)}
+        </span>
+      ))}
+      {cocktail.ingredientCount !== undefined && (
+        <span className="px-1 py-1 text-muted-foreground">
+          {cocktail.ingredientCount} required ingredients
+        </span>
+      )}
+    </span>
   );
 }
 
@@ -236,6 +377,12 @@ function CocktailLinks({ cocktails }: { cocktails: CocktailSummary[] }) {
               <span className="text-sm text-muted-foreground">
                 {cocktail.primarySpirit?.name}
               </span>
+              <CocktailMetadata cocktail={cocktail} />
+              {cocktail.matchedAlias && (
+                <span className="mt-1 block text-sm text-muted-foreground">
+                  Matched “{cocktail.matchedAlias}”
+                </span>
+              )}
               {cocktail.availability && (
                 <span className="mt-3 block text-sm font-medium">
                   {cocktail.availability.canMake
@@ -343,6 +490,10 @@ export function CocktailCatalogPage() {
     ingredientId: params.get('ingredientId') || undefined,
     availability: params.get('availability') || undefined,
     favoritesOnly: params.get('favoritesOnly') === 'true' || undefined,
+    style: params.get('style')?.trim() || undefined,
+    tag: params.get('tag')?.trim() || undefined,
+    alcohol: params.get('alcohol')?.trim() || undefined,
+    sort: params.get('sort')?.trim() || undefined,
   };
   const query = useListCocktails(filters, {
     query: {
@@ -353,6 +504,8 @@ export function CocktailCatalogPage() {
           cocktails.some((c) => c.matchedIngredientId !== filters.ingredientId)
         )
           throw new Error('Ingredient filtering is not available yet.');
+        if (cocktails.some((c) => !discoveryReady(c, filters)))
+          throw new Error('Discovery options are not available yet.');
         return cocktails;
       },
     },
@@ -362,7 +515,10 @@ export function CocktailCatalogPage() {
     params.get('primarySpiritId') ||
     params.get('ingredientId') ||
     params.get('availability') ||
-    params.get('favoritesOnly')
+    params.get('favoritesOnly') ||
+    filters.style ||
+    filters.tag ||
+    filters.alcohol
   );
   const makeable = useListCocktails(
     { availability: 'can_make' },
@@ -404,7 +560,7 @@ export function CocktailCatalogPage() {
         </aside>
       )}
       <Filters
-        key={`${params.get('search')}:${params.get('primarySpiritId')}:${params.get('ingredientId')}:${params.get('availability')}:${params.get('favoritesOnly')}`}
+        key={`filters:${JSON.stringify(filters)}`}
         kind="cocktails"
         options={spirits.map((spirit) => ({
           value: spirit.id!,
@@ -435,6 +591,34 @@ export function CocktailCatalogPage() {
           >
             Clear ingredient
           </Button>
+        </div>
+      )}
+      {(['style', 'tag', 'alcohol', 'sort'] as const).some(
+        (key) => filters[key],
+      ) && (
+        <div
+          className="flex flex-wrap gap-2"
+          aria-label="Applied discovery options"
+        >
+          {(['style', 'tag', 'alcohol', 'sort'] as const)
+            .filter((key) => filters[key])
+            .map((key) => (
+              <Button
+                key={key}
+                type="button"
+                variant="outline"
+                className="min-h-11"
+                onClick={() => {
+                  const next = new URLSearchParams(params);
+                  next.delete(key);
+                  setParams(next);
+                }}
+                aria-label={`Clear ${key}`}
+              >
+                {key === 'sort' ? 'Sort: ' : ''}
+                {displayMetadata(filters[key]!)} ×
+              </Button>
+            ))}
         </div>
       )}
       <RandomCocktail key={JSON.stringify(filters)} filters={filters} />
@@ -593,6 +777,7 @@ export function CocktailDetailPage({
             {query.data.primarySpirit?.name}
           </p>
           <h1 className="text-3xl font-semibold">{query.data.name}</h1>
+          <CocktailMetadata cocktail={query.data} />
           <FavoriteControl
             cocktailId={id}
             cocktailName={query.data.name}

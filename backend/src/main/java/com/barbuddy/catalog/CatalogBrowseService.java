@@ -77,6 +77,24 @@ public class CatalogBrowseService {
       String availability,
       boolean favoritesOnly,
       String subject) {
+    return cocktails(
+        search,
+        primarySpiritId,
+        ingredientId,
+        availability,
+        favoritesOnly,
+        CatalogDiscovery.defaults(),
+        subject);
+  }
+
+  public List<CocktailSummary> cocktails(
+      String search,
+      UUID primarySpiritId,
+      UUID ingredientId,
+      String availability,
+      boolean favoritesOnly,
+      CatalogDiscovery discovery,
+      String subject) {
     if (primarySpiritId != null) {
       var ingredient = repository.ingredient(primarySpiritId);
       if (ingredient == null || !ingredient.getCategory().equals("spirit"))
@@ -91,7 +109,7 @@ public class CatalogBrowseService {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown availability filter.");
     return summaries(
             repository.cocktails(
-                search(search), primarySpiritId, ingredientId, favoritesOnly, subject),
+                search(search), primarySpiritId, ingredientId, favoritesOnly, discovery, subject),
             subject,
             ingredientId)
         .stream()
@@ -101,10 +119,8 @@ public class CatalogBrowseService {
                     || (filter.equals("can_make")
                         ? c.availability().canMake()
                         : c.availability().missingCount() == 1))
-        .sorted(
-            Comparator.comparingInt((CocktailSummary c) -> c.availability().missingCount())
-                .thenComparing(c -> c.name().toLowerCase(Locale.ROOT))
-                .thenComparing(CocktailSummary::id))
+        .sorted(order(discovery.sort()))
+        .map(c -> c.withMatchedAlias(matchedAlias(c, search(search))))
         .toList();
   }
 
@@ -115,8 +131,27 @@ public class CatalogBrowseService {
       String availability,
       boolean favoritesOnly,
       String subject) {
+    return randomCocktail(
+        search,
+        primarySpiritId,
+        ingredientId,
+        availability,
+        favoritesOnly,
+        CatalogDiscovery.defaults(),
+        subject);
+  }
+
+  public CocktailSummary randomCocktail(
+      String search,
+      UUID primarySpiritId,
+      UUID ingredientId,
+      String availability,
+      boolean favoritesOnly,
+      CatalogDiscovery discovery,
+      String subject) {
     var candidates =
-        cocktails(search, primarySpiritId, ingredientId, availability, favoritesOnly, subject);
+        cocktails(
+            search, primarySpiritId, ingredientId, availability, favoritesOnly, discovery, subject);
     if (candidates.isEmpty())
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No matching cocktails.");
     return candidates.get(ThreadLocalRandom.current().nextInt(candidates.size()));
@@ -152,7 +187,11 @@ public class CatalogBrowseService {
         summary.primarySpirit(),
         detail,
         summary.availability(),
-        summary.favorite());
+        summary.favorite(),
+        summary.styles(),
+        summary.tags(),
+        summary.alcoholFree(),
+        summary.ingredientCount());
   }
 
   private List<CocktailSummary> summaries(List<Cocktail> cocktails, String subject) {
@@ -164,7 +203,10 @@ public class CatalogBrowseService {
     if (cocktails.isEmpty()) return List.of();
     var cocktailIds = cocktails.stream().map(Cocktail::getId).toList();
     var missing = new HashMap<UUID, List<IngredientSummary>>();
-    for (var row : repository.missingIngredients(cocktailIds, subject)) {
+    var counts = new HashMap<UUID, Integer>();
+    for (var row : repository.requiredIngredients(cocktailIds, subject)) {
+      counts.merge((UUID) row[0], 1, Integer::sum);
+      if (Boolean.TRUE.equals(row[4])) continue;
       missing
           .computeIfAbsent((UUID) row[0], key -> new ArrayList<>())
           .add(new IngredientSummary((UUID) row[1], (String) row[2], (String) row[3], null));
@@ -177,8 +219,34 @@ public class CatalogBrowseService {
                     c,
                     AvailabilityResult.from(missing.getOrDefault(c.getId(), List.of())),
                     favorites.contains(c.getId()),
-                    matchedIngredientId))
+                    matchedIngredientId,
+                    counts.getOrDefault(c.getId(), 0)))
         .toList();
+  }
+
+  private static Comparator<CocktailSummary> order(String sort) {
+    Comparator<CocktailSummary> names =
+        Comparator.comparing((CocktailSummary c) -> c.name().toLowerCase(Locale.ROOT))
+            .thenComparing(CocktailSummary::id);
+    if (sort.equals("availability"))
+      return Comparator.comparingInt((CocktailSummary c) -> c.availability().missingCount())
+          .thenComparing(names);
+    Comparator<CocktailSummary> within =
+        sort.equals("ingredient_count")
+            ? Comparator.comparingInt(CocktailSummary::ingredientCount).thenComparing(names)
+            : names;
+    return Comparator.comparingInt(
+            (CocktailSummary c) -> Math.min(2, c.availability().missingCount()))
+        .thenComparing(within);
+  }
+
+  private static String matchedAlias(CocktailSummary cocktail, String search) {
+    return normalize(cocktail.name()).contains(search)
+        ? null
+        : cocktail.aliases().stream()
+            .filter(alias -> normalize(alias).contains(search))
+            .findFirst()
+            .orElse(null);
   }
 
   private static String normalize(String value) {

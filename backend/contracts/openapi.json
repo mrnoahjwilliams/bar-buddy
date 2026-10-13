@@ -49,6 +49,34 @@
             "type" : "boolean",
             "default" : false
           }
+        }, {
+          "in" : "query",
+          "name" : "style",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "tag",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "alcohol",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "sort",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
         } ],
         "responses" : {
           "200" : {
@@ -141,6 +169,34 @@
           "schema" : {
             "type" : "boolean",
             "default" : false
+          }
+        }, {
+          "in" : "query",
+          "name" : "style",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "tag",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "alcohol",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "sort",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
           }
         } ],
         "responses" : {
@@ -848,6 +904,10 @@
       "CocktailDetail" : {
         "type" : "object",
         "properties" : {
+          "alcoholFree" : {
+            "type" : [ "boolean", "null" ],
+            "description" : "Reviewed default recipe classification; null means unknown."
+          },
           "availability" : {
             "$ref" : "#/components/schemas/AvailabilityResult"
           },
@@ -857,6 +917,10 @@
           "id" : {
             "type" : "string",
             "format" : "uuid"
+          },
+          "ingredientCount" : {
+            "type" : "integer",
+            "format" : "int32"
           },
           "name" : {
             "type" : "string"
@@ -869,6 +933,18 @@
           },
           "slug" : {
             "type" : "string"
+          },
+          "styles" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "tags" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
           }
         }
       },
@@ -887,8 +963,22 @@
       "CocktailSummary" : {
         "type" : "object",
         "properties" : {
+          "alcoholFree" : {
+            "type" : [ "boolean", "null" ],
+            "description" : "Reviewed default recipe classification; null means unknown."
+          },
+          "aliases" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
           "availability" : {
             "$ref" : "#/components/schemas/AvailabilityResult"
+          },
+          "discoveryVersion" : {
+            "type" : "integer",
+            "format" : "int32"
           },
           "favorite" : {
             "type" : "boolean"
@@ -896,6 +986,13 @@
           "id" : {
             "type" : "string",
             "format" : "uuid"
+          },
+          "ingredientCount" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "matchedAlias" : {
+            "type" : "string"
           },
           "matchedIngredientId" : {
             "type" : "string",
@@ -909,6 +1006,18 @@
           },
           "slug" : {
             "type" : "string"
+          },
+          "styles" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "tags" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
           }
         }
       },

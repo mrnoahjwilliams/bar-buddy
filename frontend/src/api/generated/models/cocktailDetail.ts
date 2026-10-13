@@ -9,11 +9,19 @@ import type { IngredientSummary } from './ingredientSummary.ts';
 import type { RecipeDetail } from './recipeDetail.ts';
 
 export interface CocktailDetail {
+  /**
+   * Reviewed default recipe classification; null means unknown.
+   * @nullable
+   */
+  alcoholFree?: boolean | null;
   availability?: AvailabilityResult;
   favorite?: boolean;
   id?: string;
+  ingredientCount?: number;
   name?: string;
   primarySpirit?: IngredientSummary;
   recipe?: RecipeDetail;
   slug?: string;
+  styles?: string[];
+  tags?: string[];
 }

@@ -5,6 +5,7 @@ import { getRandomCocktail } from '@/api/generated/bar-buddy';
 import type { ListCocktailsParams } from '@/api/generated/models';
 import { ApiError } from '@/api/http';
 import { Button } from '@/components/ui/button';
+import { discoveryReady } from '@/features/catalog/discovery';
 import { DetailFocusContext } from '@/features/catalog/detail-focus-context';
 
 export function RandomCocktail({ filters }: { filters: ListCocktailsParams }) {
@@ -37,6 +38,8 @@ export function RandomCocktail({ filters }: { filters: ListCocktailsParams }) {
         cocktail.matchedIngredientId !== filters.ingredientId
       )
         throw new Error('Ingredient filtering is not available yet.');
+      if (!discoveryReady(cocktail, filters))
+        throw new Error('Discovery options are not available yet.');
       const params = new URLSearchParams(location.search);
       if (button.current)
         remember(params.getAll('detail').length, button.current);

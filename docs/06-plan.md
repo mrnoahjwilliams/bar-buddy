@@ -178,11 +178,11 @@ Publication acceptance for 1.6 is recorded from the owner’s September 10, 2026
 
 #### 2.2.1 — Tags, aliases and mocktails
 
-- [ ] Use the reviewed optional cocktail styles and **decide:** general/seasonal/occasion tag vocabulary, additional ingredient/search alias coverage beyond the approved MVP subset and alcohol-free/mocktail classification/coverage. Extend existing catalog fields and reviewed data; support combined search/filtering without new persistent entities. **Verify:** unclassified and multi-style cocktails, aliases such as OJ → Orange Juice, duplicate matches, later tags and mocktail results with normal availability grouping; do not infer precise strength before Release 7.
+- [x] Persist the reviewed optional cocktail styles and implement the [approved Explorer vocabulary, expanded aliases and mocktail classification/coverage](02-requirements.md#approved-explorer-discovery-decisions). Extend existing catalog fields and reviewed data; support combined search/filtering without new persistent entities. **Verify:** unclassified and multi-style cocktails, aliases such as OJ → Orange Juice, duplicate matches, later tags and mocktail results with normal availability grouping; do not infer precise strength before Release 7.
 
 #### 2.2.2 — Filters and sorting
 
-- [ ] Extend existing search/filter combinations with optional cocktail styles and the new metadata, plus alphabetical/ingredient-count sorting. Define distinct-count treatment of optional ingredients, stable ties and invalid/empty parameters. Extend mobile controls, active indicators and reset. **Verify:** unclassified/multi-style results, combinations/ties/empty results, makeable/one-away grouping, cache/navigation state and query cost. Frequency, rating and strength sorts arrive in 4, 6 and 7 respectively.
+- [x] Extend existing search/filter combinations with optional cocktail styles and the new metadata, plus alphabetical/ingredient-count sorting under the [approved counting/order rules](02-requirements.md#approved-explorer-discovery-decisions). Extend mobile controls, active indicators and reset; validate invalid/empty parameters. **Verify:** unclassified/multi-style results, combinations/ties/empty results, makeable/one-away grouping, cache/navigation state and query cost. Frequency, rating and strength sorts arrive in 4, 6 and 7 respectively.
 
 #### 2.2.3 — Recently viewed cocktails
 

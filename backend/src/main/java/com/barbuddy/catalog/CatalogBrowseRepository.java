@@ -17,9 +17,9 @@ public class CatalogBrowseRepository {
     this.em = em;
   }
 
-  public List<Object[]> missingIngredients(List<UUID> cocktails, String subject) {
+  public List<Object[]> requiredIngredients(List<UUID> cocktails, String subject) {
     return em.createQuery(
-            "select distinct l.recipe.cocktail.id, i.id, i.name, i.category from RecipeIngredient l join l.ingredient i where l.recipe.cocktail.id in :cocktails and l.requirement = 'required' and not exists (select b.id from InventoryItem b where b.ingredient = i and b.owner.authSubject = :subject and b.status = com.barbuddy.inventory.InventoryStatus.Have) order by i.name, i.id",
+            "select distinct l.recipe.cocktail.id, i.id, i.name, i.category, case when exists (select b.id from InventoryItem b where b.ingredient = i and b.owner.authSubject = :subject and b.status = com.barbuddy.inventory.InventoryStatus.Have) then true else false end from RecipeIngredient l join l.ingredient i where l.recipe.cocktail.id in :cocktails and l.requirement = 'required' order by i.name, i.id",
             Object[].class)
         .setParameter("cocktails", cocktails)
         .setParameter("subject", subject)
@@ -40,13 +40,21 @@ public class CatalogBrowseRepository {
   }
 
   public List<Cocktail> cocktails(
-      String search, UUID spirit, UUID ingredient, boolean favoritesOnly, String subject) {
+      String search,
+      UUID spirit,
+      UUID ingredient,
+      boolean favoritesOnly,
+      CatalogDiscovery discovery,
+      String subject) {
     return em.createQuery(
-            "select c from Cocktail c left join fetch c.primarySpirit where locate(:search, function('catalog_search_key', c.name)) > 0 and (:spirit is null or c.primarySpirit.id = :spirit) and (:ingredient is null or exists (select l.id from RecipeIngredient l where l.recipe.cocktail = c and l.ingredient.id = :ingredient)) and (:favoritesOnly = false or exists (select s.id from UserCocktailState s where s.cocktail = c and s.owner.authSubject = :subject and s.favorite = true)) order by lower(c.name), c.id",
+            "select c from Cocktail c left join fetch c.primarySpirit where (locate(:search, function('catalog_search_key', c.name)) > 0 or function('catalog_alias_matches', c.aliases, :search) = true) and function('catalog_metadata_matches', c.styles, cast(:style as String)) = true and function('catalog_metadata_matches', c.tags, cast(:tag as String)) = true and (:alcohol = 'all' or (:alcohol = 'alcohol_free' and c.alcoholFree = true) or (:alcohol = 'alcoholic' and c.alcoholFree = false)) and (:spirit is null or c.primarySpirit.id = :spirit) and (:ingredient is null or exists (select l.id from RecipeIngredient l where l.recipe.cocktail = c and l.ingredient.id = :ingredient)) and (:favoritesOnly = false or exists (select s.id from UserCocktailState s where s.cocktail = c and s.owner.authSubject = :subject and s.favorite = true)) order by lower(c.name), c.id",
             Cocktail.class)
         .setParameter("search", search)
         .setParameter("spirit", spirit)
         .setParameter("ingredient", ingredient)
+        .setParameter("style", discovery.style())
+        .setParameter("tag", discovery.tag())
+        .setParameter("alcohol", discovery.alcohol())
         .setParameter("favoritesOnly", favoritesOnly)
         .setParameter("subject", subject)
         .getResultList();

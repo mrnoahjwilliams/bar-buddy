@@ -211,7 +211,7 @@ class InventoryAvailabilityIT {
     mvc.perform(get("/api/v1/cocktails").with(jwt()).param("availability", "wrong"))
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("status").value(400));
-    assertThat(catalog.cocktails("", null, null, "", false, "one")).hasSize(102);
+    assertThat(catalog.cocktails("", null, null, "", false, "one")).hasSize(105);
     assertThat(catalog.cocktails("", null, null, null, false, "one"))
         .extracting(c -> c.availability().missingCount())
         .isSorted();
@@ -224,7 +224,7 @@ class InventoryAvailabilityIT {
     assertThat(stats.getPrepareStatementCount()).isEqualTo(1);
     jdbc.update(
         "insert into inventory_item select gen_random_uuid(), (select id from app_user where auth_subject = 'one'), id, null, 'Have' from ingredient");
-    assertThat(catalog.cocktails("", null, null, "can_make", false, "one")).hasSize(102);
+    assertThat(catalog.cocktails("", null, null, "can_make", false, "one")).hasSize(105);
     assertThat(catalog.cocktails("", null, null, "can_make", false, "two")).isEmpty();
   }
 

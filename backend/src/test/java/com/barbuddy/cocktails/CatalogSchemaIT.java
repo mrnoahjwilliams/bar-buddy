@@ -137,7 +137,7 @@ class CatalogSchemaIT {
             .schemas("profile_upgrade")
             .defaultSchema("profile_upgrade")
             .load();
-    assertThat(migration.migrate().migrationsExecuted).isEqualTo(1);
+    assertThat(migration.migrate().migrationsExecuted).isEqualTo(2);
     assertThat(migration.migrate().migrationsExecuted).isZero();
     assertThat(db.queryForObject("select id from profile_upgrade.app_user", UUID.class))
         .isEqualTo(id);
@@ -148,6 +148,79 @@ class CatalogSchemaIT {
                 "select deletion_requested_at from profile_upgrade.app_user",
                 java.time.Instant.class))
         .isNull();
+  }
+
+  @Test
+  void upgradesExplorerMetadataWithoutInventingClassificationOrChangingUserData() {
+    var source =
+        new DriverManagerDataSource(
+            POSTGRES.getJdbcUrl(), POSTGRES.getUsername(), POSTGRES.getPassword());
+    var db = new JdbcTemplate(source);
+    Flyway.configure()
+        .dataSource(source)
+        .schemas("explorer_upgrade")
+        .defaultSchema("explorer_upgrade")
+        .target("6")
+        .load()
+        .migrate();
+    UUID user = UUID.randomUUID(),
+        ingredient = UUID.randomUUID(),
+        cocktail = UUID.randomUUID(),
+        bottle = UUID.randomUUID();
+    db.update(
+        "insert into explorer_upgrade.app_user(id, auth_subject, display_name) values (?, 'explorer', 'Preserved')",
+        user);
+    db.update(
+        "insert into explorer_upgrade.ingredient(id, catalog_id, name, category) values (?, 'ingredient:explorer', 'Mixer', 'mixer')",
+        ingredient);
+    db.update(
+        "insert into explorer_upgrade.cocktail(id, catalog_id, slug, name) values (?, 'cocktail:explorer', 'explorer', 'Drink')",
+        cocktail);
+    db.update(
+        "insert into explorer_upgrade.inventory_item(id, owner_user_id, ingredient_id, status) values (?, ?, ?, 'Out')",
+        bottle,
+        user,
+        ingredient);
+    db.update(
+        "insert into explorer_upgrade.user_cocktail_state(id, owner_user_id, cocktail_id, favorite) values (?, ?, ?, true)",
+        UUID.randomUUID(),
+        user,
+        cocktail);
+    var migration =
+        Flyway.configure()
+            .dataSource(source)
+            .schemas("explorer_upgrade")
+            .defaultSchema("explorer_upgrade")
+            .load();
+    assertThat(migration.migrate().migrationsExecuted).isEqualTo(1);
+    assertThat(migration.migrate().migrationsExecuted).isZero();
+    assertThat(
+            db.queryForObject("select alcohol_free from explorer_upgrade.cocktail", Boolean.class))
+        .isNull();
+    assertThat(
+            db.queryForObject(
+                "select cardinality(styles) + cardinality(tags) + cardinality(aliases) from explorer_upgrade.cocktail",
+                Integer.class))
+        .isZero();
+    assertThat(
+            db.queryForObject("select display_name from explorer_upgrade.app_user", String.class))
+        .isEqualTo("Preserved");
+    assertThat(
+            db.queryForObject(
+                "select status from explorer_upgrade.inventory_item where id = ?",
+                String.class,
+                bottle))
+        .isEqualTo("Out");
+    assertThat(
+            db.queryForObject(
+                "select favorite from explorer_upgrade.user_cocktail_state", Boolean.class))
+        .isTrue();
+    assertThatThrownBy(
+            () -> db.execute("update explorer_upgrade.cocktail set tags = array['unknown']"))
+        .isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
+    assertThatThrownBy(
+            () -> db.execute("update explorer_upgrade.cocktail set styles = array['unknown']"))
+        .isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
   }
 
   @Test

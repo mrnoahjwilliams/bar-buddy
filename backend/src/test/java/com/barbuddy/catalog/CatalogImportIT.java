@@ -45,10 +45,10 @@ class CatalogImportIT {
   void fullCatalogAndConcurrentRepeatsPreserveEveryIdentity() throws Exception {
     CatalogInput full = CatalogInput.read(Path.of("catalog/cocktails.json"));
     importer.importCatalog(full);
-    assertThat(count("ingredient")).isEqualTo(116);
-    assertThat(count("cocktail")).isEqualTo(102);
-    assertThat(count("recipe")).isEqualTo(102);
-    assertThat(count("recipe_ingredient")).isEqualTo(416);
+    assertThat(count("ingredient")).isEqualTo(118);
+    assertThat(count("cocktail")).isEqualTo(105);
+    assertThat(count("recipe")).isEqualTo(105);
+    assertThat(count("recipe_ingredient")).isEqualTo(424);
     var before = snapshot();
     try (var workers = Executors.newFixedThreadPool(2)) {
       var first = workers.submit(() -> importer.importCatalog(full));
@@ -259,7 +259,8 @@ class CatalogImportIT {
         jdbc.queryForList(
             "select id, catalog_id, name, category, aliases::text from ingredient order by id"),
         "cocktails",
-        jdbc.queryForList("select * from cocktail order by id"),
+        jdbc.queryForList(
+            "select id, catalog_id, slug, name, primary_spirit_id, styles::text, tags::text, aliases::text, alcohol_free from cocktail order by id"),
         "recipes",
         jdbc.queryForList("select * from recipe order by id"),
         "lines",

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "catalog": {
     "id": "catalog:bar-buddy",
     "name": "Bar Buddy cocktail catalog",
@@ -87,7 +87,9 @@
       "id": "ingredient:bourbon",
       "name": "Bourbon",
       "category": "spirit",
-      "aliases": []
+      "aliases": [
+        "Bourbon whiskey"
+      ]
     },
     {
       "id": "ingredient:brandy",
@@ -174,7 +176,9 @@
       "id": "ingredient:coffee",
       "name": "Coffee",
       "category": "other",
-      "aliases": []
+      "aliases": [
+        "Brewed coffee"
+      ]
     },
     {
       "id": "ingredient:coffee-liqueur",
@@ -204,7 +208,9 @@
       "id": "ingredient:cream",
       "name": "Cream",
       "category": "other",
-      "aliases": []
+      "aliases": [
+        "Heavy cream"
+      ]
     },
     {
       "id": "ingredient:creme-de-cacao",
@@ -276,7 +282,9 @@
       "id": "ingredient:egg-white",
       "name": "Egg white",
       "category": "other",
-      "aliases": []
+      "aliases": [
+        "Egg whites"
+      ]
     },
     {
       "id": "ingredient:egg-yolk",
@@ -386,7 +394,9 @@
       "id": "ingredient:irish-whiskey",
       "name": "Irish whiskey",
       "category": "spirit",
-      "aliases": []
+      "aliases": [
+        "Irish whisky"
+      ]
     },
     {
       "id": "ingredient:lemon",
@@ -398,7 +408,9 @@
       "id": "ingredient:lemon-juice",
       "name": "Lemon juice",
       "category": "juice",
-      "aliases": []
+      "aliases": [
+        "Fresh lemon juice"
+      ]
     },
     {
       "id": "ingredient:lillet-blanc",
@@ -416,7 +428,9 @@
       "id": "ingredient:lime-juice",
       "name": "Lime juice",
       "category": "juice",
-      "aliases": []
+      "aliases": [
+        "Fresh lime juice"
+      ]
     },
     {
       "id": "ingredient:maraschino-liqueur",
@@ -434,7 +448,9 @@
       "id": "ingredient:mint",
       "name": "Mint",
       "category": "herb",
-      "aliases": []
+      "aliases": [
+        "Fresh mint"
+      ]
     },
     {
       "id": "ingredient:old-tom-gin",
@@ -585,7 +601,9 @@
       "id": "ingredient:rye-whiskey",
       "name": "Rye whiskey",
       "category": "spirit",
-      "aliases": []
+      "aliases": [
+        "Rye"
+      ]
     },
     {
       "id": "ingredient:salt",
@@ -597,7 +615,9 @@
       "id": "ingredient:scotch-whisky",
       "name": "Scotch whisky",
       "category": "spirit",
-      "aliases": []
+      "aliases": [
+        "Scotch"
+      ]
     },
     {
       "id": "ingredient:sherry",
@@ -729,6 +749,20 @@
       "name": "Yellow Chartreuse",
       "category": "liqueur",
       "aliases": []
+    },
+    {
+      "id": "ingredient:black-tea",
+      "name": "Black tea",
+      "category": "mixer",
+      "aliases": [
+        "Brewed black tea"
+      ]
+    },
+    {
+      "id": "ingredient:lemonade",
+      "name": "Lemonade",
+      "category": "mixer",
+      "aliases": []
     }
   ],
   "cocktails": [
@@ -813,7 +847,14 @@
           "glassware": "cocktail glass",
           "garnish": "Sprinkle fresh ground nutmeg on top."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [
+        "creamy",
+        "winter",
+        "after-dinner"
+      ],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:americano",
@@ -897,7 +938,13 @@
           "glassware": "rocks glass",
           "garnish": "Garnish with half orange slice and a lemon zest."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [
+        "sparkling",
+        "aperitif"
+      ],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:angel-face",
@@ -980,7 +1027,10 @@
           "glassware": "cocktail glass",
           "garnish": null
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:aviation",
@@ -1085,7 +1135,10 @@
           "glassware": "cocktail glass",
           "garnish": "Optional Maraschino Cherry."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:bees-knees",
@@ -1189,7 +1242,10 @@
           "glassware": "cocktail glass",
           "garnish": "Optionally garnish with a lemon or orange zest."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:bellini",
@@ -1249,7 +1305,16 @@
           "glassware": "flute",
           "garnish": null
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [
+        "sparkling",
+        "spring",
+        "summer",
+        "brunch",
+        "celebration"
+      ],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:between-the-sheets",
@@ -1354,7 +1419,10 @@
           "glassware": "cocktail glass",
           "garnish": null
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:black-russian",
@@ -1416,7 +1484,10 @@
           "glassware": "rocks glass",
           "garnish": null
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:bloody-mary",
@@ -1581,7 +1652,12 @@
           "glassware": "rocks glass",
           "garnish": "Celery, lemon wedge (Optional)."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [
+        "brunch"
+      ],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:boulevardier",
@@ -1664,7 +1740,12 @@
           "glassware": "cocktail glass",
           "garnish": "Garnish with a orange zest, optionally a lemon zest."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [
+        "aperitif"
+      ],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:bramble",
@@ -1768,7 +1849,10 @@
           "glassware": "rocks glass",
           "garnish": "Garnish optionally with a lemon slice and blackberries."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:brandy-crusta",
@@ -1915,7 +1999,10 @@
           "glassware": "slim cocktail glass",
           "garnish": "Rub a slice of orange (or lemon) around the rim of the glass and dip it in\npulverized white sugar, so that the sugar will adhere to the edge of the glass.\nCarefully curling place the orange/lemon peel around the inside of the glass."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:caipirinha",
@@ -1998,7 +2085,13 @@
           "glassware": "double rocks glass",
           "garnish": null
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [
+        "refreshing",
+        "summer"
+      ],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:canchanchara",
@@ -2102,7 +2195,10 @@
           "glassware": "rocks glass",
           "garnish": "Garnish with a lime wedge."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:cardinale",
@@ -2186,7 +2282,10 @@
           "glassware": "cocktail glass",
           "garnish": "Garnish with a lemon zest."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:casino",
@@ -2291,7 +2390,10 @@
           "glassware": "rocks glass",
           "garnish": "Garnish with a lemon zest and a maraschino cherry."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:champagne-cocktail",
@@ -2414,7 +2516,13 @@
           "glassware": "champagne glass",
           "garnish": "Garnish with orange zest and maraschino cherry."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [
+        "sparkling",
+        "celebration"
+      ],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:chartreuse-swizzle",
@@ -2518,7 +2626,10 @@
           "glassware": "tall glass",
           "garnish": "Garnish with mint leaves and grated nutmeg."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:clover-club",
@@ -2622,7 +2733,10 @@
           "glassware": "cocktail glass",
           "garnish": "Fresh raspberries."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:corpse-reviver-2",
@@ -2748,7 +2862,10 @@
           "glassware": "cocktail glass",
           "garnish": "Garnish with an orange zest."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:cosmopolitan",
@@ -2853,7 +2970,10 @@
           "glassware": "large cocktail glass",
           "garnish": "Garnish with lemon twist."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:cuba-libre",
@@ -2936,7 +3056,15 @@
           "glassware": "highball glass",
           "garnish": "Garnish with lime wedge."
         }
-      ]
+      ],
+      "aliases": [
+        "Rum and Coke"
+      ],
+      "tags": [
+        "refreshing",
+        "summer"
+      ],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:daiquiri",
@@ -3019,7 +3147,13 @@
           "glassware": "cocktail glass",
           "garnish": null
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [
+        "refreshing",
+        "summer"
+      ],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:dark-n-stormy",
@@ -3081,7 +3215,15 @@
           "glassware": "highball glass",
           "garnish": "Garnish with a lime wedge or slice."
         }
-      ]
+      ],
+      "aliases": [
+        "Dark and Stormy"
+      ],
+      "tags": [
+        "refreshing",
+        "summer"
+      ],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:dons-special-daiquiri",
@@ -3207,7 +3349,10 @@
           "glassware": "footed copo glass",
           "garnish": "Garnish with 1/2 passion fruit"
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:dry-martini",
@@ -3269,7 +3414,14 @@
           "glassware": "martini glass",
           "garnish": "Squeeze oil from lemon peel onto the drink, or garnish with a green olives if requested."
         }
-      ]
+      ],
+      "aliases": [
+        "Gin Martini"
+      ],
+      "tags": [
+        "aperitif"
+      ],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:espresso-martini",
@@ -3371,7 +3523,14 @@
           "glassware": "cocktail glass",
           "garnish": "3 coffee beans"
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [
+        "coffee",
+        "winter",
+        "after-dinner"
+      ],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:fernandito",
@@ -3433,7 +3592,10 @@
           "glassware": "double rocks glass",
           "garnish": null
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:french-75",
@@ -3538,7 +3700,13 @@
           "glassware": "flute",
           "garnish": null
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [
+        "sparkling",
+        "celebration"
+      ],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:french-connection",
@@ -3600,7 +3768,10 @@
           "glassware": "rocks glass",
           "garnish": null
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:french-martini",
@@ -3681,7 +3852,10 @@
           "glassware": "cocktail glass",
           "garnish": "Squeeze oil from lemon peel onto the drink."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:garibaldi",
@@ -3743,7 +3917,10 @@
           "glassware": "highball glass",
           "garnish": "Garnish with an orange wedge."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:gin-basil-smash",
@@ -3848,7 +4025,10 @@
           "glassware": "cocktail glass",
           "garnish": null
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:gin-fizz",
@@ -3953,7 +4133,15 @@
           "glassware": "tall tumbler",
           "garnish": "Garnish with lemon slice, optional lemon zest."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [
+        "sparkling",
+        "refreshing",
+        "spring",
+        "summer"
+      ],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:grand-margarita",
@@ -4037,7 +4225,10 @@
           "glassware": "rocks glass",
           "garnish": "Garnish with a lime slice."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:grasshopper",
@@ -4120,7 +4311,13 @@
           "glassware": "cocktail glass",
           "garnish": "Mint leaf (optional)."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [
+        "creamy",
+        "after-dinner"
+      ],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:hanky-panky",
@@ -4203,7 +4400,10 @@
           "glassware": "cocktail glass",
           "garnish": "Orange zest."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:hemingway-special",
@@ -4307,7 +4507,10 @@
           "glassware": "large cocktail glass",
           "garnish": null
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:horses-neck",
@@ -4390,7 +4593,10 @@
           "glassware": "highball glass",
           "garnish": "Garnish with rind of one lemon spiral."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:tiki",
@@ -4599,7 +4805,10 @@
           "glassware": "tiki glass",
           "garnish": "Garnish with citruses and dehydrated pineapple slice."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:illegal",
@@ -4766,7 +4975,10 @@
           "glassware": "cocktail glass",
           "garnish": null
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:irish-coffee",
@@ -4868,7 +5080,17 @@
           "glassware": "Irish coffee glass",
           "garnish": null
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [
+        "coffee",
+        "creamy",
+        "autumn",
+        "winter",
+        "brunch",
+        "after-dinner"
+      ],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:john-collins",
@@ -4973,7 +5195,14 @@
           "glassware": "highball glass",
           "garnish": "Garnish with lemon slice and maraschino cherry."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [
+        "sparkling",
+        "refreshing",
+        "summer"
+      ],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:jungle-bird",
@@ -5099,7 +5328,10 @@
           "glassware": "rocks glass",
           "garnish": "Garnish with a pineapple wedge."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:kir",
@@ -5161,7 +5393,10 @@
           "glassware": "wine glass",
           "garnish": null
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:last-word",
@@ -5265,7 +5500,10 @@
           "glassware": "cocktail glass",
           "garnish": null
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:lemon-drop-martini",
@@ -5349,7 +5587,10 @@
           "glassware": "cocktail glass",
           "garnish": null
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:long-island-iced-tea",
@@ -5537,7 +5778,10 @@
           "glassware": "highball glass",
           "garnish": "Garnish with lemon slice (Optional)."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:mai-tai",
@@ -5684,7 +5928,10 @@
           "glassware": "double rocks glass",
           "garnish": "Garnish with pineapple spear, mint leaves and lime peel."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:manhattan",
@@ -5767,7 +6014,12 @@
           "glassware": "cocktail glass",
           "garnish": "Garnish with cocktail cherry."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [
+        "autumn"
+      ],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:margarita",
@@ -5851,7 +6103,13 @@
           "glassware": "cocktail glass",
           "garnish": "Half salt rim (Optional)."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [
+        "refreshing",
+        "summer"
+      ],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:martinez",
@@ -5955,7 +6213,10 @@
           "glassware": "cocktail glass",
           "garnish": "Lemon zest."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:mary-pickford",
@@ -6057,7 +6318,10 @@
           "glassware": "cocktail glass",
           "garnish": null
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:mimosa",
@@ -6117,7 +6381,15 @@
           "glassware": "flute",
           "garnish": "Garnish with orange twist (optional)."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [
+        "sparkling",
+        "summer",
+        "brunch",
+        "celebration"
+      ],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:mint-julep",
@@ -6221,7 +6493,13 @@
           "glassware": "julep cup",
           "garnish": "Garnish with a mint sprig."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [
+        "refreshing",
+        "summer"
+      ],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:missionarys-downfall",
@@ -6368,7 +6646,10 @@
           "glassware": "large coupe",
           "garnish": "Garnish with mint sprig and a slice of pineapple."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:mojito",
@@ -6494,7 +6775,13 @@
           "glassware": "highball glass",
           "garnish": "Garnish with sprigs of mint and slice of lime."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [
+        "refreshing",
+        "summer"
+      ],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:monkey-gland",
@@ -6596,7 +6883,10 @@
           "glassware": "cocktail glass",
           "garnish": null
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:moscow-mule",
@@ -6679,7 +6969,15 @@
           "glassware": "mule mug",
           "garnish": "Garnish with a lime slice."
         }
-      ]
+      ],
+      "aliases": [
+        "Vodka Mule"
+      ],
+      "tags": [
+        "refreshing",
+        "summer"
+      ],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:naked-and-famous",
@@ -6783,7 +7081,10 @@
           "glassware": "cocktail glass",
           "garnish": null
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:negroni",
@@ -6866,7 +7167,12 @@
           "glassware": "rocks glass",
           "garnish": "Garnish with half orange slice."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [
+        "aperitif"
+      ],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:new-york-sour",
@@ -6991,7 +7297,10 @@
           "glassware": "rocks glass",
           "garnish": "Garnish with lemon or orange zest with cherry."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:old-cuban",
@@ -7138,7 +7447,10 @@
           "glassware": "cocktail glass",
           "garnish": "Garnish with mint springs."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:old-fashioned",
@@ -7242,7 +7554,12 @@
           "glassware": "rocks glass",
           "garnish": "Garnish with orange slice or zest, and a cocktail cherry."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [
+        "autumn"
+      ],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:paloma",
@@ -7346,7 +7663,13 @@
           "glassware": "highball glass",
           "garnish": "Garnish with a slice of lime."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [
+        "refreshing",
+        "summer"
+      ],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:paper-plane",
@@ -7450,7 +7773,10 @@
           "glassware": "cocktail glass",
           "garnish": null
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:paradise",
@@ -7531,7 +7857,10 @@
           "glassware": "cocktail glass",
           "garnish": null
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:penicillin",
@@ -7656,7 +7985,10 @@
           "glassware": "rocks glass",
           "garnish": "Garnish with candied ginger slices."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:pina-colada",
@@ -7739,7 +8071,14 @@
           "glassware": "large glass",
           "garnish": "Garnish with a slice of pineapple with a cocktail cherry."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [
+        "creamy",
+        "summer",
+        "after-dinner"
+      ],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:pisco-punch",
@@ -7885,7 +8224,10 @@
           "glassware": "large goblet",
           "garnish": null
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:pisco-sour",
@@ -7989,7 +8331,13 @@
           "glassware": "goblet",
           "garnish": "Few dashes of Amargo bitters on top as an aromatic garnish."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [
+        "refreshing",
+        "summer"
+      ],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:planters-punch",
@@ -8073,7 +8421,10 @@
           "glassware": "small tumbler",
           "garnish": "Garnish with orange zest."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:porn-star-martini",
@@ -8196,7 +8547,10 @@
           "glassware": "large cocktail glass",
           "garnish": "Garnish with passion fruit cup and sugar."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:porto-flip",
@@ -8279,7 +8633,10 @@
           "glassware": "cocktail glass",
           "garnish": "Sprinkle with fresh ground nutmeg."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:rabo-de-galo",
@@ -8381,7 +8738,10 @@
           "glassware": "rocks glass",
           "garnish": "Garnish with a orange twist."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:ramos-fizz",
@@ -8591,7 +8951,14 @@
           "glassware": "highball glass",
           "garnish": null
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [
+        "creamy",
+        "sparkling",
+        "after-dinner"
+      ],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:remember-the-maine",
@@ -8695,7 +9062,10 @@
           "glassware": "coupe",
           "garnish": "Garnish with lemon zest."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:russian-spring-punch",
@@ -8821,7 +9191,10 @@
           "glassware": "tall tumbler",
           "garnish": "Garnish with blackberries and optionally a lemon slice as well."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:rusty-nail",
@@ -8883,7 +9256,10 @@
           "glassware": "rocks glass",
           "garnish": "Garnish with lemon zest."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:sazerac",
@@ -8987,7 +9363,10 @@
           "glassware": "rocks glass",
           "garnish": "Garnish with lemon zest."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:sea-breeze",
@@ -9070,7 +9449,13 @@
           "glassware": "highball glass",
           "garnish": "Garnish with an orange zest and cherry."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [
+        "refreshing",
+        "summer"
+      ],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:sex-on-the-beach",
@@ -9174,7 +9559,10 @@
           "glassware": "highball glass",
           "garnish": "Garnish with half orange slice."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:sherry-cobbler",
@@ -9299,7 +9687,10 @@
           "glassware": "julep cup",
           "garnish": "Garnish with fresh berries, ¼ wheel each orange and lemon. Serve with straws."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:sidecar",
@@ -9383,7 +9774,10 @@
           "glassware": "cocktail glass",
           "garnish": null
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:singapore-sling",
@@ -9571,7 +9965,10 @@
           "glassware": "hurricane glass",
           "garnish": "Garnish with pineapple and maraschino cherry."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:south-side",
@@ -9696,7 +10093,14 @@
           "glassware": "cocktail glass",
           "garnish": "Garnish with mint springs."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [
+        "refreshing",
+        "spring",
+        "summer"
+      ],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:spicy-fifty",
@@ -9821,7 +10225,10 @@
           "glassware": "cocktail glass",
           "garnish": "Garnish with a red chili pepper."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:spritz",
@@ -9904,7 +10311,14 @@
           "glassware": "wine glass",
           "garnish": "Garnish with a slice of orange."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [
+        "sparkling",
+        "aperitif",
+        "celebration"
+      ],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:stinger",
@@ -9966,7 +10380,10 @@
           "glassware": "martini glass",
           "garnish": "Optional mint leave."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:suffering-bastard",
@@ -10091,7 +10508,10 @@
           "glassware": "Collins glass",
           "garnish": "Garnish with mint spring and optionally an orange slice as well."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:tequila-sunrise",
@@ -10174,7 +10594,10 @@
           "glassware": "highball glass",
           "garnish": "Garnish with half orange slice or an orange zest."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:three-dots-and-a-dash",
@@ -10362,7 +10785,10 @@
           "glassware": "footed copo glass",
           "garnish": "Garnish with three cherries and a rectangular chunk of pineapple."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:tipperary",
@@ -10466,7 +10892,10 @@
           "glassware": "martini glass",
           "garnish": "Garnish with a slice of orange."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:tommys-margarita",
@@ -10549,7 +10978,10 @@
           "glassware": "rocks glass",
           "garnish": "Garnish with a lime slice."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:trinidad-sour",
@@ -10653,7 +11085,10 @@
           "glassware": "cocktail glass",
           "garnish": null
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:tuxedo",
@@ -10778,7 +11213,10 @@
           "glassware": "martini glass",
           "garnish": "Garnish with cherry and lemon zest."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:ve-n-to",
@@ -10903,7 +11341,10 @@
           "glassware": "small tumbler",
           "garnish": "Garnish with lemon zest and white grapes."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:vesper",
@@ -10986,7 +11427,10 @@
           "glassware": "cocktail glass",
           "garnish": "Garnish with lemon zest."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:vieux-carre",
@@ -11111,7 +11555,10 @@
           "glassware": "cocktail glass",
           "garnish": "Garnish with orange zest and maraschino cherry."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:whiskey-sour",
@@ -11215,7 +11662,14 @@
           "glassware": "cobbler glass",
           "garnish": "Garnish with half orange slice and maraschino cherry, optionally use orange zest."
         }
-      ]
+      ],
+      "aliases": [
+        "Whisky Sour"
+      ],
+      "tags": [
+        "autumn"
+      ],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:white-lady",
@@ -11299,7 +11753,10 @@
           "glassware": "cocktail glass",
           "garnish": null
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
     },
     {
       "id": "cocktail:zombie",
@@ -11508,7 +11965,261 @@
           "glassware": "tall tumbler",
           "garnish": "Garnish with mint leaves."
         }
-      ]
+      ],
+      "aliases": [],
+      "tags": [],
+      "alcoholFree": false
+    },
+    {
+      "id": "cocktail:arnold-palmer",
+      "slug": "arnold-palmer",
+      "name": "Arnold Palmer",
+      "primarySpiritId": null,
+      "styles": [],
+      "recipes": [
+        {
+          "id": "recipe:arnold-palmer:default",
+          "name": "House recipe",
+          "ingredients": [
+            {
+              "position": 1,
+              "ingredientId": "ingredient:black-tea",
+              "recipeDisplayName": "Chilled brewed black tea",
+              "measurements": {
+                "us": {
+                  "quantity": 3,
+                  "maximumQuantity": null,
+                  "unit": "ounce",
+                  "modifier": null
+                },
+                "metric": {
+                  "quantity": 90,
+                  "maximumQuantity": null,
+                  "unit": "milliliter",
+                  "modifier": null
+                }
+              },
+              "requirement": "required",
+              "preparation": null
+            },
+            {
+              "position": 2,
+              "ingredientId": "ingredient:lemonade",
+              "recipeDisplayName": "Nonalcoholic lemonade",
+              "measurements": {
+                "us": {
+                  "quantity": 3,
+                  "maximumQuantity": null,
+                  "unit": "ounce",
+                  "modifier": null
+                },
+                "metric": {
+                  "quantity": 90,
+                  "maximumQuantity": null,
+                  "unit": "milliliter",
+                  "modifier": null
+                }
+              },
+              "requirement": "required",
+              "preparation": null
+            }
+          ],
+          "instructions": "Brew black tea and allow it to cool. Fill a highball glass with ice, add equal parts chilled tea and lemonade, and stir.",
+          "glassware": "highball glass",
+          "garnish": null
+        }
+      ],
+      "aliases": [
+        "Half and Half Tea"
+      ],
+      "tags": [
+        "refreshing",
+        "summer",
+        "brunch"
+      ],
+      "alcoholFree": true
+    },
+    {
+      "id": "cocktail:shirley-temple",
+      "slug": "shirley-temple",
+      "name": "Shirley Temple",
+      "primarySpiritId": null,
+      "styles": [
+        "highball"
+      ],
+      "recipes": [
+        {
+          "id": "recipe:shirley-temple:default",
+          "name": "House recipe",
+          "ingredients": [
+            {
+              "position": 1,
+              "ingredientId": "ingredient:ginger-ale",
+              "recipeDisplayName": "Nonalcoholic ginger ale",
+              "measurements": {
+                "us": {
+                  "quantity": 5,
+                  "maximumQuantity": null,
+                  "unit": "ounce",
+                  "modifier": null
+                },
+                "metric": {
+                  "quantity": 150,
+                  "maximumQuantity": null,
+                  "unit": "milliliter",
+                  "modifier": null
+                }
+              },
+              "requirement": "required",
+              "preparation": null
+            },
+            {
+              "position": 2,
+              "ingredientId": "ingredient:grenadine",
+              "recipeDisplayName": "Nonalcoholic grenadine",
+              "measurements": {
+                "us": {
+                  "quantity": 0.5,
+                  "maximumQuantity": null,
+                  "unit": "ounce",
+                  "modifier": null
+                },
+                "metric": {
+                  "quantity": 15,
+                  "maximumQuantity": null,
+                  "unit": "milliliter",
+                  "modifier": null
+                }
+              },
+              "requirement": "required",
+              "preparation": null
+            }
+          ],
+          "instructions": "Fill a highball glass with ice. Add grenadine and ginger ale, then stir gently.",
+          "glassware": "highball glass",
+          "garnish": null
+        }
+      ],
+      "aliases": [],
+      "tags": [
+        "refreshing",
+        "sparkling",
+        "celebration"
+      ],
+      "alcoholFree": true
+    },
+    {
+      "id": "cocktail:virgin-mojito",
+      "slug": "virgin-mojito",
+      "name": "Virgin Mojito",
+      "primarySpiritId": null,
+      "styles": [
+        "smash",
+        "highball"
+      ],
+      "recipes": [
+        {
+          "id": "recipe:virgin-mojito:default",
+          "name": "House recipe",
+          "ingredients": [
+            {
+              "position": 1,
+              "ingredientId": "ingredient:lime",
+              "recipeDisplayName": "Lime, cut into wedges",
+              "measurements": {
+                "us": {
+                  "quantity": 0.5,
+                  "maximumQuantity": null,
+                  "unit": "piece",
+                  "modifier": null
+                },
+                "metric": {
+                  "quantity": 0.5,
+                  "maximumQuantity": null,
+                  "unit": "piece",
+                  "modifier": null
+                }
+              },
+              "requirement": "required",
+              "preparation": null
+            },
+            {
+              "position": 2,
+              "ingredientId": "ingredient:mint",
+              "recipeDisplayName": "Mint leaves",
+              "measurements": {
+                "us": {
+                  "quantity": 8,
+                  "maximumQuantity": null,
+                  "unit": "leaf",
+                  "modifier": null
+                },
+                "metric": {
+                  "quantity": 8,
+                  "maximumQuantity": null,
+                  "unit": "leaf",
+                  "modifier": null
+                }
+              },
+              "requirement": "required",
+              "preparation": null
+            },
+            {
+              "position": 3,
+              "ingredientId": "ingredient:sugar",
+              "recipeDisplayName": "Sugar",
+              "measurements": {
+                "us": {
+                  "quantity": 2,
+                  "maximumQuantity": null,
+                  "unit": "teaspoon",
+                  "modifier": null
+                },
+                "metric": {
+                  "quantity": 2,
+                  "maximumQuantity": null,
+                  "unit": "teaspoon",
+                  "modifier": null
+                }
+              },
+              "requirement": "required",
+              "preparation": null
+            },
+            {
+              "position": 4,
+              "ingredientId": "ingredient:soda-water",
+              "recipeDisplayName": "Nonalcoholic soda water",
+              "measurements": {
+                "us": {
+                  "quantity": 4,
+                  "maximumQuantity": null,
+                  "unit": "ounce",
+                  "modifier": null
+                },
+                "metric": {
+                  "quantity": 120,
+                  "maximumQuantity": null,
+                  "unit": "milliliter",
+                  "modifier": null
+                }
+              },
+              "requirement": "required",
+              "preparation": null
+            }
+          ],
+          "instructions": "Gently press the lime wedges, mint and sugar in a highball glass. Add ice, top with soda water and stir gently.",
+          "glassware": "highball glass",
+          "garnish": "Use one of the mint leaves as garnish."
+        }
+      ],
+      "aliases": [
+        "Nojito"
+      ],
+      "tags": [
+        "refreshing",
+        "summer"
+      ],
+      "alcoholFree": true
     }
   ]
 }

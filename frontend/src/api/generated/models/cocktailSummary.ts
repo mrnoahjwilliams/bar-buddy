@@ -8,11 +8,22 @@ import type { AvailabilityResult } from './availabilityResult.ts';
 import type { IngredientSummary } from './ingredientSummary.ts';
 
 export interface CocktailSummary {
+  /**
+   * Reviewed default recipe classification; null means unknown.
+   * @nullable
+   */
+  alcoholFree?: boolean | null;
+  aliases?: string[];
   availability?: AvailabilityResult;
+  discoveryVersion?: number;
   favorite?: boolean;
   id?: string;
+  ingredientCount?: number;
+  matchedAlias?: string;
   matchedIngredientId?: string;
   name?: string;
   primarySpirit?: IngredientSummary;
   slug?: string;
+  styles?: string[];
+  tags?: string[];
 }

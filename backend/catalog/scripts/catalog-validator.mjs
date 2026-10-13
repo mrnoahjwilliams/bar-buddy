@@ -61,6 +61,7 @@ const COCKTAIL_STYLES = new Set([
   "duo-and-trio",
   "tiki",
 ]);
+const COCKTAIL_TAGS = new Set(["refreshing", "creamy", "coffee", "sparkling", "spring", "summer", "autumn", "winter", "brunch", "aperitif", "after-dinner", "celebration"]);
 const MEASUREMENT_UNITS = new Set([
   "barspoon",
   "cube",
@@ -337,7 +338,7 @@ function validateRecipe(value, path, cocktailSlug, context, errors) {
 }
 
 function validateIngredient(value, path, context, errors) {
-  if (!validateObject(value, path, context.schemaVersion === 2 ? [...INGREDIENT_KEYS, "aliases"] : INGREDIENT_KEYS, errors)) {
+  if (!validateObject(value, path, context.schemaVersion >= 2 ? [...INGREDIENT_KEYS, "aliases"] : INGREDIENT_KEYS, errors)) {
     return;
   }
   if (validateId(value.id, `${path}.id`, INGREDIENT_ID_PATTERN, errors)) {
@@ -358,7 +359,7 @@ function validateIngredient(value, path, context, errors) {
       errors,
     );
   }
-  if (context.schemaVersion === 2 && validateArray(value.aliases, `${path}.aliases`, errors, { allowEmpty: true })) {
+  if (context.schemaVersion >= 2 && validateArray(value.aliases, `${path}.aliases`, errors, { allowEmpty: true })) {
     value.aliases.forEach((alias, index) => {
       const aliasPath = `${path}.aliases[${index}]`;
       if (validateString(alias, aliasPath, errors)) {
@@ -376,7 +377,7 @@ function validateIngredient(value, path, context, errors) {
 }
 
 function validateCocktail(value, path, context, errors) {
-  if (!validateObject(value, path, COCKTAIL_KEYS, errors)) {
+  if (!validateObject(value, path, context.schemaVersion === 3 ? [...COCKTAIL_KEYS, "aliases", "tags", "alcoholFree"] : COCKTAIL_KEYS, errors)) {
     return;
   }
   if (validateId(value.id, `${path}.id`, COCKTAIL_ID_PATTERN, errors)) {
@@ -415,6 +416,27 @@ function validateCocktail(value, path, context, errors) {
       "normalized cocktail name",
       errors,
     );
+  }
+  if (context.schemaVersion === 3) {
+    if (validateArray(value.aliases, `${path}.aliases`, errors, {allowEmpty: true})) {
+      value.aliases.forEach((alias, index) => {
+        const aliasPath = `${path}.aliases[${index}]`;
+        if (validateString(alias, aliasPath, errors)) {
+          if (alias.length > 200) errors.push(`${aliasPath}: must be at most 200 characters`);
+          recordUnique(context.cocktailNames, normalizedName(alias), aliasPath, "normalized cocktail name", errors);
+        }
+      });
+    }
+    if (validateArray(value.tags, `${path}.tags`, errors, {allowEmpty: true})) {
+      const seen = new Set();
+      value.tags.forEach((tag, index) => {
+        validateEnum(tag, `${path}.tags[${index}]`, COCKTAIL_TAGS, errors);
+        if (seen.has(tag)) errors.push(`${path}.tags[${index}]: duplicate tag '${tag}'`);
+        seen.add(tag);
+      });
+    }
+    if (typeof value.alcoholFree !== "boolean") errors.push(`${path}.alcoholFree: must be a boolean`);
+    if (value.alcoholFree === true && value.primarySpiritId !== null) errors.push(`${path}.primarySpiritId: alcohol-free recipe cannot have a primary spirit`);
   }
   if (value.primarySpiritId !== null) {
     validateId(
@@ -486,6 +508,9 @@ function validateReferences(catalog, context, errors) {
         continue;
       }
       for (const [lineIndex, ingredient] of recipe.ingredients.entries()) {
+        if (cocktail.alcoholFree === true && ["spirit", "liqueur", "fortified_wine", "bitters"].includes(context.ingredientCategories.get(ingredient?.ingredientId))) {
+          errors.push(`${cocktailPath}.recipes[${recipeIndex}].ingredients[${lineIndex}]: alcohol-free recipe cannot include an alcoholic-category ingredient`);
+        }
         if (
           isObject(ingredient) &&
           typeof ingredient.ingredientId === "string" &&
@@ -505,8 +530,8 @@ export function validateCatalog(catalog) {
   if (!validateObject(catalog, "$", ROOT_KEYS, errors)) {
     return errors;
   }
-  if (![1, 2].includes(catalog.schemaVersion)) {
-    errors.push("$.schemaVersion: must equal 1 or 2");
+  if (![1, 2, 3].includes(catalog.schemaVersion)) {
+    errors.push("$.schemaVersion: must equal 1, 2 or 3");
   }
   if (validateObject(catalog.catalog, "$.catalog", CATALOG_KEYS, errors)) {
     if (catalog.catalog.id !== "catalog:bar-buddy") {
